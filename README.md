@@ -36,7 +36,7 @@ repositories {
 
 <dependency>
    <groupId>uk.q3c.krail</groupId>
-   <artifactId>krail</artifactId>
+   <artifactId>krail-jpa</artifactId>
    <version>0.8.0</version>
 </dependency>
 
