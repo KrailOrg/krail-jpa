@@ -1,0 +1,128 @@
+/*
+ * Copyright (c) 2015 David Sowerby
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
+//build for main Krail project
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+
+version = '0.8.0'
+
+project.ext.guiceVersion = '3.0'
+
+
+
+repositories {
+    maven {
+        url "file:///" + System.getProperty("user.home") + "/localRepo"
+    }
+    jcenter()
+
+    maven {
+        url "http://maven.vaadin.com/vaadin-addons"
+    }
+
+    mavenCentral()
+}
+
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/" + System.getProperty("user.home") + "/localRepo")
+            pom {
+                groupId = "uk.q3c.krail"
+                project {
+                    inceptionYear '2015'
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+javadoc {
+    failOnError = false
+}
+
+
+
+dependencies {
+
+    //Data stores
+    compile 'org.hsqldb:hsqldb:2.3.2'
+    compile 'org.apache.derby:derby:10.11.1.1'
+
+    //Dependency Injection
+    compile 'com.google.inject:guice:' + guiceVersion
+    compile 'com.google.inject.extensions:guice-servlet:' + guiceVersion
+
+    //guice extension
+    compile 'org.apache.onami:org.apache.onami.persist:1.0.1'
+
+    //JPA
+//    Eclipse Link &  Java Persistence API
+    compile 'org.eclipse.persistence:eclipselink:2.5.2'
+
+    //JPA container
+    compile 'com.vaadin.addon:jpacontainer:3.1.1'
+
+    //Krail
+    compile 'uk.q3c.krail:krail:0.7.7'
+
+    //Logging
+    compile 'org.slf4j:slf4j-api:1.6.6'
+    compile 'org.slf4j:slf4j-log4j12:1.6.6'
+
+    //servlet
+    compile "javax.servlet:javax.servlet-api:3.+"
+
+    //testing
+    testCompile 'com.mycila:mycila-guice:2.10.ga'
+    testCompile 'com.mycila.testing.plugins:mycila-testing-guice:2.8'
+    testCompile 'com.mycila.testing.plugins:mycila-testing-mockito:2.8'
+    testCompile 'org.mockito:mockito-all:1.9.0'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:1.5.0'
+    testCompile 'org.assertj:assertj-guava:1.0.0'
+
+
+}
