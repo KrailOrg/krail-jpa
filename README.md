@@ -13,6 +13,9 @@ Most of the functionality is provided by [Apache Onami Persist](https://onami.ap
 * Assisted persistence unit configuration, in Guice modules (in addition to persistence.xml)
 
 ## Download
+
+[ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail-jpa/images/download.svg) ](https://bintray.com/dsowerby/maven/krail-jpa/_latestVersion)
+
 ### From Central Repository
 
 (not available in Maven Central, only JCenter)
