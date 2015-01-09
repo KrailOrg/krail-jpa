@@ -9,7 +9,7 @@
  */
 
 
-
+description = 'A JPA module for use with Krail'
 
 dependencies {
 
@@ -27,7 +27,6 @@ dependencies {
 
     //servlet
     compile "javax.servlet:javax.servlet-api:3.+"
-
 
 
 }
