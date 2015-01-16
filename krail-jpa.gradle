@@ -22,9 +22,6 @@ dependencies {
     compile 'org.apache.onami:org.apache.onami.persist:1.0.1'
     compile 'com.vaadin.addon:jpacontainer:3.1.1' //JPA container
 
-    //Krail
-    project(':krail')
-
     //servlet
     compile "javax.servlet:javax.servlet-api:3.+"
 

@@ -1,5 +1,18 @@
-##0.7.7
+### Release Notes for krail-jpa 0.8.1
 
-* Fixes [265](https://github.com/davidsowerby/krail/issues/265)
-* Fixes [269](https://github.com/davidsowerby/krail/issues/269)
-* Removed all persistence related elements, this will be a separate library
+This version moves most of the build to the [master project](https://github.com/davidsowerby/krail-master)
+
+#### Change log
+
+
+
+#### Dependency changes
+
+   compile dependency version changed to: krail:0.7.8
+
+#### Detail
+
+Moved most of the build to [krail-master](https://github.com/davidsowerby/krail-master)
+
+
+
