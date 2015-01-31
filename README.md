@@ -46,36 +46,3 @@ repositories {
 
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail-jpa/images/download.svg) ](https://bintray.com/dsowerby/maven/krail-jpa/_latestVersion)
 
-# Download
-
-[ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail-jpa/images/download.svg) ](https://bintray.com/dsowerby/maven/krail-jpa/_latestVersion)
-
-### From Central Repository
-
-(not available in Maven Central, only JCenter)
-
-#### Gradle:
-
-```
-repositories {
-    jcenter()
-}
-
-'uk.q3c.krail:krail-jpa:0.8.0'
-```
-#### Maven :
-```
-<repository>
-  <id>jcenter</id>
-  <url>http://jcenter.bintray.com</url>
-</repository>
-
-
-<dependency>
-   <groupId>uk.q3c.krail</groupId>
-   <artifactId>krail-jpa</artifactId>
-   <version>0.8.0</version>
-</dependency>
-
-```
-
