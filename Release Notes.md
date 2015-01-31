@@ -13,6 +13,9 @@ This version removes the IDEA project files from Git
 
 #### Detail
 
+Release notes and version.properties generated
+
+---
 *Set version information*
 
 
