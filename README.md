@@ -12,7 +12,7 @@ Most of the functionality is provided by [Apache Onami Persist](https://onami.ap
 * Support for JPAContainer configuration and creation in a Guice / Onami environment
 * Assisted persistence unit configuration, in Guice modules (in addition to persistence.xml)
 
-## Download
+# Download
 
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail-jpa/images/download.svg) ](https://bintray.com/dsowerby/maven/krail-jpa/_latestVersion)
 
