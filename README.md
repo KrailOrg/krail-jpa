@@ -12,6 +12,40 @@ Most of the functionality is provided by [Apache Onami Persist](https://onami.ap
 * Support for JPAContainer configuration and creation in a Guice / Onami environment
 * Assisted persistence unit configuration, in Guice modules (in addition to persistence.xml)
 
+#Download
+<a href='https://bintray.com/dsowerby/maven/krail-jpa/view?source=watch' alt='Get automatic notifications about new "krail-jpa" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+##Gradle
+
+```
+repositories {
+	jcenter()
+}
+```
+
+```
+'uk.q3c.krail:krail-jpa:0.8.2
+```
+##Maven
+
+```
+<repository>
+	<id>jcenter</id>
+	<url>http://jcenter.bintray.com</url>
+</repository>
+
+```
+
+```
+<dependency>
+	<groupId>uk.q3c.krail</groupId>
+	<artifactId>krail-jpa</artifactId>
+	<version>0.8.2</version>
+</dependency>
+```
+##Direct
+
+[ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail-jpa/images/download.svg) ](https://bintray.com/dsowerby/maven/krail-jpa/_latestVersion)
+
 # Download
 
 [ ![Download](https://api.bintray.com/packages/dsowerby/maven/krail-jpa/images/download.svg) ](https://bintray.com/dsowerby/maven/krail-jpa/_latestVersion)
