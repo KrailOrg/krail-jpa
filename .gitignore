@@ -6,7 +6,7 @@
 /gradle
 /logs
 
-/.krail-testUtil.iml
+/.krail-jpa.iml
 
 build.gradle~
 git.ignore~
