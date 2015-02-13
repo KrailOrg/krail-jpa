@@ -1,1 +1,1 @@
-This version removes the IDEA project files from Git
+This version adds gitattributes file, no functional changes
