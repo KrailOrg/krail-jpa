@@ -1,4 +1,4 @@
-### Release Notes for krail-jpa 0.8.3
+### Release Notes for krail-jpa 0.8.4
 
 This version adds gitattributes file, no functional changes
 
@@ -8,17 +8,7 @@ This version adds gitattributes file, no functional changes
 
 #### Dependency changes
 
-   compile dependency version changed to: krail:0.8.0
+   compile dependency version changed to: krail:0.8.1
 
 #### Detail
 
-*Update version information*
-
-
----
-*gitattributes added*
-
-To overcome Linux/Windows line ending issues
-
-
----
