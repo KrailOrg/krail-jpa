@@ -23,7 +23,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail-jpa:0.8.4
+'uk.q3c.krail:krail-jpa:0.8.5
 ```
 ##Maven
 
@@ -39,7 +39,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail-jpa</artifactId>
-	<version>0.8.4</version>
+	<version>0.8.5</version>
 </dependency>
 ```
 ##Direct
