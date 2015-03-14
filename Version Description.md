@@ -1,1 +1,1 @@
-This version adds gitattributes file, no functional changes
+Change to logback, config only
