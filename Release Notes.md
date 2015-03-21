@@ -1,6 +1,6 @@
 ### Release Notes for krail-jpa 0.8.6
 
-Change to logback, config only
+Dependency changes only
 
 #### Change log
 

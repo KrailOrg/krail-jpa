@@ -1,1 +1,1 @@
-Change to logback, config only
+Dependency changes only
