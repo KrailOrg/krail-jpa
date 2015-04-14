@@ -16,6 +16,7 @@ import org.apache.onami.persist.PersistenceModule;
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.lang.annotation.Annotation;
@@ -59,18 +60,32 @@ public abstract class JpaModule extends PersistenceModule {
         bind(EntityManagerFactory.class).annotatedWith(annotation)
                                         .toInstance(entityManagerFactory);
 
-        PersistenceUnitModuleConfiguration conf;
-        if (annotation == null) {
-            conf = (PersistenceUnitModuleConfiguration) bindContainerManagedPersistenceUnit(entityManagerFactory);
-        } else {
-            conf = (PersistenceUnitModuleConfiguration) bindContainerManagedPersistenceUnit(entityManagerFactory).annotatedWith(annotation);
-        }
+        PersistenceUnitModuleConfiguration conf = bindPU(puName, annotation, entityManagerFactory);
         //Transfer properties and additional bindings
         conf.setProperties(configuration.toProperties());
         conf.getAdditionalBindings()
             .addAll(configuration.getAdditionalBindings());
 
 
+    }
+
+    /**
+     * Override this with calls to {@link #bindApplicationManagedPersistenceUnit(String)} ofr testing outside the container
+     *
+     * @param annotation
+     * @param entityManagerFactory
+     *
+     * @return
+     */
+    protected PersistenceUnitModuleConfiguration bindPU(@Nonnull String puName, @Nullable Class<? extends Annotation> annotation, EntityManagerFactory
+            entityManagerFactory) {
+        PersistenceUnitModuleConfiguration conf;
+        if (annotation == null) {
+            conf = (PersistenceUnitModuleConfiguration) bindContainerManagedPersistenceUnit(entityManagerFactory);
+        } else {
+            conf = (PersistenceUnitModuleConfiguration) bindContainerManagedPersistenceUnit(entityManagerFactory).annotatedWith(annotation);
+        }
+        return conf;
     }
 
     /**

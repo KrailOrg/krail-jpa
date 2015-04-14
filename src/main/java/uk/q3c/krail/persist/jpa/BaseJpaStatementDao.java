@@ -144,6 +144,7 @@ public abstract class BaseJpaStatementDao<ID, VER> implements JpaStatementDao<ID
      * @see Dao#connectionUrl(Object)
      */
     @Override
+    @Transactional
     public String connectionUrl() {
         return baseDao.connectionUrl(entityManagerProvider.get());
     }
