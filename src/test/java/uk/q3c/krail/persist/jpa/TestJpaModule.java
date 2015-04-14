@@ -11,10 +11,16 @@
 
 package uk.q3c.krail.persist.jpa;
 
+import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
+import uk.q3c.krail.core.user.opt.jpa.JpaOptionDao;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.persistence.EntityManagerFactory;
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 /**
  * Created by David Sowerby on 03/01/15.
@@ -30,6 +36,26 @@ public class TestJpaModule extends JpaModule {
         } catch (IOException e) {
             throw new RuntimeException("Failed to create temp folder in TestJpaUnitModule", e);
         }
+    }
+
+    /**
+     * Override this with calls to {@link #bindApplicationManagedPersistenceUnit(String)} ofr testing outside the container
+     *
+     * @param annotation
+     * @param entityManagerFactory
+     *
+     * @return
+     */
+    @Override
+    protected PersistenceUnitModuleConfiguration bindPU(@Nonnull String puName, @Nullable Class<? extends Annotation> annotation, EntityManagerFactory
+            entityManagerFactory) {
+        PersistenceUnitModuleConfiguration conf;
+        if (annotation == null) {
+            conf = (PersistenceUnitModuleConfiguration) bindApplicationManagedPersistenceUnit(puName);
+        } else {
+            conf = (PersistenceUnitModuleConfiguration) bindApplicationManagedPersistenceUnit(puName).annotatedWith(annotation);
+        }
+        return conf;
     }
 
     /**
@@ -52,7 +78,9 @@ public class TestJpaModule extends JpaModule {
               .user("test")
               .password("test")
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE)
-              .addPrivateBinding(StandardTestEntityJpaSpecificDao.class, DefaultStandardTestEntityJpaSpecificDao.class);
+              .addPrivateBinding(StandardTestEntityJpaSpecificDao.class, DefaultStandardTestEntityJpaSpecificDao.class)
+              .
+                      addPrivateBinding(JpaOptionDao.class, TestJpaOptionDao.class);
 
         return config;
     }
