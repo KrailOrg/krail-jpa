@@ -36,7 +36,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestJpaModule.class})
-public class DefaultJpaOptionDaoTest extends BaseJpaTest {
+public class BaseJpaOptionDaoTest extends BaseJpaTest {
 
 
     @Inject

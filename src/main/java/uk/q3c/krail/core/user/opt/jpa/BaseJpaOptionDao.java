@@ -13,6 +13,7 @@ package uk.q3c.krail.core.user.opt.jpa;
 
 import com.google.common.base.Converter;
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.Transactional;
 import uk.q3c.krail.core.data.Select;
@@ -36,13 +37,14 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
  * <p>
  * Created by David Sowerby on 13/04/15.
  */
-public abstract class DefaultJpaOptionDao implements JpaOptionDao {
+public class BaseJpaOptionDao implements JpaOptionDao {
 
 
     private final StandardJpaStatementDao dao;
     private EntityManagerProvider entityManagerProvider;
 
-    protected DefaultJpaOptionDao(StandardJpaStatementDao dao, EntityManagerProvider entityManagerProvider) {
+    @Inject
+    protected BaseJpaOptionDao(StandardJpaStatementDao dao, EntityManagerProvider entityManagerProvider) {
         this.dao = dao;
         this.entityManagerProvider = entityManagerProvider;
     }

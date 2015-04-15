@@ -18,6 +18,7 @@ public class BindingPair<E extends Object> {
     private final Class<? extends E> implementationClass;
     private final Class<E> interfaceClass;
 
+
     public BindingPair(Class<E> interfaceClass, Class<? extends E> implementationClass) {
         this.implementationClass = implementationClass;
         this.interfaceClass = interfaceClass;

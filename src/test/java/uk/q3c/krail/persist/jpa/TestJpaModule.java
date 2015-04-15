@@ -13,7 +13,10 @@ package uk.q3c.krail.persist.jpa;
 
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
+import uk.q3c.krail.core.user.opt.jpa.BaseJpaOptionDao;
 import uk.q3c.krail.core.user.opt.jpa.JpaOptionDao;
+import uk.q3c.krail.i18n.jpa.BaseJpaPatternDao;
+import uk.q3c.krail.i18n.jpa.JpaPatternDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,7 +83,8 @@ public class TestJpaModule extends JpaModule {
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE)
               .addPrivateBinding(StandardTestEntityJpaSpecificDao.class, DefaultStandardTestEntityJpaSpecificDao.class)
               .
-                      addPrivateBinding(JpaOptionDao.class, TestJpaOptionDao.class);
+                      addPrivateBinding(JpaOptionDao.class, BaseJpaOptionDao.class)
+              .addPrivateBinding(JpaPatternDao.class, BaseJpaPatternDao.class);
 
         return config;
     }
