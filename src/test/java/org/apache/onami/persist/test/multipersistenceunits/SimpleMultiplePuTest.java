@@ -12,7 +12,10 @@
 package org.apache.onami.persist.test.multipersistenceunits;
 
 import com.google.inject.Key;
+import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.test.TestEntity;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +24,7 @@ import uk.q3c.krail.persist.jpa.StandardJpaDao;
 import uk.q3c.krail.persist.jpa.StandardJpaStatementDao;
 import uk.q3c.krail.persist.jpa.Widget;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -98,6 +102,13 @@ public class SimpleMultiplePuTest extends BaseMultiplePuTest {
         final StandardJpaStatementDao statementDao2 = injector.getInstance(statementDaoKey2);
         final StandardJpaBlockDao blockDao2 = injector.getInstance(blockDaoKey2);
 
+        //bindings to annotations
+        assertThat(statementDao1.connectionUrl()).isEqualTo(empUrl(firstEmp));
+        assertThat(statementDao2.connectionUrl()).isEqualTo(empUrl(secondEmp));
+        blockDao1.transact(d -> assertThat(d.connectionUrl()).isEqualTo(empUrl(firstEmp)));
+        blockDao2.transact(d -> assertThat(d.connectionUrl()).isEqualTo(empUrl(secondEmp)));
+        assertThat(statementDao1.connectionUrl()).isNotEqualTo(statementDao2.connectionUrl());
+
 
         //then
         assertThat(dao1).isNotNull();
@@ -152,5 +163,13 @@ public class SimpleMultiplePuTest extends BaseMultiplePuTest {
             assertThat(w.get()
                         .getName()).isEqualTo("B");
         });
+    }
+
+    private String empUrl(EntityManagerProvider firstEmp) {
+        final EntityManager entityManager = firstEmp.get();
+        EntityManagerImpl em = (EntityManagerImpl) entityManager;
+        return (String) em.getProperties()
+                          .get(PersistenceUnitProperties.JDBC_URL);
+
     }
 }

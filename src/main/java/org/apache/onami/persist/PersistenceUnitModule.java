@@ -14,6 +14,8 @@ package org.apache.onami.persist;
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
 import com.google.inject.util.Providers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -27,7 +29,7 @@ import static org.apache.onami.persist.Preconditions.checkNotNull;
  * @see PersistenceModule
  */
 class PersistenceUnitModule extends PrivateModule {
-
+    private static Logger log = LoggerFactory.getLogger(PersistenceUnitModule.class);
 
     /**
      * The configuration for the persistence unit.
@@ -94,12 +96,20 @@ class PersistenceUnitModule extends PrivateModule {
      */
     private void exposePersistenceServiceAndEntityManagerProviderAndUnitOfWork() {
         if (config.isAnnotated()) {
+
+
             bindAndExposedAnnotated(PersistenceService.class);
             bindAndExposedAnnotated(EntityManagerProvider.class);
             bindAndExposedAnnotated(UnitOfWork.class);
 
+            //bind additional interfaces to their implementations, but do not annotate & expose yet
             for (BindingPair bindingPair : config.getAdditionalBindings()) {
-                bindAndExposeAnnotatedInterface(bindingPair.getInterfaceClass(), bindingPair.getImplementationClass());
+                bind(bindingPair.getInterfaceClass()).to(Key.get(bindingPair.getImplementationClass()));
+            }
+
+            //now bind the interfaces to annotation & expose
+            for (BindingPair bindingPair : config.getAdditionalBindings()) {
+                bindAndExposedAnnotated(bindingPair.getInterfaceClass());
             }
 
 
@@ -108,42 +118,18 @@ class PersistenceUnitModule extends PrivateModule {
             expose(EntityManagerProvider.class);
             expose(UnitOfWork.class);
 
+            //bind additional interfaces to their implementations, but do not expose yet
             for (BindingPair bindingPair : config.getAdditionalBindings()) {
-                bindAndExposeInterface(bindingPair.getInterfaceClass(), bindingPair.getImplementationClass());
+                bind(bindingPair.getInterfaceClass()).to(Key.get(bindingPair.getImplementationClass()));
+            }
+
+            //now expose the interfaces
+            for (BindingPair bindingPair : config.getAdditionalBindings()) {
+                expose(bindingPair.getInterfaceClass());
             }
         }
     }
 
-    /**
-     * Bind an interface to its implementation within the scope of this PrivateModule, and expose the interface with annotation added.
-     *
-     * @param intf
-     *         the interface to bind
-     * @param implementation
-     *         the implementation to bind to the interface
-     * @param <T>
-     *         the type to expose.
-     */
-    private <T> void bindAndExposeAnnotatedInterface(Class<T> intf, Class<? extends T> implementation) {
-        bind(intf).annotatedWith(config.getAnnotation())
-                  .to(Key.get(implementation));
-        expose(intf).annotatedWith(config.getAnnotation());
-    }
-
-    /**
-     * Bind an interface to its implementation within the scope of this PrivateModule, and expose the interface.
-     *
-     * @param intf
-     *         the interface to bind
-     * @param implementation
-     *         the implementation to bind to the interface
-     * @param <T>
-     *         the type to expose.
-     */
-    private <T> void bindAndExposeInterface(Class<T> intf, Class<? extends T> implementation) {
-        bind(intf).to(Key.get(implementation));
-        expose(intf);
-    }
 
     /**
      * helper to expose a binding with annotation added.

@@ -22,6 +22,7 @@
         <class>uk.q3c.krail.persist.jpa.Widget</class>
         <class>uk.q3c.krail.persist.jpa.StandardTestEntity</class>
         <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity</class>
+        <class>uk.q3c.krail.i18n.jpa.PatternEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -42,6 +43,7 @@
         <class>uk.q3c.krail.persist.jpa.Widget</class>
         <class>uk.q3c.krail.persist.jpa.StandardTestEntity</class>
         <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity</class>
+        <class>uk.q3c.krail.i18n.jpa.PatternEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -62,6 +64,7 @@
         <class>uk.q3c.krail.persist.jpa.Widget</class>
         <class>uk.q3c.krail.persist.jpa.StandardTestEntity</class>
         <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity</class>
+        <class>uk.q3c.krail.i18n.jpa.PatternEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -81,6 +84,7 @@
         <class>uk.q3c.krail.persist.jpa.Todo</class>
         <class>uk.q3c.krail.persist.jpa.Widget</class>
         <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity</class>
+        <class>uk.q3c.krail.i18n.jpa.PatternEntity</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
         </properties>
