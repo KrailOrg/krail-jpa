@@ -42,6 +42,7 @@ public class OptionEntity extends StandardEntity {
         rankName = optionCacheKey.getRequestedRankName();
         optionKey = optionCacheKey.getOptionKey()
                                   .compositeKey();
+        this.value = value;
 
     }
 

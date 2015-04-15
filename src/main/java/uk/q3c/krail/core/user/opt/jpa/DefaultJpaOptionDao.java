@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.q3c.krail.core.data.Select.Compare.EQ;
+import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
  * Converts {@link OptionCacheKey} to {@link OptionEntity} for persistence.  Sub-class and construct with the appropriately annotated {@code dao} and {@code
@@ -53,7 +54,7 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
 
     @Override
     public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Converter<V, String> converter, @Nonnull V value) {
-        checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
+        checkRankOption(cacheKey, SPECIFIC_RANK);
         //noinspection ConstantConditions
         final OptionEntity entity = new OptionEntity(cacheKey, converter.convert(value));
         dao.save(entity);
@@ -63,7 +64,7 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
     @Nullable
     @Override
     public Object deleteValue(@Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
+        checkRankOption(cacheKey, SPECIFIC_RANK);
         final Optional<OptionEntity> entity = find(cacheKey);
         if (entity.isPresent()) {
             dao.delete(entity.get());
@@ -77,7 +78,7 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
     @Transactional
     @Nonnull
     public Optional<OptionEntity> find(@Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
+        checkRankOption(cacheKey, SPECIFIC_RANK);
 
         Select select = selectSingleRank(cacheKey);
         TypedQuery<OptionEntity> query = entityManagerProvider.get()
@@ -91,27 +92,12 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
     }
 
     protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
-        return new Select().where("userHierarchyName", EQ, cacheKey.getHierarchy()
+        return new Select().clazz(dao.tableName(OptionEntity.class))
+                           .where("userHierarchyName", EQ, cacheKey.getHierarchy()
                                                                    .persistenceName())
                            .and("rankName", EQ, cacheKey.getRequestedRankName())
                            .and("optionKey", EQ, cacheKey.getOptionKey()
                                                          .compositeKey());
-    }
-
-    @Nonnull
-    @Override
-    public <V> Optional<V> getValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
-        checkNotNull(converter);
-        final Optional<OptionEntity> entity = find(cacheKey);
-        if (entity.isPresent()) {
-            V result = converter.convert(entity.get()
-                                               .getValue());
-            if (result != null) {
-                return Optional.of(result);
-            }
-        }
-        return Optional.empty();
     }
 
     @Nonnull
@@ -137,7 +123,7 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
     protected Optional<Object> findFirstRankedValue(@Nonnull final OptionCacheKey cacheKey, @Nonnull List<String> ranks) {
         Optional<Object> value = Optional.empty();
         for (String rank : ranks) {
-            OptionCacheKey searchKey = new OptionCacheKey(cacheKey, rank, true);
+            OptionCacheKey searchKey = new OptionCacheKey(cacheKey, rank, SPECIFIC_RANK);
             value = getValue(searchKey);
             if (value.isPresent()) {
                 return value;
@@ -149,7 +135,7 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
     @Nonnull
     @Override
     public Optional<Object> getValue(@Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
+        checkRankOption(cacheKey, SPECIFIC_RANK);
         final Optional<OptionEntity> entity = find(cacheKey);
         if (entity.isPresent()) {
             return Optional.of(entity.get()
@@ -161,12 +147,62 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
 
     @Nonnull
     @Override
+    public <V> Optional<V> getHighestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull final OptionCacheKey cacheKey) {
+        checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
+        final ImmutableList<String> ranks = cacheKey.getHierarchy()
+                                                    .ranksForCurrentUser();
+
+        return findFirstRankedValue(converter, cacheKey, ranks);
+    }
+
+    protected <V> Optional<V> findFirstRankedValue(@Nonnull Converter<String, V> converter, @Nonnull final OptionCacheKey cacheKey, @Nonnull List<String>
+            ranks) {
+        Optional<V> value = Optional.empty();
+        for (String rank : ranks) {
+            OptionCacheKey searchKey = new OptionCacheKey(cacheKey, rank, SPECIFIC_RANK);
+            value = getValue(converter, searchKey);
+            if (value.isPresent()) {
+                return value;
+            }
+        }
+        return value;
+    }
+
+    @Nonnull
+    @Override
+    public <V> Optional<V> getValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
+        checkRankOption(cacheKey, SPECIFIC_RANK);
+        checkNotNull(converter);
+        final Optional<OptionEntity> entity = find(cacheKey);
+        if (entity.isPresent()) {
+            V result = converter.convert(entity.get()
+                                               .getValue());
+            if (result != null) {
+                return Optional.of(result);
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Nonnull
+    @Override
     public Optional<Object> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.LOWEST_RANK);
         final ImmutableList<String> ranks = cacheKey.getHierarchy()
                                                     .ranksForCurrentUser()
                                                     .reverse();
         return findFirstRankedValue(cacheKey, ranks);
+    }
+
+
+    @Nonnull
+    @Override
+    public <V> Optional<V> getLowestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
+        checkRankOption(cacheKey, RankOption.LOWEST_RANK);
+        final ImmutableList<String> ranks = cacheKey.getHierarchy()
+                                                    .ranksForCurrentUser()
+                                                    .reverse();
+        return findFirstRankedValue(converter, cacheKey, ranks);
     }
 
     @Override
