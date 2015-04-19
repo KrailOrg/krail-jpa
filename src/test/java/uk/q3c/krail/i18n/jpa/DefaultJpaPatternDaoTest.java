@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({TestJpaModule.class})
-public class BaseJpaPatternDaoTest extends BaseJpaTest {
+public class DefaultJpaPatternDaoTest extends BaseJpaTest {
 
 
     public static final String UK_ENGLISH = "UK English";

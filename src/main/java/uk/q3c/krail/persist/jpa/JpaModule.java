@@ -94,8 +94,16 @@ public abstract class JpaModule extends PersistenceModule {
     @Override
     protected void configurePersistence() {
         bindInstanceConfiguration();
-        bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
+        bindContainerProvider();
         define();
+    }
+
+
+    /**
+     * Override this method to provide your own {@link JpaContainerProvider} implementation
+     */
+    protected void bindContainerProvider() {
+        bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
     }
 
 

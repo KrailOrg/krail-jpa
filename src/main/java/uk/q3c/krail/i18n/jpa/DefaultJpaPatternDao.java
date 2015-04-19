@@ -13,6 +13,7 @@ package uk.q3c.krail.i18n.jpa;
 
 import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
+import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
 import uk.q3c.krail.core.data.Select;
 import uk.q3c.krail.i18n.PatternCacheKey;
@@ -27,18 +28,20 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Sub-class and construct with the appropriately annotated {@code dao} and {@code EntityManagerProvider}
+ * The default implementation of {@link JpaPatternDao}.  The {@code entityManagerProvider} and {@code dao} are bound by {@link PersistenceUnitModule} to the
+ * annotation which is used in the injection of this class. (For example, if an instance of this class is annotated with @Jpa1, then the constructor arameters
+ * will also be bound with @Jpa1)
  * <p>
  * Created by David Sowerby on 15/04/15.
  */
-public class BaseJpaPatternDao implements JpaPatternDao {
+public class DefaultJpaPatternDao implements JpaPatternDao {
 
 
     private final StandardJpaStatementDao dao;
     private EntityManagerProvider entityManagerProvider;
 
     @Inject
-    protected BaseJpaPatternDao(EntityManagerProvider entityManagerProvider, StandardJpaStatementDao dao) {
+    protected DefaultJpaPatternDao(EntityManagerProvider entityManagerProvider, StandardJpaStatementDao dao) {
         this.dao = dao;
         this.entityManagerProvider = entityManagerProvider;
     }

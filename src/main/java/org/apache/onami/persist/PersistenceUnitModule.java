@@ -28,7 +28,7 @@ import static org.apache.onami.persist.Preconditions.checkNotNull;
  *
  * @see PersistenceModule
  */
-class PersistenceUnitModule extends PrivateModule {
+public class PersistenceUnitModule extends PrivateModule {
     private static Logger log = LoggerFactory.getLogger(PersistenceUnitModule.class);
 
     /**
