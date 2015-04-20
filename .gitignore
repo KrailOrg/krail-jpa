@@ -1,19 +1,19 @@
-/.gradle
-/.idea
-/.settings
-/bin
-/build
-/gradle
-/logs
+.gradle
+.idea
+.settings
+bin
+build
+gradle
+logs
 
-/.krail-jpa.iml
+.krail-jpa.iml
 
 build.gradle~
 git.ignore~
 README.md~
 
-/.classpath
-/.project
-/.gradle
-/error-screenshots
+.classpath
+.project
+
+error-screenshots
 derby.log

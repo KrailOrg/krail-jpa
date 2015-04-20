@@ -6,7 +6,7 @@ This module provides JPA capability.
 
 Most of the functionality is provided by [Apache Onami Persist](https://onami.apache.org/persist/), but with some additional Vaadin specific capability, and Krail specific generic DAOs.
 
-In order to provide the DAOs, the onami-persist source is included and slighlty modified. 
+In order to provide the DAOs, the onami-persist source is included and slightly modified. 
 
 ##Features
 
