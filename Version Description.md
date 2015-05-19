@@ -1,1 +1,1 @@
-Included onami-persist in the source, so that modifications can be made to it.  DAOs are now created using the same Private Modules as Onami, thus enabling the use of DAOs with Binding Annotations
+Upgrade to Vaadin 7.4.6, Guice 4.0.  Minor change to build file for bintrayUpload
