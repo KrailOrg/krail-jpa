@@ -30,3 +30,7 @@ dependencies {
 
 
 }
+
+bintray {
+    dryRun = false
+}
