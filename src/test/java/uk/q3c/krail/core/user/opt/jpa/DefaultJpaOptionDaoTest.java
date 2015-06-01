@@ -50,7 +50,7 @@ public class DefaultJpaOptionDaoTest extends BaseJpaTest {
     private OptionCacheKey cacheKey0;
     private OptionCacheKey cacheKey1;
     private OptionCacheKey cacheKey2;
-    private OptionKey optionKey1;
+    private OptionKey<Integer> optionKey1;
 
     @Before
     public void setup() {
@@ -59,7 +59,7 @@ public class DefaultJpaOptionDaoTest extends BaseJpaTest {
         when(hierarchy1.rankName(0)).thenReturn(rankNames1.get(0));
         when(hierarchy1.rankName(1)).thenReturn(rankNames1.get(1));
         when(hierarchy1.rankName(2)).thenReturn(rankNames1.get(2));
-        optionKey1 = new OptionKey(LocaleContainer.class, LabelKey.Yes);
+        optionKey1 = new OptionKey<>(337, LocaleContainer.class, LabelKey.Yes);
         cacheKey0 = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, 0, optionKey1);
         cacheKey1 = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, 1, optionKey1);
         cacheKey2 = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, 2, optionKey1);
