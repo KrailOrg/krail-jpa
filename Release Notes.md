@@ -1,4 +1,4 @@
-### Release Notes for krail-jpa 0.8.9
+### Release Notes for krail-jpa 0.8.10
 
 OptionKey includeds default value
 
@@ -8,15 +8,7 @@ OptionKey includeds default value
 
 #### Dependency changes
 
-   compile dependency version changed to: krail:0.9.4
+   compile dependency version changed to: krail:0.9.5
 
 #### Detail
 
-*Version info updated*
-
-
----
-*OptionKey includes default value, OptionPopup introduced*
-
-
----
