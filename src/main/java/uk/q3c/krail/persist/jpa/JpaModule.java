@@ -112,4 +112,9 @@ public abstract class JpaModule extends PersistenceModule {
     protected void bindInstanceConfiguration() {
         bind(JpaInstanceConfiguration.class).to(DefaultJpaInstanceConfiguration.class);
     }
+
+
+    protected void bindPersistenceService() {
+        bind(JpaService.class).to(DefaultJpaService.class);
+    }
 }

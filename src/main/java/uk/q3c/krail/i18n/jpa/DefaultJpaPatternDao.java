@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import uk.q3c.krail.core.data.Select;
 import uk.q3c.krail.i18n.PatternCacheKey;
 import uk.q3c.krail.persist.jpa.StandardJpaStatementDao;
@@ -76,7 +77,11 @@ public class DefaultJpaPatternDao implements JpaPatternDao {
     public Optional<PatternEntity> find(@Nonnull PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
         Select select = selectEntity(cacheKey);
-        TypedQuery<PatternEntity> query = entityManagerProvider.get()
+
+
+        // see https://github.com/davidsowerby/krail/issues/364
+        EntityManagerImpl entityManager = (EntityManagerImpl) entityManagerProvider.get();
+        TypedQuery<PatternEntity> query = entityManager
                                                                .createQuery(select.toString(), PatternEntity.class);
         List<PatternEntity> results = query.getResultList();
         if (results.isEmpty()) {

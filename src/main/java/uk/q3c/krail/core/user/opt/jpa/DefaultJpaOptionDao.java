@@ -15,6 +15,7 @@ import com.google.common.base.Converter;
 import com.google.common.collect.ImmutableList;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.Transactional;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import uk.q3c.krail.core.data.Select;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.RankOption;
@@ -81,7 +82,10 @@ public abstract class DefaultJpaOptionDao implements JpaOptionDao {
         checkRankOption(cacheKey, SPECIFIC_RANK);
 
         Select select = selectSingleRank(cacheKey);
-        TypedQuery<OptionEntity> query = entityManagerProvider.get()
+
+        // see https://github.com/davidsowerby/krail/issues/364
+        EntityManagerImpl entityManager = (EntityManagerImpl) entityManagerProvider.get();
+        TypedQuery<OptionEntity> query = entityManager
                                                               .createQuery(select.toString(), OptionEntity.class);
         List<OptionEntity> results = query.getResultList();
         if (results.isEmpty()) {
