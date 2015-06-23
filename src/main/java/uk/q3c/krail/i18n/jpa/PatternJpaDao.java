@@ -9,19 +9,19 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.persist.jpa;
+package uk.q3c.krail.i18n.jpa;
 
-import com.google.inject.Inject;
-import org.apache.onami.persist.EntityManagerProvider;
-import uk.q3c.krail.core.user.opt.jpa.DefaultJpaOptionDao;
+import uk.q3c.krail.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.PatternDao;
+
+import java.util.Optional;
 
 /**
- * Created by David Sowerby on 14/04/15.
+ * JPA specific interface for {@link PatternDao} to enable binding alternatives
+ * <p>
+ * Created by David Sowerby on 15/04/15.
  */
-public class TestJpaOptionDao extends DefaultJpaOptionDao {
+public interface PatternJpaDao extends PatternDao {
 
-    @Inject
-    protected TestJpaOptionDao(@Jpa1 StandardJpaStatementDao dao, @Jpa1 EntityManagerProvider entityManagerProvider) {
-        super(dao, entityManagerProvider);
-    }
+    Optional<PatternEntity> find(PatternCacheKey cacheKey);
 }

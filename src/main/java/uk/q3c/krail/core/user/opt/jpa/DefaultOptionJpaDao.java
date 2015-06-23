@@ -16,11 +16,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.Transactional;
-import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import uk.q3c.krail.core.data.Select;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.RankOption;
-import uk.q3c.krail.persist.jpa.StandardJpaStatementDao;
+import uk.q3c.krail.persist.jpa.DefaultJpaDao_LongInt;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,16 +37,12 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
  * <p>
  * Created by David Sowerby on 13/04/15.
  */
-public class BaseJpaOptionDao implements JpaOptionDao {
+public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements OptionJpaDao {
 
-
-    private final StandardJpaStatementDao dao;
-    private EntityManagerProvider entityManagerProvider;
 
     @Inject
-    protected BaseJpaOptionDao(StandardJpaStatementDao dao, EntityManagerProvider entityManagerProvider) {
-        this.dao = dao;
-        this.entityManagerProvider = entityManagerProvider;
+    protected DefaultOptionJpaDao(EntityManagerProvider entityManagerProvider) {
+        super(entityManagerProvider);
     }
 
     @Override
@@ -55,22 +50,24 @@ public class BaseJpaOptionDao implements JpaOptionDao {
         throw new UnsupportedOperationException("Not supported.  Use call with Converter, write(OptionCacheKey, Converter, value)");
     }
 
+    @Transactional
     @Override
     public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Converter<V, String> converter, @Nonnull V value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         //noinspection ConstantConditions
         final OptionEntity entity = new OptionEntity(cacheKey, converter.convert(value));
-        dao.save(entity);
+        save( entity);
     }
 
 
+    @Transactional
     @Nullable
     @Override
     public Object deleteValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         final Optional<OptionEntity> entity = find(cacheKey);
         if (entity.isPresent()) {
-            dao.delete(entity.get());
+            delete( entity.get());
             return entity.get()
                          .getValue();
         } else {
@@ -85,11 +82,7 @@ public class BaseJpaOptionDao implements JpaOptionDao {
 
         Select select = selectSingleRank(cacheKey);
 
-        // see https://github.com/davidsowerby/krail/issues/364
-        EntityManagerImpl entityManager = (EntityManagerImpl) entityManagerProvider.get();
-
-
-        TypedQuery<OptionEntity> query = entityManager
+        TypedQuery<OptionEntity> query = getEntityManager()
                                                               .createQuery(select.toString(), OptionEntity.class);
         List<OptionEntity> results = query.getResultList();
         if (results.isEmpty()) {
@@ -100,7 +93,7 @@ public class BaseJpaOptionDao implements JpaOptionDao {
     }
 
     protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
-        return new Select().clazz(dao.tableName(OptionEntity.class))
+        return new Select().from(tableName(OptionEntity.class))
                            .where("userHierarchyName", EQ, cacheKey.getHierarchy()
                                                                    .persistenceName())
                            .and("rankName", EQ, cacheKey.getRequestedRankName())
@@ -213,10 +206,6 @@ public class BaseJpaOptionDao implements JpaOptionDao {
         return findFirstRankedValue(converter, cacheKey, ranks);
     }
 
-    @Override
-    public String connectionUrl() {
-        return dao.connectionUrl();
-    }
 
 
 }

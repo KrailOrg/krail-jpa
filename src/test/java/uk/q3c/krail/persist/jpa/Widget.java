@@ -13,20 +13,25 @@ package uk.q3c.krail.persist.jpa;
 
 import uk.q3c.krail.core.data.KrailEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity
 public class Widget implements KrailEntity<Long,Integer> {
     private String description;
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
     @Version
     private Integer version;
+
+    public Widget() {
+    }
+
+    public Widget(String name, String description) {
+        this.description = description;
+        this.name = name;
+    }
 
     public String getName() {
         return name;

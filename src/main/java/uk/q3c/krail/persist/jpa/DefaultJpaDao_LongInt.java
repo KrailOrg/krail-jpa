@@ -11,12 +11,18 @@
 
 package uk.q3c.krail.persist.jpa;
 
-import uk.q3c.krail.core.data.StatementDao;
+import com.google.inject.Inject;
+import org.apache.onami.persist.EntityManagerProvider;
 
 /**
- * Created by David Sowerby on 01/01/15.
+ * _LongInt simply means ID = Long and VER = Integer
+ *
+ * Created by David Sowerby on 11/04/15.
  */
-public interface JpaStatementDao<ID, VER> extends StatementDao<ID, VER> {
+public class DefaultJpaDao_LongInt extends BaseJpaDao<Long, Integer> implements JpaDao_LongInt {
 
-
+    @Inject
+    public DefaultJpaDao_LongInt(EntityManagerProvider entityManagerProvider) {
+        super(entityManagerProvider);
+    }
 }

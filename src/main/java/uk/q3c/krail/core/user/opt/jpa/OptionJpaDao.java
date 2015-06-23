@@ -9,10 +9,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.persist.jpa;
+package uk.q3c.krail.core.user.opt.jpa;
+
+import uk.q3c.krail.core.user.opt.OptionDao;
 
 /**
- * Created by David Sowerby on 11/04/15.
+ * Created by David Sowerby on 13/04/15.
  */
-public interface StandardJpaStatementDao extends JpaStatementDao<Long, Integer> {
+public interface OptionJpaDao extends OptionDao {
+
 }

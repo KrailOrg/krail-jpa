@@ -162,12 +162,12 @@ public class DefaultJpaInstanceConfigurationTest {
         //given
 
         //when
-        config.addPrivateBinding(StandardJpaDao.class, DefaultStandardJpaDao.class);
+        config.addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class);
         //then
         assertThat(config.getAdditionalBindings()).hasSize(1);
         BindingPair<?> entry = config.getAdditionalBindings()
                                      .get(0);
-        assertThat(entry.getInterfaceClass()).isEqualTo(StandardJpaDao.class);
-        assertThat(entry.getImplementationClass()).isEqualTo(DefaultStandardJpaDao.class);
+        assertThat(entry.getInterfaceClass()).isEqualTo(JpaDao_LongInt.class);
+        assertThat(entry.getImplementationClass()).isEqualTo(DefaultJpaDao_LongInt.class);
     }
 }

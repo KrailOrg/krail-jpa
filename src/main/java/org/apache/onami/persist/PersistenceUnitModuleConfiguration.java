@@ -13,10 +13,6 @@ package org.apache.onami.persist;
 
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import uk.q3c.krail.persist.jpa.DefaultStandardJpaBlockDao;
-import uk.q3c.krail.persist.jpa.DefaultStandardJpaStatementDao;
-import uk.q3c.krail.persist.jpa.StandardJpaBlockDao;
-import uk.q3c.krail.persist.jpa.StandardJpaStatementDao;
 
 import javax.inject.Provider;
 import javax.persistence.EntityManagerFactory;
@@ -47,8 +43,7 @@ public class PersistenceUnitModuleConfiguration implements UnannotatedPersistenc
     private Key<? extends Provider<UserTransaction>> utProviderKey;
 
     public PersistenceUnitModuleConfiguration() {
-        addPrivateBinding(new BindingPair<StandardJpaStatementDao>(StandardJpaStatementDao.class, DefaultStandardJpaStatementDao.class));
-        addPrivateBinding(new BindingPair<StandardJpaBlockDao>(StandardJpaBlockDao.class, DefaultStandardJpaBlockDao.class));
+
     }
 
     /**

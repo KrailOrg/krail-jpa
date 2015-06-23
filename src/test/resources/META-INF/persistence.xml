@@ -24,7 +24,7 @@
         <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity</class>
         <class>uk.q3c.krail.i18n.jpa.PatternEntity</class>
 
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:persistence"/>

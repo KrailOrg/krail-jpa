@@ -13,12 +13,10 @@ package uk.q3c.krail.persist.jpa;
 
 import uk.q3c.krail.core.data.Dao;
 
-import javax.persistence.EntityManager;
-
 /**
  * Type safety interface for JPA implementation of {@link Dao}
  *
  * Created by David Sowerby on 08/04/15.
  */
-public interface JpaDao<ID, VER> extends Dao<ID, VER, EntityManager> {
+public interface JpaDao<ID, VER> extends Dao<ID, VER> {
 }

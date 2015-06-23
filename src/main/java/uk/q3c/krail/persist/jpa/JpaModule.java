@@ -70,7 +70,7 @@ public abstract class JpaModule extends PersistenceModule {
     }
 
     /**
-     * Override this with calls to {@link #bindApplicationManagedPersistenceUnit(String)} ofr testing outside the container
+     * Override this with calls to {@link #bindApplicationManagedPersistenceUnit(String)} for testing outside the container
      *
      * @param annotation
      * @param entityManagerFactory
@@ -113,8 +113,8 @@ public abstract class JpaModule extends PersistenceModule {
         bind(JpaInstanceConfiguration.class).to(DefaultJpaInstanceConfiguration.class);
     }
 
-
-    protected void bindPersistenceService() {
-        bind(JpaService.class).to(DefaultJpaService.class);
-    }
+    //
+    //    protected void bindPersistenceService() {
+    //        bind(JpaService.class).to(DefaultJpaService.class);
+    //    }
 }

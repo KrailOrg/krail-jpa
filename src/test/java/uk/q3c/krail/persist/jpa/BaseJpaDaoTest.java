@@ -11,62 +11,75 @@
 
 package uk.q3c.krail.persist.jpa;
 
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
-import org.junit.Before;
+import com.google.inject.Key;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import uk.q3c.krail.core.data.KrailEntity;
 
-import javax.persistence.EntityManager;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-@RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
-public class BaseJpaDaoTest {
 
-    BaseJpaDao dao;
+public class BaseJpaDaoTest extends JpaDaoTestBase {
 
-    @Mock
-    StandardTestEntity entity;
 
-    @Mock
-    StandardTestEntity entity1;
+    JpaDao_LongInt dao;
+    private long count = 1;
 
-    @Mock
-    StandardTestEntity entity2;
-
-    @Mock
-    EntityManager entityManager;
-
-    @Before
-    public void setup() {
-        dao = new DefaultStandardJpaDao();
+    @Override
+    public void setUp() {
+        super.setUp();
+        final Key<JpaDao_LongInt> daoKey = Key.get(JpaDao_LongInt.class, Jpa1.class);
+        dao = injector.getInstance(daoKey);
+        count = 1;
     }
 
     @Test
-    public void saveNullId() {
+    public void writeRead() {
         //given
-        when(entity.getId()).thenReturn(null);
+
         //when
-        KrailEntity result = dao.save(entityManager, entity);
+        final Widget widget = dao.save(newWidget("a", "write"));
         //then
-        assertThat(result).isEqualTo(entity);
-        verify(entityManager).persist(entity);
+        assertThat(widget.getId()).isNotNull();
+        final Optional<Widget> byId = dao.findById(Widget.class, 1L);
+        assertThat(byId.isPresent()).isTrue();
+        assertThat(byId.get()
+                       .getName()).isEqualTo("a");
+    }
+
+    private Widget newWidget(String a, String b) {
+        Widget w = new Widget(a, b);
+        w.setId(count++);
+        return w;
     }
 
     @Test
-    public void saveAlreadyExists() {
+    public void count() {
         //given
-        when(entity.getId()).thenReturn(5L);
-        when(entity1.getId()).thenReturn(5L);
-        when(entityManager.find(any(), any(Long.class))).thenReturn(entity1);
-        when(entityManager.merge(any())).thenReturn(entity2);
+
         //when
-        KrailEntity result = dao.save(entityManager, entity);
+        dao.save(newWidget("a", "count"));
+        dao.save(newWidget("b", "count"));
+        dao.save(newWidget("c", "count"));
         //then
-        assertThat(result).isEqualTo(entity2);
+        assertThat(dao.findById(Widget.class, 1L)
+                      .isPresent()).isTrue();
+        assertThat(dao.findById(Widget.class, 2L)
+                      .isPresent()).isTrue();
+        assertThat(dao.findById(Widget.class, 3L)
+                      .isPresent()).isTrue();
+        assertThat(dao.findById(Widget.class, 4L)
+                      .isPresent()).isFalse();
+        assertThat(dao.findAll(Widget.class)).hasSize(3);
+        assertThat(dao.count(Widget.class)).isEqualTo(3);
     }
+
+    @Test
+    public void tableName() {
+        //given
+        //when
+
+        //then
+        assertThat(dao.tableName(Widget.class)).isEqualTo("Widget");
+    }
+
 }

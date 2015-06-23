@@ -9,7 +9,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package org.apache.onami.persist.test.multipersistenceunits;
+package uk.q3c.krail.persist.jpa;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -23,10 +23,10 @@ import org.junit.Before;
 
 import java.lang.annotation.Annotation;
 
-public abstract class BaseMultiplePuTest {
-    protected EntityManagerProvider firstEmp;
+public abstract class JpaDaoTestBase {
+    protected EntityManagerProvider entityManagerProvider1;
 
-    protected EntityManagerProvider secondEmp;
+    protected EntityManagerProvider entityManagerProvider2;
 
     protected Injector injector;
 
@@ -37,46 +37,42 @@ public abstract class BaseMultiplePuTest {
         injector = Guice.createInjector(pm);
 
         //startup persistence
-        injector.getInstance(Key.get(PersistenceService.class, FirstPU.class))
+        injector.getInstance(Key.get(PersistenceService.class, Jpa1.class))
                 .start();
-        injector.getInstance(Key.get(PersistenceService.class, SecondPU.class))
+        injector.getInstance(Key.get(PersistenceService.class, Jpa2.class))
                 .start();
 
-        firstEmp = injector.getInstance(Key.get(EntityManagerProvider.class, FirstPU.class));
-        secondEmp = injector.getInstance(Key.get(EntityManagerProvider.class, SecondPU.class));
+        entityManagerProvider1 = injector.getInstance(Key.get(EntityManagerProvider.class, Jpa1.class));
+        entityManagerProvider2 = injector.getInstance(Key.get(EntityManagerProvider.class, Jpa2.class));
+
+        beginUnitOfWork();
     }
 
     protected PersistenceModule createPersistenceModuleForTest() {
-        return new PersistenceModule() {
-
-            @Override
-            protected void configurePersistence() {
-                bindApplicationManagedPersistenceUnit("firstUnit").annotatedWith(FirstPU.class);
-                bindApplicationManagedPersistenceUnit("secondUnit").annotatedWith(SecondPU.class);
-            }
-        };
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        injector.getInstance(Key.get(PersistenceService.class, FirstPU.class))
-                .stop();
-        injector.getInstance(Key.get(PersistenceService.class, SecondPU.class))
-                .stop();
+        return new TestJpaModule();
     }
 
     protected void beginUnitOfWork() {
-        getInstance(UnitOfWork.class, FirstPU.class).begin();
-        getInstance(UnitOfWork.class, SecondPU.class).begin();
+        getInstance(UnitOfWork.class, Jpa1.class).begin();
+        getInstance(UnitOfWork.class, Jpa2.class).begin();
     }
 
     protected <T> T getInstance(Class<T> type, Class<? extends Annotation> anno) {
         return injector.getInstance(Key.get(type, anno));
     }
 
+    @After
+    public void tearDown() throws Exception {
+        endUnitOfWork();
+        injector.getInstance(Key.get(PersistenceService.class, Jpa1.class))
+                .stop();
+        injector.getInstance(Key.get(PersistenceService.class, Jpa2.class))
+                .stop();
+    }
+
     protected void endUnitOfWork() {
-        getInstance(UnitOfWork.class, FirstPU.class).end();
-        getInstance(UnitOfWork.class, SecondPU.class).end();
+        getInstance(UnitOfWork.class, Jpa1.class).end();
+        getInstance(UnitOfWork.class, Jpa2.class).end();
     }
 
     protected <T> T getInstance(Class<T> type) {

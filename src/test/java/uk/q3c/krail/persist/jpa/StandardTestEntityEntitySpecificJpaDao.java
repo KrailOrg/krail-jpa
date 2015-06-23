@@ -12,9 +12,7 @@
 package uk.q3c.krail.persist.jpa;
 
 /**
- * Extends JpaBlockDao to use the standard ID = Long and VER = Integer
- * <p>
- * Created by David Sowerby on 11/04/15.
+ * Created by David Sowerby on 12/04/15.
  */
-public interface StandardJpaBlockDao extends JpaBlockDao<Long, Integer> {
+public interface StandardTestEntityEntitySpecificJpaDao extends EntitySpecificJpaDao<StandardTestEntity, Long, Integer> {
 }

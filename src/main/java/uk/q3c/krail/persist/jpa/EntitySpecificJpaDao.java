@@ -11,13 +11,11 @@
 
 package uk.q3c.krail.persist.jpa;
 
-import uk.q3c.krail.core.data.StatementBlock;
+import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.core.data.SpecificDao;
 
 /**
- * Created by David Sowerby on 08/04/15.
+ * Created by David Sowerby on 06/04/15.
  */
-
-public interface JpaStatementBlock extends StatementBlock {
-
-
+public interface EntitySpecificJpaDao<E extends KrailEntity<ID, VER>, ID, VER> extends SpecificDao<E, ID, VER> {
 }

@@ -14,6 +14,10 @@ package uk.q3c.krail.persist.jpa;
 import org.apache.onami.persist.BindingPair;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;
+import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao;
+import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao;
+import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
+import uk.q3c.krail.i18n.jpa.PatternJpaDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,6 +148,20 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
         return props;
     }
 
+    @Override
+    public LoggingLevel getLoggingLevel() {
+        return (LoggingLevel) get(PersistenceUnitProperties.LOGGING_LEVEL);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DefaultJpaInstanceConfiguration useLongIntDao() {
+        addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class);
+        return this;
+    }
+
     /**
      * Adds a interface-implementation pair which will be bound in the PersistenceUnitModule, and attached to an annotation if one has been specified
      *
@@ -156,8 +174,21 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public LoggingLevel getLoggingLevel() {
-        return (LoggingLevel) get(PersistenceUnitProperties.LOGGING_LEVEL);
+    public DefaultJpaInstanceConfiguration usePatternDao() {
+        addPrivateBinding(PatternJpaDao.class, DefaultPatternJpaDao.class);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DefaultJpaInstanceConfiguration useOptionDao() {
+        addPrivateBinding(OptionJpaDao.class, DefaultOptionJpaDao.class);
+        return this;
     }
 }

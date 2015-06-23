@@ -16,5 +16,5 @@ package uk.q3c.krail.persist.jpa;
  *
  * Created by David Sowerby on 11/04/15.
  */
-public interface StandardJpaDao extends JpaDao<Long, Integer> {
+public interface JpaDao_LongInt extends JpaDao<Long, Integer> {
 }

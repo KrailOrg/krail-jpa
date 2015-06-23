@@ -12,7 +12,10 @@
 package uk.q3c.krail.persist.jpa;
 
 import org.apache.onami.persist.BindingPair;
+import org.apache.onami.persist.EntityManagerProvider;
 import uk.q3c.krail.core.data.DataSourceInstanceConfiguration;
+import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao;
+import uk.q3c.krail.i18n.jpa.PatternJpaDao;
 
 import java.util.List;
 import java.util.Properties;
@@ -22,7 +25,6 @@ import java.util.Properties;
  */
 public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfiguration<C> {
     enum TransactionType {JTA, RESOURCE_LOCAL}
-
 
 
     enum Ddl {
@@ -53,5 +55,39 @@ public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfigura
 
     Properties toProperties();
 
-    <T> DefaultJpaInstanceConfiguration addPrivateBinding(Class<T> interfaceClass, Class<? extends T> implementationClass);
+    /**
+     * Passes an interface-implementation pair which enables binding of implementations via the Onami-persist private modules.  If you have a binding which
+     * needs to be bound "to" an {@link EntityManagerProvider} (including those bound with annotations) use this method.
+     *
+     * @param interfaceClass
+     *         the interface to be bound
+     * @param implementationClass
+     *         the implementation to bind it to
+     * @param <T>
+     *         the interface type
+     *
+     * @return this for fluency
+     */
+    <T> C addPrivateBinding(Class<T> interfaceClass, Class<? extends T> implementationClass);
+
+    /**
+     * Shorthand way to bind {@link JpaDao_LongInt}
+     *
+     * @return this for fluency
+     */
+    C useLongIntDao();
+
+    /**
+     * Shorthand way to bind {@link PatternJpaDao}
+     *
+     * @return this for fluency
+     */
+    C usePatternDao();
+
+    /**
+     * Shorthand way to bind {@link OptionJpaDao}
+     *
+     * @return this for fluency
+     */
+    DefaultJpaInstanceConfiguration useOptionDao();
 }

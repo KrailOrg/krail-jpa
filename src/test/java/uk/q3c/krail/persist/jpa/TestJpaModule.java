@@ -13,10 +13,10 @@ package uk.q3c.krail.persist.jpa;
 
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
-import uk.q3c.krail.core.user.opt.jpa.BaseJpaOptionDao;
-import uk.q3c.krail.core.user.opt.jpa.JpaOptionDao;
-import uk.q3c.krail.i18n.jpa.DefaultJpaPatternDao;
-import uk.q3c.krail.i18n.jpa.JpaPatternDao;
+import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao;
+import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao;
+import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
+import uk.q3c.krail.i18n.jpa.PatternJpaDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -81,10 +81,10 @@ public class TestJpaModule extends JpaModule {
               .user("test")
               .password("test")
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE)
-              .addPrivateBinding(StandardTestEntityJpaSpecificDao.class, DefaultStandardTestEntityJpaSpecificDao.class)
               .
-                      addPrivateBinding(JpaOptionDao.class, BaseJpaOptionDao.class)
-              .addPrivateBinding(JpaPatternDao.class, DefaultJpaPatternDao.class);
+                      addPrivateBinding(OptionJpaDao.class, DefaultOptionJpaDao.class)
+              .addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
+              .addPrivateBinding(PatternJpaDao.class, DefaultPatternJpaDao.class);
 
         return config;
     }
@@ -96,6 +96,10 @@ public class TestJpaModule extends JpaModule {
               .url("mem:test")
               .user("sa")
               .password("")
+              .useOptionDao()
+              .useLongIntDao()
+              .usePatternDao()
+              .addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE);
         return config;
     }

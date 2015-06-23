@@ -15,8 +15,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
-import uk.q3c.krail.persist.jpa.DefaultStandardJpaDao;
-import uk.q3c.krail.persist.jpa.StandardJpaDao;
 
 import javax.inject.Provider;
 import javax.persistence.EntityManagerFactory;
@@ -42,7 +40,6 @@ public abstract class PersistenceModule extends AbstractModule {
      */
     @Override
     protected final void configure() {
-        bindDao();
         if (configurations != null) {
             throw new RuntimeException("cannot reenter the configure method");
         }
@@ -84,9 +81,6 @@ public abstract class PersistenceModule extends AbstractModule {
      */
     protected abstract void configurePersistence();
 
-    protected void bindDao() {
-        bind(StandardJpaDao.class).to(DefaultStandardJpaDao.class);
-    }
 
     /**
      * Binds an application managed persistence unit.

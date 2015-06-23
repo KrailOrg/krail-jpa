@@ -11,13 +11,13 @@
 
 package uk.q3c.krail.persist.jpa;
 
+import org.apache.onami.persist.EntityManagerProvider;
+import org.apache.onami.persist.Transactional;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.data.Dao;
 import uk.q3c.krail.core.data.KrailEntity;
-import uk.q3c.krail.util.QualityReview1;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,23 +30,32 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Base implementation of {@link JpaDao}.  Sub-classs for specific ID and VER types
+ * A general purpose JPA DAO Base implementation with generic methods.  Sub-class for specific ID and VER types.  Transaction control must be provided by the
+ * caller, and each method needs an EntityManager instance as a parameter.  The same can be achieved using an {@link EntityManager} directly - this class,
+ * however, may be useful as a base where the developer prefers to keep queries in one place.
  * <p>
  * <p>
  * Created by David Sowerby on 08/04/15.
  */
-@QualityReview1
 public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
 
     private static Logger log = LoggerFactory.getLogger(BaseJpaDao.class);
+    private EntityManagerProvider entityManagerProvider;
+
+
+    public BaseJpaDao(EntityManagerProvider entityManagerProvider) {
+        this.entityManagerProvider = entityManagerProvider;
+    }
 
     /**
-     * @see Dao#save(Object, KrailEntity)
+     * {@inheritDoc}
      */
+    @Transactional
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> E save(@Nonnull EntityManager entityManager, @Nonnull E entity) {
+    public <E extends KrailEntity<ID, VER>> E save(@Nonnull E entity) {
         checkNotNull(entity);
-        checkNotNull(entityManager);
+        EntityManager entityManager = entityManagerProvider.get();
+        
 
         if (entity.getId() == null) {
             entityManager.persist(entity);
@@ -55,7 +64,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
         }
 
 
-        @SuppressWarnings("unchecked") Optional<E> fEntity = findById(entityManager, (Class<E>) entity.getClass(), entity.getId());
+        @SuppressWarnings("unchecked") Optional<E> fEntity = findById((Class<E>) entity.getClass(), entity.getId());
         if (fEntity.isPresent()) {
             E managedEntity = entityManager.merge(entity);
             log.debug("{} persisted", managedEntity);
@@ -68,42 +77,45 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     }
 
     /**
-     * @see Dao#findById(Object, Class, Object)
+     * {@inheritDoc}
      */
     @Override
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> Optional<E> findById(@Nonnull EntityManager entityManager, @Nonnull Class<E> entityClass, @Nonnull ID entityId) {
+    public <E extends KrailEntity<ID, VER>> Optional<E> findById(@Nonnull Class<E> entityClass, @Nonnull ID entityId) {
         checkNotNull(entityClass);
-        checkNotNull(entityManager);
         checkNotNull(entityId);
-
+        EntityManager entityManager = entityManagerProvider.get();
         E result = entityManager.find(entityClass, entityId);
         return (result == null) ? Optional.empty() : Optional.of(result);
     }
 
     /**
-     * @see Dao#delete(Object, KrailEntity)
+     * {@inheritDoc}
      */
+    @Transactional
     @Override
-    public <E extends KrailEntity<ID, VER>> void delete(@Nonnull EntityManager entityManager, @Nonnull E entity) {
+    public <E extends KrailEntity<ID, VER>> Optional<E> delete(@Nonnull E entity) {
         checkNotNull(entity);
-        checkNotNull(entityManager);
-        E mergedEntity = merge(entityManager, entity);
+        EntityManager entityManager = entityManagerProvider.get();
+        E mergedEntity = merge(entity);
         if (mergedEntity.getId() != null) {
-            deleteById(entityManager, entity.getClass(), mergedEntity.getId());
+            //noinspection unchecked
+            return deleteById((Class<E>) entity.getClass(), mergedEntity.getId());
         }
+        return Optional.empty();
     }
 
     /**
-     * @see Dao#deleteById(Object, Class, Object)
+     * {@inheritDoc}
      */
+    @Transactional
     @Override
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> Optional<E> deleteById(@Nonnull EntityManager entityManager, @Nonnull Class<E> entityClass, @Nonnull ID entityId) {
+    public <E extends KrailEntity<ID, VER>> Optional<E> deleteById(@Nonnull Class<E> entityClass, @Nonnull ID entityId) {
         checkNotNull(entityClass);
-        checkNotNull(entityManager);
         checkNotNull(entityId);
-        Optional<E> entity = findById(entityManager, entityClass, entityId);
+        EntityManager entityManager = entityManagerProvider.get();
+        Optional<E> entity = findById(entityClass, entityId);
         if (entity.isPresent()) {
             entityManager.remove(entity.get());
             log.debug("Deleted entity {}", entity);
@@ -114,40 +126,41 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     }
 
     /**
-     * @see Dao#merge(Object, KrailEntity)
+     * {@inheritDoc}
      */
+    @Transactional
     @Override
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> E merge(@Nonnull EntityManager entityManager, @Nonnull E entity) {
-        checkNotNull(entityManager);
+    public <E extends KrailEntity<ID, VER>> E merge(@Nonnull E entity) {
         checkNotNull(entity);
+        EntityManager entityManager = entityManagerProvider.get();
         E mergedEntity = entityManager.merge(entity);
         log.debug("{} merged", entity);
         return mergedEntity;
     }
 
     /**
-     * @see Dao#findAll(Object, Class)
+     * {@inheritDoc}
      */
     @Nonnull
     @Override
-    public <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull EntityManager entityManager, @Nonnull Class<E> entityClass) {
+    public <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
-        checkNotNull(entityManager);
+        EntityManager entityManager = entityManagerProvider.get();
         EntityManagerImpl em = (EntityManagerImpl) entityManager;
-        TypedQuery<E> query = em.createQuery("SELECT e FROM " + tableName(entityManager, entityClass) + " e", entityClass);
+        TypedQuery<E> query = em.createQuery("SELECT e FROM " + tableName(entityClass) + " e", entityClass);
         query.setFlushMode(FlushModeType.AUTO);
         return query.getResultList();
     }
 
     /**
-     * @see Dao#tableName(Object, Class)
+     * {@inheritDoc}
      */
     @Override
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> String tableName(@Nonnull EntityManager entityManager, @Nonnull Class<E> entityClass) {
+    public <E extends KrailEntity<ID, VER>> String tableName(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
-        checkNotNull(entityManager);
+        EntityManager entityManager = entityManagerProvider.get();
         EntityManagerImpl em = (EntityManagerImpl) entityManager;
         Metamodel meta = em.getMetamodel();
         EntityType<E> entityType = meta.entity(entityClass);
@@ -160,40 +173,46 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     }
 
     /**
-     * @see Dao#getVersion(Object, KrailEntity)
+     * {@inheritDoc}
      */
     @Nonnull
     @Override
-    public <E extends KrailEntity<ID, VER>> VER getVersion(@Nonnull EntityManager entityManager, @Nonnull E entity) {
+    public <E extends KrailEntity<ID, VER>> VER getVersion(@Nonnull E entity) {
         return entity.getVersion();
     }
 
     /**
-     * @see Dao#getIdentity(Object, KrailEntity)
+     * {@inheritDoc}
      */
     @Nullable
     @Override
-    public <E extends KrailEntity<ID, VER>> ID getIdentity(@Nonnull EntityManager entityManager, @Nonnull E entity) {
+    public <E extends KrailEntity<ID, VER>> ID getIdentity(@Nonnull E entity) {
         return entity.getId();
     }
 
 
     /**
-     * @see Dao#count(Object, Class)
+     * {@inheritDoc}
      */
+    @Transactional
     @Override
-    public <E extends KrailEntity<ID, VER>> long count(@Nonnull EntityManager entityManager, @Nonnull Class<E> entityClass) {
+    public <E extends KrailEntity<ID, VER>> long count(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
-        checkNotNull(entityManager);
-        String tableName = tableName(entityManager, entityClass);
-        Query query = entityManager.createQuery("SELECT COUNT(c) FROM " + tableName + " c");
+        EntityManager entityManager = entityManagerProvider.get();
+        String tableName = tableName(entityClass);
+        Query query = entityManager.createQuery("SELECT COUNT(c) FROM Widget c");
         return (Long) query.getSingleResult();
     }
 
     @Override
-    public String connectionUrl(@Nonnull EntityManager entityManager) {
+    public String connectionUrl() {
+        EntityManager entityManager = entityManagerProvider.get();
         EntityManagerImpl em = (EntityManagerImpl) entityManager;
         return (String) em.getProperties()
                           .get(PersistenceUnitProperties.JDBC_URL);
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManagerProvider.get();
     }
 }

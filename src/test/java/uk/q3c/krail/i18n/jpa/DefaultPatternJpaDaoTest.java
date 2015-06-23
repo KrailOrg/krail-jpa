@@ -11,74 +11,78 @@
 
 package uk.q3c.krail.i18n.jpa;
 
-import com.google.inject.Inject;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
+import com.google.inject.Key;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import uk.q3c.krail.core.user.opt.jpa.BaseJpaTest;
 import uk.q3c.krail.i18n.LabelKey;
 import uk.q3c.krail.i18n.PatternCacheKey;
 import uk.q3c.krail.persist.jpa.Jpa1;
-import uk.q3c.krail.persist.jpa.TestJpaModule;
+import uk.q3c.krail.persist.jpa.JpaDaoTestBase;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestJpaModule.class})
-public class DefaultJpaPatternDaoTest extends BaseJpaTest {
+
+public class DefaultPatternJpaDaoTest extends JpaDaoTestBase {
 
 
     public static final String UK_ENGLISH = "UK English";
     public static final String ENGLISH = "English";
     public static final String US_ENGLISH = "US English";
 
-    @Inject
-    @Jpa1
-    JpaPatternDao dao;
 
     PatternCacheKey cacheKey1 = new PatternCacheKey(LabelKey.Yes, Locale.UK);
     PatternCacheKey cacheKey2 = new PatternCacheKey(LabelKey.Yes, new Locale("EN"));
     PatternCacheKey cacheKey3 = new PatternCacheKey(LabelKey.Yes, Locale.US);
 
+    PatternJpaDao dao;
+    private long count = 1;
+
+    @Override
+    public void setUp() {
+        super.setUp();
+        final Key<PatternJpaDao> daoKey = Key.get(PatternJpaDao.class, Jpa1.class);
+        dao = injector.getInstance(daoKey);
+        count = 1;
+    }
+
     @Test
     public void allMethods() {
         //given
 
-        //when
+        //        when
         dao.write(cacheKey1, UK_ENGLISH);
         dao.write(cacheKey2, ENGLISH);
         dao.write(cacheKey3, US_ENGLISH);
         //then
-        assertThat(dao.getValue(cacheKey1)
-                      .get()).isEqualTo(UK_ENGLISH);
-        assertThat(dao.getValue(cacheKey2)
-                      .get()).isEqualTo(ENGLISH);
-        assertThat(dao.getValue(cacheKey3)
-                      .get()).isEqualTo(US_ENGLISH);
+        assertThat(this.dao.getValue(cacheKey1)
+                           .get()).isEqualTo(UK_ENGLISH);
+        assertThat(this.dao.getValue(cacheKey2)
+                           .get()).isEqualTo(ENGLISH);
+        assertThat(this.dao.getValue(cacheKey3)
+                           .get()).isEqualTo(US_ENGLISH);
 
         //when
-        String returnedValue = dao.deleteValue(cacheKey2);
+        Optional<String> returnedValue = this.dao.deleteValue(cacheKey2);
 
         //then
-        assertThat(dao.getValue(cacheKey1)
-                      .get()).isEqualTo(UK_ENGLISH);
-        assertThat(dao.getValue(cacheKey2)
-                      .isPresent()).isFalse();
-        assertThat(dao.getValue(cacheKey3)
-                      .get()).isEqualTo(US_ENGLISH);
-        assertThat(returnedValue).isEqualTo(ENGLISH);
+        assertThat(this.dao.getValue(cacheKey1)
+                           .get()).isEqualTo(UK_ENGLISH);
+        assertThat(this.dao.getValue(cacheKey2)
+                           .isPresent()).isFalse();
+        assertThat(this.dao.getValue(cacheKey3)
+                           .get()).isEqualTo(US_ENGLISH);
+        assertThat(returnedValue.get()).isEqualTo(ENGLISH);
 
         //when absent
-        returnedValue = dao.deleteValue(cacheKey2);
+        returnedValue = this.dao.deleteValue(cacheKey2);
 
         //then
-        assertThat(returnedValue).isNull();
+        assertThat(returnedValue.isPresent()).isFalse();
 
         //when
-        String url = dao.connectionUrl();
+        String url = this.dao.connectionUrl();
 
         //then
         assertThat(url).startsWith("jdbc:derby:/tmp/junit");
