@@ -68,7 +68,7 @@ public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfigura
      *
      * @return this for fluency
      */
-    <T> C addPrivateBinding(Class<T> interfaceClass, Class<? extends T> implementationClass);
+    <T> C bind(Class<T> interfaceClass, Class<? extends T> implementationClass);
 
     /**
      * Shorthand way to bind {@link JpaDao_LongInt}

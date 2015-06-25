@@ -13,7 +13,7 @@ package uk.q3c.krail.core.user.opt.jpa;
 
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
-import uk.q3c.krail.persist.jpa.StandardEntity;
+import uk.q3c.krail.persist.jpa.EntityBase_LongInt;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Entity;
@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by David Sowerby on 13/04/15.
  */
 @Entity
-public class OptionEntity extends StandardEntity {
+public class OptionEntity extends EntityBase_LongInt {
 
     private String optionKey;
     private String rankName;

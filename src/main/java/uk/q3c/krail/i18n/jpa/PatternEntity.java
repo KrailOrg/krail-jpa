@@ -14,7 +14,7 @@ package uk.q3c.krail.i18n.jpa;
 import com.google.common.base.Converter;
 import com.google.common.base.Enums;
 import uk.q3c.krail.i18n.PatternCacheKey;
-import uk.q3c.krail.persist.jpa.StandardEntity;
+import uk.q3c.krail.persist.jpa.EntityBase_LongInt;
 
 import javax.persistence.Entity;
 
@@ -25,7 +25,7 @@ import javax.persistence.Entity;
  */
 
 @Entity
-public class PatternEntity extends StandardEntity {
+public class PatternEntity extends EntityBase_LongInt {
 
     private String i18nkey;
     private String locale;

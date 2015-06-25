@@ -158,7 +158,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      */
     @Override
     public DefaultJpaInstanceConfiguration useLongIntDao() {
-        addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class);
+        bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class);
         return this;
     }
 
@@ -168,7 +168,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      * @return this
      */
     @Override
-    public <T> DefaultJpaInstanceConfiguration addPrivateBinding(Class<T> interfaceClass, Class<? extends T> implementationClass) {
+    public <T> DefaultJpaInstanceConfiguration bind(Class<T> interfaceClass, Class<? extends T> implementationClass) {
         BindingPair<T> bindingPair = new BindingPair<>(interfaceClass, implementationClass);
         additionalBindings.add(bindingPair);
         return this;
@@ -179,7 +179,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      */
     @Override
     public DefaultJpaInstanceConfiguration usePatternDao() {
-        addPrivateBinding(PatternJpaDao.class, DefaultPatternJpaDao.class);
+        bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
         return this;
     }
 
@@ -188,7 +188,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      */
     @Override
     public DefaultJpaInstanceConfiguration useOptionDao() {
-        addPrivateBinding(OptionJpaDao.class, DefaultOptionJpaDao.class);
+        bind(OptionJpaDao.class, DefaultOptionJpaDao.class);
         return this;
     }
 }

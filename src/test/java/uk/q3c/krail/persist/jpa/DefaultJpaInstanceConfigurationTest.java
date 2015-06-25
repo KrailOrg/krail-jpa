@@ -162,7 +162,7 @@ public class DefaultJpaInstanceConfigurationTest {
         //given
 
         //when
-        config.addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class);
+        config.bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class);
         //then
         assertThat(config.getAdditionalBindings()).hasSize(1);
         BindingPair<?> entry = config.getAdditionalBindings()

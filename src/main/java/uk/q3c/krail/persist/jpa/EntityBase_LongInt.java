@@ -13,22 +13,18 @@ package uk.q3c.krail.persist.jpa;
 
 import uk.q3c.krail.core.data.KrailEntity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 /**
- * A convenience base class which implements KrailEntity with ID of Long & VER of Integer.  It also assumes automatic generation of the Id being provided by
- * the
- * database.  Of course, not all databases have that facility
+ * A convenience base class which implements KrailEntity with ID of Long and Version of Integer.  It also assumes automatic generation of the Id being
+ * provided by the database.  Of course, not all databases have that facility
  * <p>
  * Created by David Sowerby on 13/04/15.
  */
 @MappedSuperclass
-public abstract class StandardEntity implements KrailEntity<Long, Integer> {
+public abstract class EntityBase_LongInt implements KrailEntity<Long, Integer> {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version

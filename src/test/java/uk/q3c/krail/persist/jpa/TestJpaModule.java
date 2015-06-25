@@ -82,9 +82,9 @@ public class TestJpaModule extends JpaModule {
               .password("test")
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE)
               .
-                      addPrivateBinding(OptionJpaDao.class, DefaultOptionJpaDao.class)
-              .addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
-              .addPrivateBinding(PatternJpaDao.class, DefaultPatternJpaDao.class);
+                      bind(OptionJpaDao.class, DefaultOptionJpaDao.class)
+              .bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
+              .bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
 
         return config;
     }
@@ -99,7 +99,7 @@ public class TestJpaModule extends JpaModule {
               .useOptionDao()
               .useLongIntDao()
               .usePatternDao()
-              .addPrivateBinding(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
+              .bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE);
         return config;
     }
