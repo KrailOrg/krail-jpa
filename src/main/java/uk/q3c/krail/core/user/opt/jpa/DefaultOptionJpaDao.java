@@ -11,67 +11,73 @@
 
 package uk.q3c.krail.core.user.opt.jpa;
 
-import com.google.common.base.Converter;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.Transactional;
 import uk.q3c.krail.core.data.Select;
+import uk.q3c.krail.core.data.StringPersistenceConverter;
+import uk.q3c.krail.core.user.opt.Option;
+import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
+import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.persist.jpa.DefaultJpaDao_LongInt;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.q3c.krail.core.data.Select.Compare.EQ;
 import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
  * Converts {@link OptionCacheKey} to {@link OptionEntity} for persistence.  Sub-class and construct with the appropriately annotated {@code dao} and {@code
  * EntityManagerProvider}
- * <p>
+ * <br>
+ * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
+ * {@link OptionDao} are wrapped in Optional.
+ * <br>
  * Created by David Sowerby on 13/04/15.
  */
 public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements OptionJpaDao {
 
 
+    private StringPersistenceConverter stringPersistenceConverter;
+
     @Inject
-    protected DefaultOptionJpaDao(EntityManagerProvider entityManagerProvider) {
+    protected DefaultOptionJpaDao(EntityManagerProvider entityManagerProvider, StringPersistenceConverter stringPersistenceConverter) {
         super(entityManagerProvider);
+        this.stringPersistenceConverter = stringPersistenceConverter;
     }
 
     @Override
-    public void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Object value) {
-        throw new UnsupportedOperationException("Not supported.  Use call with Converter, write(OptionCacheKey, Converter, value)");
-    }
-
-    @Transactional
-    @Override
-    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Converter<V, String> converter, @Nonnull V value) {
+    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         //noinspection ConstantConditions
-        final OptionEntity entity = new OptionEntity(cacheKey, converter.convert(value));
-        save( entity);
+
+        final OptionEntity entity = new OptionEntity(cacheKey, stringPersistenceConverter.convertToPersistence(value)
+                                                                                         .get());
+        save(entity);
     }
 
 
     @Transactional
-    @Nullable
+    @Nonnull
     @Override
-    public Object deleteValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         final Optional<OptionEntity> entity = find(cacheKey);
         if (entity.isPresent()) {
-            delete( entity.get());
-            return entity.get()
-                         .getValue();
+            String entityValue = entity.get()
+                                       .getValue();
+            delete(entity.get());
+            return Optional.of(entityValue);
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -82,8 +88,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
 
         Select select = selectSingleRank(cacheKey);
 
-        TypedQuery<OptionEntity> query = getEntityManager()
-                                                              .createQuery(select.toString(), OptionEntity.class);
+        TypedQuery<OptionEntity> query = getEntityManager().createQuery(select.toString(), OptionEntity.class);
         List<OptionEntity> results = query.getResultList();
         if (results.isEmpty()) {
             return Optional.empty();
@@ -103,7 +108,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
 
     @Nonnull
     @Override
-    public Optional<Object> getHighestRankedValue(@Nonnull final OptionCacheKey cacheKey) {
+    public Optional<?> getHighestRankedValue(@Nonnull final OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
         final ImmutableList<String> ranks = cacheKey.getHierarchy()
                                                     .ranksForCurrentUser();
@@ -121,8 +126,8 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
      *
      * @return the first value found, or Optional.empty() if none found
      */
-    protected Optional<Object> findFirstRankedValue(@Nonnull final OptionCacheKey cacheKey, @Nonnull List<String> ranks) {
-        Optional<Object> value = Optional.empty();
+    protected Optional<?> findFirstRankedValue(@Nonnull final OptionCacheKey cacheKey, @Nonnull List<String> ranks) {
+        Optional<?> value = Optional.empty();
         for (String rank : ranks) {
             OptionCacheKey searchKey = new OptionCacheKey(cacheKey, rank, SPECIFIC_RANK);
             value = getValue(searchKey);
@@ -135,59 +140,24 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
 
     @Nonnull
     @Override
-    public Optional<Object> getValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
-        final Optional<OptionEntity> entity = find(cacheKey);
-        if (entity.isPresent()) {
-            return Optional.of(entity.get()
-                                     .getValue());
+        final Optional<OptionEntity> optionalEntity = find(cacheKey);
+        if (optionalEntity.isPresent()) {
+
+            String value = optionalEntity.get()
+                                         .getValue();
+
+            return stringPersistenceConverter.convertFromPersistence(cacheKey, value);
         } else {
             return Optional.empty();
         }
     }
 
-    @Nonnull
-    @Override
-    public <V> Optional<V> getHighestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull final OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
-        final ImmutableList<String> ranks = cacheKey.getHierarchy()
-                                                    .ranksForCurrentUser();
-
-        return findFirstRankedValue(converter, cacheKey, ranks);
-    }
-
-    protected <V> Optional<V> findFirstRankedValue(@Nonnull Converter<String, V> converter, @Nonnull final OptionCacheKey cacheKey, @Nonnull List<String>
-            ranks) {
-        Optional<V> value = Optional.empty();
-        for (String rank : ranks) {
-            OptionCacheKey searchKey = new OptionCacheKey(cacheKey, rank, SPECIFIC_RANK);
-            value = getValue(converter, searchKey);
-            if (value.isPresent()) {
-                return value;
-            }
-        }
-        return value;
-    }
 
     @Nonnull
     @Override
-    public <V> Optional<V> getValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, SPECIFIC_RANK);
-        checkNotNull(converter);
-        final Optional<OptionEntity> entity = find(cacheKey);
-        if (entity.isPresent()) {
-            V result = converter.convert(entity.get()
-                                               .getValue());
-            if (result != null) {
-                return Optional.of(result);
-            }
-        }
-        return Optional.empty();
-    }
-
-    @Nonnull
-    @Override
-    public Optional<Object> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, RankOption.LOWEST_RANK);
         final ImmutableList<String> ranks = cacheKey.getHierarchy()
                                                     .ranksForCurrentUser()
@@ -196,16 +166,23 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
     }
 
 
-    @Nonnull
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
-    public <V> Optional<V> getLowestRankedValue(@Nonnull Converter<String, V> converter, @Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, RankOption.LOWEST_RANK);
-        final ImmutableList<String> ranks = cacheKey.getHierarchy()
-                                                    .ranksForCurrentUser()
-                                                    .reverse();
-        return findFirstRankedValue(converter, cacheKey, ranks);
+    public int clear() {
+        final Query query = getEntityManager().createQuery("DELETE FROM " + tableName(OptionEntity.class));
+        return query.executeUpdate();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long count() {
+        return super.count(OptionEntity.class);
+    }
 
 
 }

@@ -21,18 +21,20 @@ import javax.persistence.Entity;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * An entity to hold data for an {@link Option}.  The value is held as a String to enable the use of a single column for it.
+ * An entity to hold data for an {@link Option}.  The value is held as a String to enable the use of a single column for it.  Context is part of the overall
+ * {#optionKey} to ensure uniqueness, but is also held separately as it is a useful way to group the options for manual setting up, and there may also be an
+ * opportunity to pre-load options by Context.
  * <p>
  * Created by David Sowerby on 13/04/15.
  */
 @Entity
 public class OptionEntity extends EntityBase_LongInt {
 
+    private String context;
     private String optionKey;
     private String rankName;
     private String userHierarchyName;
     private String value;
-
     public OptionEntity() {
     }
 
@@ -42,8 +44,15 @@ public class OptionEntity extends EntityBase_LongInt {
         rankName = optionCacheKey.getRequestedRankName();
         optionKey = optionCacheKey.getOptionKey()
                                   .compositeKey();
+        context = optionCacheKey.getOptionKey()
+                                .getContext()
+                                .getName();
         this.value = value;
 
+    }
+
+    public String getContext() {
+        return context;
     }
 
     public String getUserHierarchyName() {

@@ -12,8 +12,13 @@
 package uk.q3c.krail.persist.jpa;
 
 import com.google.inject.BindingAnnotation;
+import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import org.apache.onami.persist.PersistenceModule;
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
+import uk.q3c.krail.core.persist.OptionDaoProviders;
+import uk.q3c.krail.core.persist.PatternDaoProviders;
+import uk.q3c.krail.core.user.opt.CoreDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,9 +27,14 @@ import javax.persistence.Persistence;
 import java.lang.annotation.Annotation;
 
 /**
+ * Sets up {@link PersistenceModule} with some Krail specific extensions
+ * <p>
  * Created by David Sowerby on 30/12/14.
  */
 public abstract class JpaModule extends PersistenceModule {
+
+    private Multibinder<Class<? extends Annotation>> optionDaoProviders;
+    private Multibinder<Class<? extends Annotation>> patternDaoProviders;
 
     /**
      * Adds a single JPA persistence unit.  If you require multiple persistence units, an annotation is required in
@@ -63,16 +73,36 @@ public abstract class JpaModule extends PersistenceModule {
         PersistenceUnitModuleConfiguration conf = bindPU(puName, annotation, entityManagerFactory);
         //Transfer properties and additional bindings
         conf.setProperties(configuration.toProperties());
+        conf.provideOptionDao(configuration.providesOptionDao());
+        conf.providePatternDao(configuration.providesPatternDao());
         conf.getAdditionalBindings()
             .addAll(configuration.getAdditionalBindings());
+        registerDaoProviders(conf);
 
+    }
 
+    protected void registerDaoProviders(PersistenceUnitModuleConfiguration config) {
+
+        Class<? extends Annotation> annotation = (config.getAnnotation() == null) ? CoreDao.class : config.getAnnotation();
+
+        if (config.providesPatternDao()) {
+            patternDaoProviders.addBinding()
+                               .toInstance(annotation);
+        }
+
+        if (config.providesOptionDao()) {
+            optionDaoProviders.addBinding()
+                              .toInstance(annotation);
+        }
     }
 
     /**
      * Override this with calls to {@link #bindApplicationManagedPersistenceUnit(String)} for testing outside the container
      *
+     * @param puName
+     *         the persistence unit name - must be defined in persistence.xml
      * @param annotation
+     *         - the annotation class to associate the persistence unit to.  Must be a {@link BindingAnnotation}
      * @param entityManagerFactory
      *
      * @return
@@ -93,6 +123,12 @@ public abstract class JpaModule extends PersistenceModule {
      */
     @Override
     protected void configurePersistence() {
+        TypeLiteral<Class<? extends Annotation>> annotationClassLiteral = new TypeLiteral<Class<? extends Annotation>>() {
+        };
+
+        patternDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, PatternDaoProviders.class);
+        optionDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, OptionDaoProviders.class);
+
         bindInstanceConfiguration();
         bindContainerProvider();
         define();
@@ -113,8 +149,5 @@ public abstract class JpaModule extends PersistenceModule {
         bind(JpaInstanceConfiguration.class).to(DefaultJpaInstanceConfiguration.class);
     }
 
-    //
-    //    protected void bindPersistenceService() {
-    //        bind(JpaService.class).to(DefaultJpaService.class);
-    //    }
+
 }

@@ -14,10 +14,10 @@ package uk.q3c.krail.persist.jpa;
 import org.apache.onami.persist.BindingPair;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;
+import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao;
-import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao;
+import uk.q3c.krail.i18n.PatternDao;
 import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
-import uk.q3c.krail.i18n.jpa.PatternJpaDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,16 +26,20 @@ import java.util.Properties;
 
 /**
  * Helper class to populate the equivalent of persistence.xml properties.  A persistence.xml file is still needed but
- * can be minimal (persistent unit declarations and
+ * can be minimal
+ *
  * Created by David Sowerby on 01/01/15.
  */
 public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> implements JpaInstanceConfiguration<DefaultJpaInstanceConfiguration> {
-
 
     private List<BindingPair<?>> additionalBindings;
     private boolean autoCreate;
     private boolean create;
     private JpaDb db;
+    private boolean provideCoreOptionDao = false;
+    private boolean provideCorePatternDao;
+    private boolean provideOptionDao = false;
+    private boolean providePatternDao;
     private String url;
     public DefaultJpaInstanceConfiguration() {
         //not sure why this is necessary but assigning properties doesn't work without it
@@ -47,6 +51,16 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
     public DefaultJpaInstanceConfiguration provider(Class<?> providerClazz) {
         put("javax.persistence.provider", providerClazz);
         return this;
+    }
+
+    @Override
+    public boolean providesOptionDao() {
+        return provideOptionDao;
+    }
+
+    @Override
+    public boolean providesPatternDao() {
+        return providePatternDao;
     }
 
     @Override
@@ -174,21 +188,59 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public DefaultJpaInstanceConfiguration usePatternDao() {
-        bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
-        return this;
-    }
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public DefaultJpaInstanceConfiguration usePatternDao() {
+    //        bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
+    //        return this;
+    //    }
+
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public DefaultJpaInstanceConfiguration useOptionDao() {
+    //        bind(OptionJpaDao.class, DefaultOptionJpaDao.class);
+    //        return this;
+    //    }
+
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public DefaultJpaInstanceConfiguration provideCoreOptionDao() {
+    //        provideCoreOptionDao = true;
+    //        return this;
+    //    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DefaultJpaInstanceConfiguration useOptionDao() {
-        bind(OptionJpaDao.class, DefaultOptionJpaDao.class);
+    public DefaultJpaInstanceConfiguration provideOptionDao() {
+        bind(OptionDao.class, DefaultOptionJpaDao.class);
+        provideOptionDao = true;
+        return this;
+    }
+
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public DefaultJpaInstanceConfiguration provideCorePatternDao() {
+    //        provideCorePatternDao = true;
+    //        return this;
+    //    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DefaultJpaInstanceConfiguration providePatternDao() {
+        bind(PatternDao.class, DefaultPatternJpaDao.class);
+        providePatternDao = true;
         return this;
     }
 }

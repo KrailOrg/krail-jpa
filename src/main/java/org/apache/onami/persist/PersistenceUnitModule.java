@@ -13,12 +13,17 @@ package org.apache.onami.persist;
 
 import com.google.inject.Key;
 import com.google.inject.PrivateModule;
+import com.google.inject.Provider;
+import com.google.inject.multibindings.MapBinder;
 import com.google.inject.util.Providers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.i18n.PatternDao;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
+import java.lang.annotation.Annotation;
 import java.util.Properties;
 
 import static org.apache.onami.persist.Preconditions.checkNotNull;
@@ -45,6 +50,8 @@ public class PersistenceUnitModule extends PrivateModule {
      * Container for adding this persistence unit.
      */
     private final AllPersistenceUnits allPersistenceUnits;
+    private MapBinder<Class<? extends Annotation>, Provider<OptionDao>> optionDaoProviders;
+    private MapBinder<Class<? extends Annotation>, Provider<PatternDao>> patternDaoProviders;
 
     /**
      * Constructor.
@@ -67,6 +74,8 @@ public class PersistenceUnitModule extends PrivateModule {
      */
     @Override
     protected void configure() {
+
+
         bind(AnnotationHolder.class).toInstance(config.getAnnotationHolder());
 
         bindPersistenceServiceAndEntityManagerFactoryProviderAndProperties();
@@ -127,6 +136,7 @@ public class PersistenceUnitModule extends PrivateModule {
             for (BindingPair bindingPair : config.getAdditionalBindings()) {
                 expose(bindingPair.getInterfaceClass());
             }
+
         }
     }
 

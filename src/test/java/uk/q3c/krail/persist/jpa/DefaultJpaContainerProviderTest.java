@@ -18,11 +18,12 @@ import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.q3c.krail.core.data.DataModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestJpaModule.class})
+@GuiceContext({TestJpaModule.class, DataModule.class})
 public class DefaultJpaContainerProviderTest {
 
     @Inject

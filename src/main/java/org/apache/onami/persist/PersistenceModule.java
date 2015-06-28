@@ -76,6 +76,7 @@ public abstract class PersistenceModule extends AbstractModule {
         }
     }
 
+
     /**
      * Configures the persistence units over the exposed methods.
      */

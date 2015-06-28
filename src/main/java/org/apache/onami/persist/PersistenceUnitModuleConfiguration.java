@@ -36,14 +36,23 @@ public class PersistenceUnitModuleConfiguration implements UnannotatedPersistenc
     private Key<? extends Provider<EntityManagerFactory>> emfProviderKey;
     private boolean isJta = false;
     private Properties properties;
+    private boolean providesOptionDao;
+    private boolean providesPatternDao;
     private String puName;
     private UserTransaction userTransaction;
     private String utJndiName;
     private Provider<UserTransaction> utProvider;
     private Key<? extends Provider<UserTransaction>> utProviderKey;
-
     public PersistenceUnitModuleConfiguration() {
 
+    }
+
+    public boolean providesPatternDao() {
+        return providesPatternDao;
+    }
+
+    public boolean providesOptionDao() {
+        return providesOptionDao;
     }
 
     /**
@@ -251,8 +260,15 @@ public class PersistenceUnitModuleConfiguration implements UnannotatedPersistenc
         return new AnnotationHolder(annotation);
     }
 
-    Class<? extends Annotation> getAnnotation() {
+    public Class<? extends Annotation> getAnnotation() {
         return annotation;
     }
 
+    public void provideOptionDao(boolean provides) {
+        this.providesOptionDao = provides;
+    }
+
+    public void providePatternDao(boolean provides) {
+        this.providesPatternDao = provides;
+    }
 }

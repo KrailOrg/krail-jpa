@@ -96,7 +96,6 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     @Override
     public <E extends KrailEntity<ID, VER>> Optional<E> delete(@Nonnull E entity) {
         checkNotNull(entity);
-        EntityManager entityManager = entityManagerProvider.get();
         E mergedEntity = merge(entity);
         if (mergedEntity.getId() != null) {
             //noinspection unchecked
@@ -199,9 +198,8 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     public <E extends KrailEntity<ID, VER>> long count(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
         EntityManager entityManager = entityManagerProvider.get();
-        String tableName = tableName(entityClass);
-        Query query = entityManager.createQuery("SELECT COUNT(c) FROM Widget c");
-        return (Long) query.getSingleResult();
+        Query query = entityManager.createQuery("SELECT COUNT(c) FROM " + tableName(entityClass) + " c");
+        return (long) query.getSingleResult();
     }
 
     @Override

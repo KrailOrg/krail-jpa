@@ -96,9 +96,7 @@ public class TestJpaModule extends JpaModule {
               .url("mem:test")
               .user("sa")
               .password("")
-              .useOptionDao()
               .useLongIntDao()
-              .usePatternDao()
               .bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE);
         return config;

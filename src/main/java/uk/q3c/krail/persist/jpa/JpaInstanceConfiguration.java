@@ -14,8 +14,7 @@ package uk.q3c.krail.persist.jpa;
 import org.apache.onami.persist.BindingPair;
 import org.apache.onami.persist.EntityManagerProvider;
 import uk.q3c.krail.core.data.DataSourceInstanceConfiguration;
-import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao;
-import uk.q3c.krail.i18n.jpa.PatternJpaDao;
+import uk.q3c.krail.core.persist.KrailPersistenceUnit;
 
 import java.util.List;
 import java.util.Properties;
@@ -23,7 +22,7 @@ import java.util.Properties;
 /**
  * Created by David Sowerby on 04/04/15.
  */
-public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfiguration<C> {
+public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfiguration<C>, KrailPersistenceUnit {
     enum TransactionType {JTA, RESOURCE_LOCAL}
 
 
@@ -42,6 +41,10 @@ public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfigura
     }
 
     List<BindingPair<?>> getAdditionalBindings();
+
+    boolean providesOptionDao();
+
+    boolean providesPatternDao();
 
     C provider(Class<?> providerClazz);
 
@@ -77,17 +80,5 @@ public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfigura
      */
     C useLongIntDao();
 
-    /**
-     * Shorthand way to bind {@link PatternJpaDao}
-     *
-     * @return this for fluency
-     */
-    C usePatternDao();
 
-    /**
-     * Shorthand way to bind {@link OptionJpaDao}
-     *
-     * @return this for fluency
-     */
-    DefaultJpaInstanceConfiguration useOptionDao();
 }
