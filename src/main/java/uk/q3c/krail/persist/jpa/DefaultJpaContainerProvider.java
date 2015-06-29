@@ -12,32 +12,29 @@
 package uk.q3c.krail.persist.jpa;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Key;
+import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.provider.CachingBatchableLocalEntityProvider;
-
-import javax.persistence.EntityManagerFactory;
-import java.lang.annotation.Annotation;
+import org.apache.onami.persist.EntityManagerProvider;
+import uk.q3c.krail.persist.ContainerType;
 
 /**
  * Created by David Sowerby on 03/01/15.
  */
 public class DefaultJpaContainerProvider implements JpaContainerProvider {
 
-    private Injector injector;
+    private EntityManagerProvider entityManagerProvider;
 
     @Inject
-    protected DefaultJpaContainerProvider(Injector injector) {
-        this.injector = injector;
+    protected DefaultJpaContainerProvider(EntityManagerProvider entityManagerProvider) {
+        this.entityManagerProvider = entityManagerProvider;
     }
 
 
     @Override
-    public <E> JPAContainer<E> get(Class<? extends Annotation> annotatedBy, Class<E> entityClass,
-                                                     ContainerType containerType) {
+    public <E> JPAContainer<E> get(Class<E> entityClass, ContainerType containerType) {
 
-        com.vaadin.addon.jpacontainer.EntityProvider<E> containerProvider = null;
+        EntityProvider<E> containerProvider = null;
 
 
         switch (containerType) {
@@ -45,9 +42,7 @@ public class DefaultJpaContainerProvider implements JpaContainerProvider {
                 containerProvider = new CachingBatchableLocalEntityProvider<E>(entityClass);
                 break;
         }
-        Key<EntityManagerFactory> key = Key.get(EntityManagerFactory.class, annotatedBy);
-        EntityManagerFactory emf = injector.getInstance(key);
-        containerProvider.setEntityManager(emf.createEntityManager());
+        containerProvider.setEntityManager(entityManagerProvider.get());
         JPAContainer container = new JPAContainer(entityClass);
         container.setEntityProvider(containerProvider);
         return container;

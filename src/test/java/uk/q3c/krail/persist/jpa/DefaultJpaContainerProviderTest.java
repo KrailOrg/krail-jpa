@@ -11,33 +11,41 @@
 
 package uk.q3c.krail.persist.jpa;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import uk.q3c.krail.core.data.DataModule;
+import uk.q3c.krail.persist.ContainerType;
+import uk.q3c.krail.persist.VaadinContainerProvider;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MycilaJunitRunner.class)
-@GuiceContext({TestJpaModule.class, DataModule.class})
-public class DefaultJpaContainerProviderTest {
+public class DefaultJpaContainerProviderTest extends JpaDaoTestBase {
 
-    @Inject
-    Injector injector;
-
-    DefaultJpaContainerProvider provider;
 
     @Test
     public void get() {
         //given
-        provider = new DefaultJpaContainerProvider(injector);
+        VaadinContainerProvider provider1 = getInstance(VaadinContainerProvider.class, Jpa1.class);
+        VaadinContainerProvider provider2 = getInstance(VaadinContainerProvider.class, Jpa2.class);
         //when
-        JPAContainer<StandardTestEntity> result = provider.get(Jpa1.class, StandardTestEntity.class, JpaContainerProvider.ContainerType.CACHED);
+        Container container1 = provider1.get(StandardTestEntity.class, ContainerType.CACHED);
+        Container container2 = provider2.get(StandardTestEntity.class, ContainerType.CACHED);
         //then
-        assertThat(result).isNotNull();
+
+        assertThat(container1).isNotNull();
+        assertThat(container2).isNotNull();
+        assertThat(targetDb(container1)).isEqualTo("Derby");
+        assertThat(targetDb(container2)).isEqualTo("HSQL");
+
+    }
+
+    private String targetDb(Container container) {
+        JPAContainer jpaContainer = (JPAContainer) container;
+        Map<String, Object> props = jpaContainer.getEntityProvider()
+                                                .getEntityManager()
+                                                .getProperties();
+        return (String) props.get("eclipselink.target-database");
     }
 }

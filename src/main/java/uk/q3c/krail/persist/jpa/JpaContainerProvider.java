@@ -13,16 +13,15 @@ package uk.q3c.krail.persist.jpa;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-
-import java.lang.annotation.Annotation;
+import uk.q3c.krail.persist.ContainerType;
+import uk.q3c.krail.persist.VaadinContainerProvider;
 
 /**
  * A Krail replacement for {@link JPAContainerFactory}
  * <p>
  * Created by David Sowerby on 03/01/15.
  */
-public interface JpaContainerProvider {
-    enum ContainerType {CACHED}
+public interface JpaContainerProvider extends VaadinContainerProvider {
 
-    <E> JPAContainer<E> get(Class<? extends Annotation> annotatedBy, Class<E> entityClass, JpaContainerProvider.ContainerType containerType);
+    <E> JPAContainer<E> get(Class<E> entityClass, ContainerType containerType);
 }

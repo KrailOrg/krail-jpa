@@ -20,6 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.i18n.PatternDao;
+import uk.q3c.krail.persist.VaadinContainerProvider;
+import uk.q3c.krail.persist.jpa.DefaultJpaContainerProvider;
+import uk.q3c.krail.persist.jpa.JpaContainerProvider;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -116,11 +119,16 @@ public class PersistenceUnitModule extends PrivateModule {
                 bind(bindingPair.getInterfaceClass()).to(Key.get(bindingPair.getImplementationClass()));
             }
 
+            bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
+            bind(VaadinContainerProvider.class).to(JpaContainerProvider.class);
+
+
             //now bind the interfaces to annotation & expose
             for (BindingPair bindingPair : config.getAdditionalBindings()) {
                 bindAndExposedAnnotated(bindingPair.getInterfaceClass());
             }
 
+            bindAndExposedAnnotated(VaadinContainerProvider.class);
 
         } else {
             expose(PersistenceService.class);

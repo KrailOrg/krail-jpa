@@ -130,17 +130,17 @@ public abstract class JpaModule extends PersistenceModule {
         optionDaoProviders = Multibinder.newSetBinder(binder(), annotationClassLiteral, OptionDaoProviders.class);
 
         bindInstanceConfiguration();
-        bindContainerProvider();
+        //        bindContainerProvider();
         define();
     }
 
 
-    /**
-     * Override this method to provide your own {@link JpaContainerProvider} implementation
-     */
-    protected void bindContainerProvider() {
-        bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
-    }
+    //    /**
+    //     * Override this method to provide your own {@link JpaContainerProvider} implementation
+    //     */
+    //    protected void bindContainerProvider() {
+    //        bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
+    //    }
 
 
     protected abstract void define();
