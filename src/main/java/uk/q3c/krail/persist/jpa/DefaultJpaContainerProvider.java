@@ -16,7 +16,7 @@ import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.provider.CachingBatchableLocalEntityProvider;
 import org.apache.onami.persist.EntityManagerProvider;
-import uk.q3c.krail.persist.ContainerType;
+import uk.q3c.krail.core.persist.ContainerType;
 
 /**
  * Created by David Sowerby on 03/01/15.

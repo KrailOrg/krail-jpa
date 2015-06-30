@@ -13,8 +13,8 @@ package uk.q3c.krail.persist.jpa;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import uk.q3c.krail.persist.ContainerType;
-import uk.q3c.krail.persist.VaadinContainerProvider;
+import uk.q3c.krail.core.persist.ContainerType;
+import uk.q3c.krail.core.persist.VaadinContainerProvider;
 
 /**
  * A Krail replacement for {@link JPAContainerFactory}

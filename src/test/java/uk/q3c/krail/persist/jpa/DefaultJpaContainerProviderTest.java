@@ -14,8 +14,8 @@ package uk.q3c.krail.persist.jpa;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container;
 import org.junit.Test;
-import uk.q3c.krail.persist.ContainerType;
-import uk.q3c.krail.persist.VaadinContainerProvider;
+import uk.q3c.krail.core.persist.ContainerType;
+import uk.q3c.krail.core.persist.VaadinContainerProvider;
 
 import java.util.Map;
 

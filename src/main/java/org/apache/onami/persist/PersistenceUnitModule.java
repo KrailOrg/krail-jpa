@@ -18,9 +18,9 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.util.Providers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.persist.VaadinContainerProvider;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.i18n.PatternDao;
-import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.jpa.DefaultJpaContainerProvider;
 import uk.q3c.krail.persist.jpa.JpaContainerProvider;
 
