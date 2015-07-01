@@ -89,7 +89,7 @@ public class DefaultJpaInstanceConfigurationTest {
         //then
         assertThat(config.get(PersistenceUnitProperties.JDBC_URL)).isEqualTo("jdbc:derby:/home/david/temp/derbyDb;" +
                 "create=true");
-        assertThat(config.getUrl()).isEqualTo("/home/david/temp/derbyDb");
+        assertThat(config.getConnectionUrl()).isEqualTo("/home/david/temp/derbyDb");
     }
 
     @Test

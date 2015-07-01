@@ -16,6 +16,7 @@ import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.PatternDao;
 import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
 
@@ -27,20 +28,21 @@ import java.util.Properties;
 /**
  * Helper class to populate the equivalent of persistence.xml properties.  A persistence.xml file is still needed but
  * can be minimal
- *
+ * <p>
  * Created by David Sowerby on 01/01/15.
  */
 public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> implements JpaInstanceConfiguration<DefaultJpaInstanceConfiguration> {
 
     private List<BindingPair<?>> additionalBindings;
     private boolean autoCreate;
-    private boolean create;
+    private String connectionUrl;
     private JpaDb db;
-    private boolean provideCoreOptionDao = false;
-    private boolean provideCorePatternDao;
+    private I18NKey description;
+    private I18NKey name;
     private boolean provideOptionDao = false;
     private boolean providePatternDao;
-    private String url;
+    private boolean volatilePersistence;
+
     public DefaultJpaInstanceConfiguration() {
         //not sure why this is necessary but assigning properties doesn't work without it
         provider(PersistenceProvider.class);
@@ -73,15 +75,15 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
         this.db = db;
         put(PersistenceUnitProperties.JDBC_DRIVER, db.getDriver());
         put(PersistenceUnitProperties.TARGET_DATABASE, db.getTargetDatabase());
-        if (url != null) {
-            url(url);
+        if (connectionUrl != null) {
+            url(connectionUrl);
         }
         return this;
     }
 
     @Override
     public DefaultJpaInstanceConfiguration url(String url) {
-        this.url = url;
+        this.connectionUrl = url;
         String prefix = (db == null) ? "" : db.getUrlPrefix();
         put(PersistenceUnitProperties.JDBC_URL, prefix + url + ";create=" + autoCreate);
         return this;
@@ -89,8 +91,8 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
 
 
     @Override
-    public String getUrl() {
-        return url;
+    public String getConnectionUrl() {
+        return connectionUrl;
     }
 
     @Override
@@ -188,32 +190,6 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
         return this;
     }
 
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public DefaultJpaInstanceConfiguration usePatternDao() {
-    //        bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
-    //        return this;
-    //    }
-
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public DefaultJpaInstanceConfiguration useOptionDao() {
-    //        bind(OptionJpaDao.class, DefaultOptionJpaDao.class);
-    //        return this;
-    //    }
-
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public DefaultJpaInstanceConfiguration provideCoreOptionDao() {
-    //        provideCoreOptionDao = true;
-    //        return this;
-    //    }
 
     /**
      * {@inheritDoc}
@@ -225,14 +201,6 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
         return this;
     }
 
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public DefaultJpaInstanceConfiguration provideCorePatternDao() {
-    //        provideCorePatternDao = true;
-    //        return this;
-    //    }
 
     /**
      * {@inheritDoc}
@@ -241,6 +209,46 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
     public DefaultJpaInstanceConfiguration providePatternDao() {
         bind(PatternDao.class, DefaultPatternJpaDao.class);
         providePatternDao = true;
+        return this;
+    }
+
+    @Override
+    public I18NKey getName() {
+        return name;
+    }
+
+    @Override
+    public I18NKey getDescription() {
+        return description;
+    }
+
+
+    @Override
+    public boolean isVolatilePersistence() {
+        return volatilePersistence;
+    }
+
+    @Override
+    public DefaultJpaInstanceConfiguration name(final I18NKey name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public DefaultJpaInstanceConfiguration description(final I18NKey description) {
+        this.description = description;
+        return this;
+    }
+
+    @Override
+    public DefaultJpaInstanceConfiguration connectionUrl(final String connectionUrl) {
+        this.connectionUrl = connectionUrl;
+        return this;
+    }
+
+    @Override
+    public DefaultJpaInstanceConfiguration volatilePersistence(final boolean volatilePersistence) {
+        this.volatilePersistence = volatilePersistence;
         return this;
     }
 }

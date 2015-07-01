@@ -129,6 +129,7 @@ public class PersistenceUnitModule extends PrivateModule {
             }
 
             bindAndExposedAnnotated(VaadinContainerProvider.class);
+            bindAndExposedAnnotated(JpaContainerProvider.class);
 
         } else {
             expose(PersistenceService.class);
