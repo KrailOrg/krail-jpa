@@ -16,18 +16,25 @@ import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.provider.CachingBatchableLocalEntityProvider;
 import org.apache.onami.persist.EntityManagerProvider;
+import org.apache.onami.persist.UnitOfWork;
 import uk.q3c.krail.core.persist.ContainerType;
 
 /**
+ * Sets up and returns a JPAContainer instance for use with Onami persistence.  An instance of this should be injected, annotated for the appropriate
+ * persistence unit.
+ * <p>
+ * <p>
  * Created by David Sowerby on 03/01/15.
  */
 public class DefaultJpaContainerProvider implements JpaContainerProvider {
 
     private EntityManagerProvider entityManagerProvider;
+    private UnitOfWork unitOfWork;
 
     @Inject
-    protected DefaultJpaContainerProvider(EntityManagerProvider entityManagerProvider) {
+    protected DefaultJpaContainerProvider(EntityManagerProvider entityManagerProvider, UnitOfWork unitOfWork) {
         this.entityManagerProvider = entityManagerProvider;
+        this.unitOfWork = unitOfWork;
     }
 
 
@@ -36,14 +43,15 @@ public class DefaultJpaContainerProvider implements JpaContainerProvider {
 
         EntityProvider<E> containerProvider = null;
 
-
+        // TODO Other provider types
+        //https://github.com/davidsowerby/krail-jpa/issues/9
         switch (containerType) {
             case CACHED:
-                containerProvider = new CachingBatchableLocalEntityProvider<E>(entityClass);
+                containerProvider = new CachingBatchableLocalEntityProvider<>(entityClass);
                 break;
         }
-        containerProvider.setEntityManager(entityManagerProvider.get());
-        JPAContainer container = new JPAContainer(entityClass);
+        containerProvider.setEntityManagerProvider(new EntityManagerProviderOnamiWrapper(entityManagerProvider, unitOfWork));
+        JPAContainer<E> container = new JPAContainer<>(entityClass);
         container.setEntityProvider(containerProvider);
         return container;
     }
