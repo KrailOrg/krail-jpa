@@ -35,7 +35,8 @@ import static uk.q3c.krail.core.data.Select.Compare.EQ;
 import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
- * Converts {@link OptionCacheKey} to {@link OptionEntity} for persistence.  Sub-class and construct with the appropriately annotated {@code dao} and {@code
+ * Converts {@link OptionCacheKey} to {@link OptionEntity_LongInt} for persistence.  Sub-class and construct with the appropriately annotated {@code dao} and
+ * {@code
  * EntityManagerProvider}
  * <br>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
@@ -43,13 +44,13 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
  * <br>
  * Created by David Sowerby on 13/04/15.
  */
-public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements OptionJpaDao {
+public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implements OptionJpaDao_LongInt {
 
 
     private StringPersistenceConverter stringPersistenceConverter;
 
     @Inject
-    protected DefaultOptionJpaDao(EntityManagerProvider entityManagerProvider, StringPersistenceConverter stringPersistenceConverter) {
+    protected DefaultOptionJpaDao_LongInt(EntityManagerProvider entityManagerProvider, StringPersistenceConverter stringPersistenceConverter) {
         super(entityManagerProvider);
         this.stringPersistenceConverter = stringPersistenceConverter;
     }
@@ -59,7 +60,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
         checkRankOption(cacheKey, SPECIFIC_RANK);
         //noinspection ConstantConditions
 
-        final OptionEntity entity = new OptionEntity(cacheKey, stringPersistenceConverter.convertToPersistence(value)
+        final OptionEntity_LongInt entity = new OptionEntity_LongInt(cacheKey, stringPersistenceConverter.convertToPersistence(value)
                                                                                          .get());
         save(entity);
     }
@@ -70,7 +71,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
     @Override
     public Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
-        final Optional<OptionEntity> entity = find(cacheKey);
+        final Optional<OptionEntity_LongInt> entity = find(cacheKey);
         if (entity.isPresent()) {
             String entityValue = entity.get()
                                        .getValue();
@@ -83,13 +84,13 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
 
     @Transactional
     @Nonnull
-    public Optional<OptionEntity> find(@Nonnull OptionCacheKey cacheKey) {
+    public Optional<OptionEntity_LongInt> find(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
 
         Select select = selectSingleRank(cacheKey);
 
-        TypedQuery<OptionEntity> query = getEntityManager().createQuery(select.toString(), OptionEntity.class);
-        List<OptionEntity> results = query.getResultList();
+        TypedQuery<OptionEntity_LongInt> query = getEntityManager().createQuery(select.toString(), OptionEntity_LongInt.class);
+        List<OptionEntity_LongInt> results = query.getResultList();
         if (results.isEmpty()) {
             return Optional.empty();
         } else {
@@ -98,7 +99,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
     }
 
     protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
-        return new Select().from(tableName(OptionEntity.class))
+        return new Select().from(tableName(OptionEntity_LongInt.class))
                            .where("userHierarchyName", EQ, cacheKey.getHierarchy()
                                                                    .persistenceName())
                            .and("rankName", EQ, cacheKey.getRequestedRankName())
@@ -142,7 +143,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
     @Override
     public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
-        final Optional<OptionEntity> optionalEntity = find(cacheKey);
+        final Optional<OptionEntity_LongInt> optionalEntity = find(cacheKey);
         if (optionalEntity.isPresent()) {
 
             String value = optionalEntity.get()
@@ -172,7 +173,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
     @Transactional
     @Override
     public int clear() {
-        final Query query = getEntityManager().createQuery("DELETE FROM " + tableName(OptionEntity.class));
+        final Query query = getEntityManager().createQuery("DELETE FROM " + tableName(OptionEntity_LongInt.class));
         return query.executeUpdate();
     }
 
@@ -181,7 +182,7 @@ public class DefaultOptionJpaDao extends DefaultJpaDao_LongInt implements Option
      */
     @Override
     public long count() {
-        return super.count(OptionEntity.class);
+        return super.count(OptionEntity_LongInt.class);
     }
 
 

@@ -13,8 +13,8 @@ package uk.q3c.krail.persist.jpa;
 
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
-import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao;
-import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao;
+import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao_LongInt;
+import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao_LongInt;
 import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
 import uk.q3c.krail.i18n.jpa.PatternJpaDao;
 
@@ -82,7 +82,7 @@ public class TestJpaModule extends JpaModule {
               .password("test")
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE)
               .
-                      bind(OptionJpaDao.class, DefaultOptionJpaDao.class)
+                      bind(OptionJpaDao_LongInt.class, DefaultOptionJpaDao_LongInt.class)
               .bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
               .bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
 

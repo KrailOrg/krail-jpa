@@ -18,9 +18,12 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.util.Providers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.core.persist.OptionContainerProvider;
 import uk.q3c.krail.core.persist.VaadinContainerProvider;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.i18n.PatternDao;
+import uk.q3c.krail.option.jpa.DefaultJpaOptionContainerProvider;
+import uk.q3c.krail.option.jpa.JpaOptionContainerProvider;
 import uk.q3c.krail.persist.jpa.DefaultJpaContainerProvider;
 import uk.q3c.krail.persist.jpa.JpaContainerProvider;
 
@@ -121,6 +124,8 @@ public class PersistenceUnitModule extends PrivateModule {
 
             bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
             bind(VaadinContainerProvider.class).to(JpaContainerProvider.class);
+            bind(OptionContainerProvider.class).to(JpaOptionContainerProvider.class);
+            bind(JpaOptionContainerProvider.class).to(DefaultJpaOptionContainerProvider.class);
 
 
             //now bind the interfaces to annotation & expose
@@ -130,6 +135,7 @@ public class PersistenceUnitModule extends PrivateModule {
 
             bindAndExposedAnnotated(VaadinContainerProvider.class);
             bindAndExposedAnnotated(JpaContainerProvider.class);
+            bindAndExposedAnnotated(OptionContainerProvider.class);
 
         } else {
             expose(PersistenceService.class);

@@ -35,10 +35,10 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultOptionJpaDaoTest extends JpaDaoTestBase {
+public class DefaultOptionJpaDaoLongIntTest extends JpaDaoTestBase {
 
 
-    OptionJpaDao dao;
+    OptionJpaDao_LongInt dao;
 
     @Mock
     UserHierarchy hierarchy1;
@@ -52,7 +52,7 @@ public class DefaultOptionJpaDaoTest extends JpaDaoTestBase {
     @Before
     public void setup() {
         super.setUp();
-        final Key<OptionJpaDao> daoKey = Key.get(OptionJpaDao.class, Jpa1.class);
+        final Key<OptionJpaDao_LongInt> daoKey = Key.get(OptionJpaDao_LongInt.class, Jpa1.class);
         dao = injector.getInstance(daoKey);
         when(hierarchy1.persistenceName()).thenReturn("p1");
         when(hierarchy1.ranksForCurrentUser()).thenReturn(rankNames1);

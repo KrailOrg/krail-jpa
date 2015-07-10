@@ -28,17 +28,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by David Sowerby on 13/04/15.
  */
 @Entity
-public class OptionEntity extends EntityBase_LongInt {
+public class OptionEntity_LongInt extends EntityBase_LongInt {
 
     private String context;
     private String optionKey;
     private String rankName;
     private String userHierarchyName;
     private String value;
-    public OptionEntity() {
+
+    public OptionEntity_LongInt() {
     }
 
-    public OptionEntity(@Nonnull OptionCacheKey optionCacheKey, @Nonnull String value) {
+    public OptionEntity_LongInt(@Nonnull OptionCacheKey optionCacheKey, @Nonnull String value) {
         userHierarchyName = optionCacheKey.getHierarchy()
                                           .persistenceName();
         rankName = optionCacheKey.getRequestedRankName();

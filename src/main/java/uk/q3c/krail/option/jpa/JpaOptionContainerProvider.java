@@ -9,13 +9,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.core.user.opt.jpa;
+package uk.q3c.krail.option.jpa;
 
-import uk.q3c.krail.core.user.opt.OptionDao;
+import com.vaadin.data.Container;
+import uk.q3c.krail.core.persist.ContainerType;
+import uk.q3c.krail.core.persist.OptionContainerProvider;
 
 /**
- * Created by David Sowerby on 13/04/15.
+ * Used solely to enable a Krail developer to replace the default implementation if desired
+ * <p>
+ * Created by David Sowerby on 09/07/15.
  */
-public interface OptionJpaDao extends OptionDao {
-
+public interface JpaOptionContainerProvider extends OptionContainerProvider {
+    Container get(ContainerType containerType);
 }
