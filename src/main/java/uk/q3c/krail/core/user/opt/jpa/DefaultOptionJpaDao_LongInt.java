@@ -14,11 +14,13 @@ package uk.q3c.krail.core.user.opt.jpa;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
+import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
 import uk.q3c.krail.core.data.Select;
 import uk.q3c.krail.core.data.StringPersistenceConverter;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.user.opt.OptionException;
 import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
@@ -26,6 +28,7 @@ import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.persist.jpa.DefaultJpaDao_LongInt;
 
 import javax.annotation.Nonnull;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -35,9 +38,10 @@ import static uk.q3c.krail.core.data.Select.Compare.EQ;
 import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
- * Converts {@link OptionCacheKey} to {@link OptionEntity_LongInt} for persistence.  Sub-class and construct with the appropriately annotated {@code dao} and
- * {@code
- * EntityManagerProvider}
+ * Converts {@link OptionCacheKey} to {@link OptionEntity_LongInt} for persistence.
+ *
+ * Injected automatically with the correct {@link EntityManagerProvider} (where correct == annotated the same as this instance).  This is done by the {@link
+ * PersistenceUnitModule}
  * <br>
  * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
  * {@link OptionDao} are wrapped in Optional.
@@ -56,15 +60,57 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
     }
 
     @Override
-    public <V> void write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
+    @Transactional
+    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
-        //noinspection ConstantConditions
+        EntityManager entityManager = getEntityManager();
+        // is there an existing entity (nearing in mind that the id field is not the same as the key field
+        String stringValue = stringPersistenceConverter.convertToPersistence(value)
+                                                       .get();
 
-        final OptionEntity_LongInt entity = new OptionEntity_LongInt(cacheKey, stringPersistenceConverter.convertToPersistence(value)
-                                                                                         .get());
-        save(entity);
+
+        Optional<OptionEntity_LongInt> existingEntity = find(cacheKey);
+        if (existingEntity.isPresent()) {
+            existingEntity.get()
+                          .setValue(stringValue);
+            entityManager.persist(existingEntity.get());
+            return existingEntity.get();
+        } else {
+            //noinspection ConstantConditions
+            final OptionEntity_LongInt entity = new OptionEntity_LongInt(cacheKey, stringValue);
+            entityManager.persist(entity);
+            return entity;
+        }
+
     }
 
+    @Transactional
+    @Nonnull
+    public Optional<OptionEntity_LongInt> find(@Nonnull OptionCacheKey cacheKey) {
+        checkRankOption(cacheKey, SPECIFIC_RANK);
+
+        Select select = selectSingleRank(cacheKey);
+
+        TypedQuery<OptionEntity_LongInt> query = getEntityManager().createQuery(select.toString(), OptionEntity_LongInt.class);
+        List<OptionEntity_LongInt> results = query.getResultList();
+        if (results.isEmpty()) {
+            return Optional.empty();
+        } else {
+            if (results.size() > 1) {
+                throw new OptionException("Multiple values for one cache key found, cacheKey =  " + cacheKey.toString());
+            }
+            return Optional.of(results.get(0));
+        }
+    }
+
+    protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
+        return new Select().from(tableName(OptionEntity_LongInt.class))
+                           .where("userHierarchyName", EQ, cacheKey.getHierarchy()
+                                                                   .persistenceName())
+                           .and("rankName", EQ, cacheKey.getRequestedRankName())
+                           .and("optionKey", EQ, cacheKey.getOptionKey()
+                                                         .compositeKey());
+    }
 
     @Transactional
     @Nonnull
@@ -80,31 +126,6 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
         } else {
             return Optional.empty();
         }
-    }
-
-    @Transactional
-    @Nonnull
-    public Optional<OptionEntity_LongInt> find(@Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, SPECIFIC_RANK);
-
-        Select select = selectSingleRank(cacheKey);
-
-        TypedQuery<OptionEntity_LongInt> query = getEntityManager().createQuery(select.toString(), OptionEntity_LongInt.class);
-        List<OptionEntity_LongInt> results = query.getResultList();
-        if (results.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(results.get(0));
-        }
-    }
-
-    protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
-        return new Select().from(tableName(OptionEntity_LongInt.class))
-                           .where("userHierarchyName", EQ, cacheKey.getHierarchy()
-                                                                   .persistenceName())
-                           .and("rankName", EQ, cacheKey.getRequestedRankName())
-                           .and("optionKey", EQ, cacheKey.getOptionKey()
-                                                         .compositeKey());
     }
 
     @Nonnull
