@@ -15,7 +15,7 @@ import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
 import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao_LongInt;
 import uk.q3c.krail.core.user.opt.jpa.OptionJpaDao_LongInt;
-import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
+import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao_LongInt;
 import uk.q3c.krail.i18n.jpa.PatternJpaDao;
 
 import javax.annotation.Nonnull;
@@ -84,7 +84,7 @@ public class TestJpaModule extends JpaModule {
               .
                       bind(OptionJpaDao_LongInt.class, DefaultOptionJpaDao_LongInt.class)
               .bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
-              .bind(PatternJpaDao.class, DefaultPatternJpaDao.class);
+              .bind(PatternJpaDao.class, DefaultPatternJpaDao_LongInt.class);
 
         return config;
     }

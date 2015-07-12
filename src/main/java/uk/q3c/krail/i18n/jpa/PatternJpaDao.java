@@ -23,5 +23,5 @@ import java.util.Optional;
  */
 public interface PatternJpaDao extends PatternDao {
 
-    Optional<PatternEntity> find(PatternCacheKey cacheKey);
+    Optional<PatternEntity_LongInt> find(PatternCacheKey cacheKey);
 }

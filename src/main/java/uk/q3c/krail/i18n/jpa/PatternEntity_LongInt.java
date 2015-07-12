@@ -25,16 +25,16 @@ import javax.persistence.Entity;
  */
 
 @Entity
-public class PatternEntity extends EntityBase_LongInt {
+public class PatternEntity_LongInt extends EntityBase_LongInt {
 
     private String i18nkey;
     private String locale;
     private String value;
 
-    public PatternEntity() {
+    public PatternEntity_LongInt() {
     }
 
-    public PatternEntity(PatternCacheKey cacheKey, String value) {
+    public PatternEntity_LongInt(PatternCacheKey cacheKey, String value) {
         final Enum<?> enumKey = cacheKey.getKey();
         Converter<String, ? extends Enum> keyBase = Enums.stringConverter(enumKey.getClass());
         String keyString = keyBase + "." + enumKey.name();
@@ -50,6 +50,10 @@ public class PatternEntity extends EntityBase_LongInt {
 
     public String getValue() {
         return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getLocale() {

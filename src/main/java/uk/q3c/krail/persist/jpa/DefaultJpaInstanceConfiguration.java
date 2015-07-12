@@ -18,7 +18,7 @@ import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.jpa.DefaultOptionJpaDao_LongInt;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.PatternDao;
-import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao;
+import uk.q3c.krail.i18n.jpa.DefaultPatternJpaDao_LongInt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -207,7 +207,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      */
     @Override
     public DefaultJpaInstanceConfiguration providePatternDao() {
-        bind(PatternDao.class, DefaultPatternJpaDao.class);
+        bind(PatternDao.class, DefaultPatternJpaDao_LongInt.class);
         providePatternDao = true;
         return this;
     }

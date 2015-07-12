@@ -24,7 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class DefaultPatternJpaDaoTest extends JpaDaoTestBase {
+public class DefaultPatternJpaDaoLongIntTest extends JpaDaoTestBase {
 
 
     public static final String UK_ENGLISH = "UK English";
