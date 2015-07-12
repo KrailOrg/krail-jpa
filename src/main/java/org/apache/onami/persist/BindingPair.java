@@ -11,14 +11,16 @@
 
 package org.apache.onami.persist;
 
-import uk.q3c.krail.persist.jpa.JpaInstanceConfiguration;
+import uk.q3c.krail.jpa.persist.JpaInstanceConfiguration;
+
+import java.io.Serializable;
 
 /**
  * An interface-implementation pair which enables binding of implementations via the Onami-persist private modules.  If you have a binding which needs to be
  * bound "to" an {@link EntityManagerProvider} (including those bound with annotations) use {@link JpaInstanceConfiguration#bind(Class, Class)}
  * Created by David Sowerby on 11/04/15.
  */
-public class BindingPair<E extends Object> {
+public class BindingPair<E extends Object> implements Serializable {
     private final Class<? extends E> implementationClass;
     private final Class<E> interfaceClass;
 

@@ -22,10 +22,10 @@ import uk.q3c.krail.core.persist.OptionContainerProvider;
 import uk.q3c.krail.core.persist.VaadinContainerProvider;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.i18n.PatternDao;
-import uk.q3c.krail.option.jpa.DefaultJpaOptionContainerProvider;
-import uk.q3c.krail.option.jpa.JpaOptionContainerProvider;
-import uk.q3c.krail.persist.jpa.DefaultJpaContainerProvider;
-import uk.q3c.krail.persist.jpa.JpaContainerProvider;
+import uk.q3c.krail.jpa.persist.DefaultJpaContainerProvider;
+import uk.q3c.krail.jpa.persist.JpaContainerProvider;
+import uk.q3c.krail.jpa.user.opt.DefaultJpaOptionContainerProvider;
+import uk.q3c.krail.jpa.user.opt.JpaOptionContainerProvider;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;

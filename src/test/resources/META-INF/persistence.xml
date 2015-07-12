@@ -19,11 +19,11 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <class>org.apache.onami.persist.test.TestEntity</class>
-        <class>uk.q3c.krail.persist.jpa.Widget</class>
-        <class>uk.q3c.krail.persist.jpa.Widget2</class>
-        <class>uk.q3c.krail.persist.jpa.StandardTestEntity</class>
-        <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity_LongInt</class>
-        <class>uk.q3c.krail.i18n.jpa.PatternEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.persist.Widget</class>
+        <class>uk.q3c.krail.jpa.persist.Widget2</class>
+        <class>uk.q3c.krail.jpa.persist.StandardTestEntity</class>
+        <class>uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.i18n.PatternEntity_LongInt</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -41,11 +41,11 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <class>org.apache.onami.persist.test.TestEntity</class>
-        <class>uk.q3c.krail.persist.jpa.Widget</class>
-        <class>uk.q3c.krail.persist.jpa.Widget2</class>
-        <class>uk.q3c.krail.persist.jpa.StandardTestEntity</class>
-        <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity_LongInt</class>
-        <class>uk.q3c.krail.i18n.jpa.PatternEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.persist.Widget</class>
+        <class>uk.q3c.krail.jpa.persist.Widget2</class>
+        <class>uk.q3c.krail.jpa.persist.StandardTestEntity</class>
+        <class>uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.i18n.PatternEntity_LongInt</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -63,11 +63,11 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <class>org.apache.onami.persist.test.TestEntity</class>
-        <class>uk.q3c.krail.persist.jpa.Widget</class>
-        <class>uk.q3c.krail.persist.jpa.Widget2</class>
-        <class>uk.q3c.krail.persist.jpa.StandardTestEntity</class>
-        <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity_LongInt</class>
-        <class>uk.q3c.krail.i18n.jpa.PatternEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.persist.Widget</class>
+        <class>uk.q3c.krail.jpa.persist.Widget2</class>
+        <class>uk.q3c.krail.jpa.persist.StandardTestEntity</class>
+        <class>uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.i18n.PatternEntity_LongInt</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
@@ -84,11 +84,11 @@
 
     <persistence-unit name="derbyDb">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>uk.q3c.krail.persist.jpa.Todo</class>
-        <class>uk.q3c.krail.persist.jpa.Widget</class>
-        <class>uk.q3c.krail.persist.jpa.Widget2</class>
-        <class>uk.q3c.krail.core.user.opt.jpa.OptionEntity_LongInt</class>
-        <class>uk.q3c.krail.i18n.jpa.PatternEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.persist.Todo</class>
+        <class>uk.q3c.krail.jpa.persist.Widget</class>
+        <class>uk.q3c.krail.jpa.persist.Widget2</class>
+        <class>uk.q3c.krail.jpa.user.opt.OptionEntity_LongInt</class>
+        <class>uk.q3c.krail.jpa.i18n.PatternEntity_LongInt</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
         </properties>
