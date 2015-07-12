@@ -67,9 +67,6 @@ public class DefaultPatternJpaDao_LongInt extends DefaultJpaDao_LongInt implemen
         checkNotNull(cacheKey);
         Select select = selectEntity(cacheKey);
 
-        // see https://github.com/davidsowerby/krail/issues/364
-//        EntityManagerImpl entityManager = (EntityManagerImpl) getEntityManager();
-
         TypedQuery<PatternEntity_LongInt> query = getEntityManager().createQuery(select.toString(), PatternEntity_LongInt.class);
         List<PatternEntity_LongInt> results = query.getResultList();
         if (results.isEmpty()) {

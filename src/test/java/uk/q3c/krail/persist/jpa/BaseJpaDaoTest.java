@@ -52,8 +52,14 @@ public class BaseJpaDaoTest extends JpaDaoTestBase {
         return w;
     }
 
+    private Widget2 newWidget2(String a, String b) {
+        Widget2 w = new Widget2(a, b);
+        w.setId(count++);
+        return w;
+    }
+
     @Test
-    public void count() {
+    public void countFindAndFindAll() {
         //given
 
         //when
@@ -82,4 +88,23 @@ public class BaseJpaDaoTest extends JpaDaoTestBase {
         assertThat(dao.tableName(Widget.class)).isEqualTo("Widget");
     }
 
+    @Test
+    public void tableNameFromAnnotation() {
+        //given
+
+        //when
+
+        //then
+        assertThat(dao.tableName(Widget2.class)).isEqualTo("wiggly");
+    }
+
+    @Test
+    public void url() {
+        //given
+
+        //when
+
+        //then
+        assertThat(dao.connectionUrl()).contains("jdbc:derby:/tmp/junit");
+    }
 }

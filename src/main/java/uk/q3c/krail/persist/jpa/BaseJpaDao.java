@@ -14,7 +14,6 @@ package uk.q3c.krail.persist.jpa;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.Transactional;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
-import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.data.KrailEntity;
@@ -22,8 +21,6 @@ import uk.q3c.krail.core.data.KrailEntity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.persistence.*;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +52,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     public <E extends KrailEntity<ID, VER>> E save(@Nonnull E entity) {
         checkNotNull(entity);
         EntityManager entityManager = entityManagerProvider.get();
-        
+
 
         if (entity.getId() == null) {
             entityManager.persist(entity);
@@ -146,8 +143,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     public <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
         EntityManager entityManager = entityManagerProvider.get();
-        EntityManagerImpl em = (EntityManagerImpl) entityManager;
-        TypedQuery<E> query = em.createQuery("SELECT e FROM " + tableName(entityClass) + " e", entityClass);
+        TypedQuery<E> query = entityManager.createQuery("SELECT e FROM " + tableName(entityClass) + " e", entityClass);
         query.setFlushMode(FlushModeType.AUTO);
         return query.getResultList();
     }
@@ -159,16 +155,14 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     @Nonnull
     public <E extends KrailEntity<ID, VER>> String tableName(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
-        EntityManager entityManager = entityManagerProvider.get();
-        EntityManagerImpl em = (EntityManagerImpl) entityManager;
-        Metamodel meta = em.getMetamodel();
-        EntityType<E> entityType = meta.entity(entityClass);
 
         //Check whether @Table annotation is present on the class.
         Table t = entityClass.getAnnotation(Table.class);
 
         //If no Table annotation use the default (simple class name)
-        return (t == null) ? entityType.getName() : t.name();
+        return (t == null) ? entityClass.getSimpleName() : t.name();
+
+
     }
 
     /**
@@ -205,9 +199,8 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     @Override
     public String connectionUrl() {
         EntityManager entityManager = entityManagerProvider.get();
-        EntityManagerImpl em = (EntityManagerImpl) entityManager;
-        return (String) em.getProperties()
-                          .get(PersistenceUnitProperties.JDBC_URL);
+        return (String) entityManager.getProperties()
+                                     .get(PersistenceUnitProperties.JDBC_URL);
     }
 
     public EntityManager getEntityManager() {

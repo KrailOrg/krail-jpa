@@ -52,7 +52,7 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
 
     OptionKey optionKey1 = Mock()
 
-    TestDefaultOptionJpaDao_LongInt dao
+    DefaultOptionJpaDao_LongInt dao
 
 
     def setup() {
@@ -62,7 +62,7 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
         emptyResultList = new ArrayList<>()
         userHierarchy.persistenceName() >> "simple"
         userHierarchy.rankName(_) >> "ds"
-        dao = new TestDefaultOptionJpaDao_LongInt(entityManagerProvider, stringPersistenceConverter)
+        dao = new DefaultOptionJpaDao_LongInt(entityManagerProvider, stringPersistenceConverter)
     }
 
     def "Write should throw an OptionKeyException if OptionKey rank is not specific"() {
