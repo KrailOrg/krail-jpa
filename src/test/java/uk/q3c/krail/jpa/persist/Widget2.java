@@ -15,8 +15,7 @@ import uk.q3c.krail.core.data.KrailEntity;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "wiggly")
+@Entity(name = "wiggly")
 public class Widget2 implements KrailEntity<Long, Integer> {
     private String description;
     @Id

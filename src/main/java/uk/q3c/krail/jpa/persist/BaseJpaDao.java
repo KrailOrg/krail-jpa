@@ -157,7 +157,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
         checkNotNull(entityClass);
 
         //Check whether @Table annotation is present on the class.
-        Table t = entityClass.getAnnotation(Table.class);
+        Entity t = entityClass.getAnnotation(Entity.class);
 
         //If no Table annotation use the default (simple class name)
         return (t == null) ? entityClass.getSimpleName() : t.name();
