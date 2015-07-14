@@ -85,7 +85,7 @@ public class BaseJpaDaoTest extends JpaDaoTestBase {
         //when
 
         //then
-        assertThat(dao.tableName(Widget.class)).isEqualTo("Widget");
+        assertThat(dao.entityName(Widget.class)).isEqualTo("Widget");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class BaseJpaDaoTest extends JpaDaoTestBase {
         //when
 
         //then
-        assertThat(dao.tableName(Widget2.class)).isEqualTo("wiggly");
+        assertThat(dao.entityName(Widget2.class)).isEqualTo("wiggly");
     }
 
     @Test

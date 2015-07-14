@@ -143,7 +143,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     public <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
         EntityManager entityManager = entityManagerProvider.get();
-        TypedQuery<E> query = entityManager.createQuery("SELECT e FROM " + tableName(entityClass) + " e", entityClass);
+        TypedQuery<E> query = entityManager.createQuery("SELECT e FROM " + entityName(entityClass) + " e", entityClass);
         query.setFlushMode(FlushModeType.AUTO);
         return query.getResultList();
     }
@@ -153,14 +153,15 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
      */
     @Override
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> String tableName(@Nonnull Class<E> entityClass) {
+    public <E extends KrailEntity<ID, VER>> String entityName(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
 
-        //Check whether @Table annotation is present on the class.
+        // Get the @Entity annotation to check for name change
         Entity t = entityClass.getAnnotation(Entity.class);
 
         //If no Table annotation use the default (simple class name)
-        return (t == null) ? entityClass.getSimpleName() : t.name();
+        return t.name()
+                .isEmpty() ? entityClass.getSimpleName() : t.name();
 
 
     }
@@ -192,7 +193,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     public <E extends KrailEntity<ID, VER>> long count(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
         EntityManager entityManager = entityManagerProvider.get();
-        Query query = entityManager.createQuery("SELECT COUNT(c) FROM " + tableName(entityClass) + " c");
+        Query query = entityManager.createQuery("SELECT COUNT(c) FROM " + entityName(entityClass) + " c");
         return (long) query.getSingleResult();
     }
 

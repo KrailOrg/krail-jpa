@@ -104,7 +104,7 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
     }
 
     protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
-        return new Select().from(tableName(OptionEntity_LongInt.class))
+        return new Select().from(entityName(OptionEntity_LongInt.class))
                            .where("userHierarchyName", EQ, cacheKey.getHierarchy()
                                                                    .persistenceName())
                            .and("rankName", EQ, cacheKey.getRequestedRankName())
@@ -194,7 +194,7 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
     @Transactional
     @Override
     public int clear() {
-        final Query query = getEntityManager().createQuery("DELETE FROM " + tableName(OptionEntity_LongInt.class));
+        final Query query = getEntityManager().createQuery("DELETE FROM " + entityName(OptionEntity_LongInt.class));
         return query.executeUpdate();
     }
 

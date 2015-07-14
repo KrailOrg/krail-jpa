@@ -79,7 +79,7 @@ public class DefaultPatternJpaDao_LongInt extends DefaultJpaDao_LongInt implemen
     protected Select selectEntity(PatternCacheKey cacheKey) {
         //ensure the same conversion as writing
         PatternEntity_LongInt searchKey = new PatternEntity_LongInt(cacheKey, "x");
-        return new Select().from(tableName(PatternEntity_LongInt.class))
+        return new Select().from(entityName(PatternEntity_LongInt.class))
                            .where("i18nkey", searchKey.getI18nkey())
                            .and("locale", searchKey.getLocale());
     }
@@ -143,6 +143,7 @@ public class DefaultPatternJpaDao_LongInt extends DefaultJpaDao_LongInt implemen
      * @return the number of entries
      */
     @Override
+    @Transactional
     public long count() {
         return super.count(PatternEntity_LongInt.class);
     }
