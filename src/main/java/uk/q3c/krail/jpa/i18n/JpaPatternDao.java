@@ -21,7 +21,7 @@ import java.util.Optional;
  * <p>
  * Created by David Sowerby on 15/04/15.
  */
-public interface PatternJpaDao extends PatternDao {
+public interface JpaPatternDao extends PatternDao {
 
     Optional<PatternEntity_LongInt> find(PatternCacheKey cacheKey);
 }

@@ -24,7 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class DefaultPatternJpaDaoLongIntTest extends JpaDaoTestBase {
+public class DefaultJpaPatternDaoLongIntTest extends JpaDaoTestBase {
 
 
     public static final String UK_ENGLISH = "UK English";
@@ -36,13 +36,13 @@ public class DefaultPatternJpaDaoLongIntTest extends JpaDaoTestBase {
     PatternCacheKey cacheKey2 = new PatternCacheKey(LabelKey.Yes, new Locale("EN"));
     PatternCacheKey cacheKey3 = new PatternCacheKey(LabelKey.Yes, Locale.US);
 
-    PatternJpaDao dao;
+    JpaPatternDao dao;
     private long count = 1;
 
     @Override
     public void setUp() {
         super.setUp();
-        final Key<PatternJpaDao> daoKey = Key.get(PatternJpaDao.class, Jpa1.class);
+        final Key<JpaPatternDao> daoKey = Key.get(JpaPatternDao.class, Jpa1.class);
         dao = injector.getInstance(daoKey);
         count = 1;
     }

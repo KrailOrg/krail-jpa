@@ -23,7 +23,7 @@ import uk.q3c.krail.i18n.PatternDao
 import uk.q3c.krail.jpa.persist.Jpa1
 
 @UseModules([TestPatternJpaModule, DataModule])
-class DefaultPatternJpaDao_LongInt_IntegrationTest extends Specification {
+class DefaultJpaPatternDao_LongInt_IntegrationTest extends Specification {
 
     @Inject
     @Jpa1

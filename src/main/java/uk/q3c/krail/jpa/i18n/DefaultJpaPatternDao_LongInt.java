@@ -27,16 +27,16 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The default implementation of {@link PatternJpaDao}.  The {@code entityManagerProvider} and {@code dao} are bound by {@link PersistenceUnitModule} to the
+ * The default implementation of {@link JpaPatternDao}.  The {@code entityManagerProvider} and {@code dao} are bound by {@link PersistenceUnitModule} to the
  * annotation which is used in the injection of this class. (For example, if an instance of this class is annotated with @Jpa1, then the constructor parameters
  * will also be bound with @Jpa1)
  * <p>
  * Created by David Sowerby on 15/04/15.
  */
-public class DefaultPatternJpaDao_LongInt extends DefaultJpaDao_LongInt implements PatternJpaDao {
+public class DefaultJpaPatternDao_LongInt extends DefaultJpaDao_LongInt implements JpaPatternDao {
 
     @Inject
-    protected DefaultPatternJpaDao_LongInt(EntityManagerProvider entityManagerProvider) {
+    protected DefaultJpaPatternDao_LongInt(EntityManagerProvider entityManagerProvider) {
         super(entityManagerProvider);
     }
 
