@@ -15,8 +15,8 @@ import com.vaadin.data.util.converter.ConverterFactory
 import com.vaadin.data.util.converter.DefaultConverterFactory
 import org.apache.onami.persist.EntityManagerProvider
 import spock.lang.Specification
-import uk.q3c.krail.core.data.DefaultStringPersistenceConverter
-import uk.q3c.krail.core.data.StringPersistenceConverter
+import uk.q3c.krail.core.data.DefaultOptionStringConverter
+import uk.q3c.krail.core.data.OptionStringConverter
 import uk.q3c.krail.core.user.opt.OptionContext
 import uk.q3c.krail.core.user.opt.OptionKey
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey
@@ -38,7 +38,7 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
 
     ConverterFactory converterFactory = new DefaultConverterFactory()
 
-    StringPersistenceConverter stringPersistenceConverter = new DefaultStringPersistenceConverter(converterFactory)
+    OptionStringConverter stringPersistenceConverter = new DefaultOptionStringConverter()
 
     EntityManagerProvider entityManagerProvider = Mock()
 

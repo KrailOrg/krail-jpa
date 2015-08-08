@@ -16,7 +16,6 @@ import uk.q3c.krail.i18n.PatternCacheKey;
 import uk.q3c.krail.jpa.persist.EntityBase_LongInt;
 
 import javax.persistence.Entity;
-import java.util.Locale;
 
 /**
  * An entity to represent an I18N key, Locale and value combination
@@ -36,7 +35,7 @@ public class PatternEntity_LongInt extends EntityBase_LongInt {
 
     public PatternEntity_LongInt(PatternCacheKey cacheKey, String value) {
         final Enum<?> enumKey = cacheKey.getKey();
-        this.i18nkey = new EnumConverter().convertToPresentation(enumKey, String.class, Locale.UK);
+        this.i18nkey = new EnumConverter().convertToString(enumKey);
         this.locale = cacheKey.getRequestedLocale()
                               .toLanguageTag();
         this.value = value;

@@ -10,7 +10,6 @@
  */
 
 package uk.q3c.krail.jpa.user.opt
-
 import com.google.inject.Inject
 import org.apache.onami.persist.PersistenceService
 import org.apache.onami.persist.UnitOfWork
@@ -132,7 +131,6 @@ class DefaultOptionJpaDao_LongInt_IntegrationTest extends Specification {
         dao.count() == 2
         result1.get().getValue() == "4"
         result2.get().getValue() == "5"
-
 
     }
 

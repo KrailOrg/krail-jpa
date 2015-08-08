@@ -11,13 +11,14 @@
 
 package uk.q3c.krail.jpa.user.opt;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
+import uk.q3c.krail.core.data.OptionStringConverter;
 import uk.q3c.krail.core.data.Select;
-import uk.q3c.krail.core.data.StringPersistenceConverter;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.core.user.opt.OptionException;
@@ -51,22 +52,23 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implements OptionJpaDao_LongInt {
 
 
-    private StringPersistenceConverter stringPersistenceConverter;
+    private OptionStringConverter optionStringConverter;
 
     @Inject
-    protected DefaultOptionJpaDao_LongInt(EntityManagerProvider entityManagerProvider, StringPersistenceConverter stringPersistenceConverter) {
+    protected DefaultOptionJpaDao_LongInt(EntityManagerProvider entityManagerProvider, OptionStringConverter optionStringConverter) {
         super(entityManagerProvider);
-        this.stringPersistenceConverter = stringPersistenceConverter;
+        this.optionStringConverter = optionStringConverter;
     }
 
     @Override
     @Transactional
+    @Nonnull
     public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
+        Preconditions.checkArgument(value.isPresent(), "Value must be non-empty");
         EntityManager entityManager = getEntityManager();
-        // is there an existing entity (nearing in mind that the id field is not the same as the key field
-        String stringValue = stringPersistenceConverter.convertToPersistence(value)
-                                                       .get();
+        // is there an existing entity (bearing in mind that the id field is not the same as the key field
+        String stringValue = optionStringConverter.convertValueToString(value.get());
 
 
         Optional<OptionEntity_LongInt> existingEntity = find(cacheKey);
@@ -170,7 +172,7 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
             String value = optionalEntity.get()
                                          .getValue();
 
-            return stringPersistenceConverter.convertFromPersistence(cacheKey, value);
+            return Optional.of(optionStringConverter.convertStringToValue(cacheKey, value));
         } else {
             return Optional.empty();
         }
