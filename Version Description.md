@@ -1,1 +1,1 @@
-OptionKey includeds default value
+Simplification of integration with Krail core has caused a substantial number of changes.  The biggest apparent change is probably the use of annotations alone to identify sources.

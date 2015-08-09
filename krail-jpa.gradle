@@ -11,8 +11,6 @@
 
 description = 'A JPA module for use with Krail'
 
-version = '0.9.0'
-
 dependencies {
 
     //Data stores
