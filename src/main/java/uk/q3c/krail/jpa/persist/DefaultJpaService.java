@@ -13,7 +13,7 @@ package uk.q3c.krail.jpa.persist;
 
 import com.google.inject.Inject;
 import org.apache.onami.persist.PersistenceService;
-import uk.q3c.krail.core.services.AbstractServiceI18N;
+import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Service;
 import uk.q3c.krail.core.services.ServicesMonitor;
 import uk.q3c.krail.i18n.Translate;
@@ -27,7 +27,7 @@ import uk.q3c.krail.i18n.Translate;
  * <p>
  * Created by David Sowerby on 21/06/15.
  */
-public class DefaultJpaService extends AbstractServiceI18N implements JpaService {
+public class DefaultJpaService extends AbstractService implements JpaService, Service {
 
     private final PersistenceService persistenceService;
 
