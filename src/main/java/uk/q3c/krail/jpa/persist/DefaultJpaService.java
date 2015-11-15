@@ -15,8 +15,11 @@ import com.google.inject.Inject;
 import org.apache.onami.persist.PersistenceService;
 import uk.q3c.krail.core.services.AbstractService;
 import uk.q3c.krail.core.services.Service;
+import uk.q3c.krail.core.services.ServicesController;
 import uk.q3c.krail.core.services.ServicesMonitor;
+import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
+import uk.q3c.krail.jpa.i18n.LabelKey;
 
 /**
  * NOT CURRENTLY USED, see https://github.com/davidsowerby/krail-jpa/issues/6
@@ -32,8 +35,8 @@ public class DefaultJpaService extends AbstractService implements JpaService, Se
     private final PersistenceService persistenceService;
 
     @Inject
-    protected DefaultJpaService(Translate translate, PersistenceService persistenceService) {
-        super(translate);
+    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, ServicesController servicesController) {
+        super(translate, servicesController);
         this.persistenceService = persistenceService;
     }
 
@@ -45,5 +48,10 @@ public class DefaultJpaService extends AbstractService implements JpaService, Se
     @Override
     protected void doStart() throws Exception {
         persistenceService.start();
+    }
+
+    @Override
+    public I18NKey getNameKey() {
+        return LabelKey.JPA_Service;
     }
 }
