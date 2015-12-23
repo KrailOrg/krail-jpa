@@ -10,6 +10,7 @@
 
 
 description = 'A JPA module for use with Krail'
+version = '0.9.1'
 
 dependencies {
 
