@@ -1,1 +1,1 @@
-Simplification of integration with Krail core has caused a substantial number of changes.  The biggest apparent change is probably the use of annotations alone to identify sources.
+Reflect changes to Service interface and model made in Krail core
