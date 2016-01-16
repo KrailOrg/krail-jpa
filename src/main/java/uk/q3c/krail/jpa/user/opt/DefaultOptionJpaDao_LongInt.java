@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.jpa.user.opt;
@@ -73,10 +75,11 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
 
         Optional<OptionEntity_LongInt> existingEntity = find(cacheKey);
         if (existingEntity.isPresent()) {
-            existingEntity.get()
+            OptionEntity_LongInt existing = existingEntity.get();
+            existing
                           .setValue(stringValue);
             entityManager.persist(existingEntity.get());
-            return existingEntity.get();
+            return existing;
         } else {
             //noinspection ConstantConditions
             final OptionEntity_LongInt entity = new OptionEntity_LongInt(cacheKey, stringValue);
@@ -93,13 +96,13 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
 
         Select select = selectSingleRank(cacheKey);
 
-        TypedQuery<OptionEntity_LongInt> query = getEntityManager().createQuery(select.toString(), OptionEntity_LongInt.class);
+        TypedQuery<OptionEntity_LongInt> query = getEntityManager().createQuery(select.statement(), OptionEntity_LongInt.class);
         List<OptionEntity_LongInt> results = query.getResultList();
         if (results.isEmpty()) {
             return Optional.empty();
         } else {
             if (results.size() > 1) {
-                throw new OptionException("Multiple values for one cache key found, cacheKey =  " + cacheKey.toString());
+                throw new OptionException("Multiple values for one cache key found, cacheKey =  " + cacheKey);
             }
             return Optional.of(results.get(0));
         }

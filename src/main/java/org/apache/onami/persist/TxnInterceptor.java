@@ -1,16 +1,19 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package org.apache.onami.persist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -110,6 +113,7 @@ class TxnInterceptor implements MethodInterceptor {
      * @throws Throwable
      *         if an exception happened while ending the unit of work.
      */
+    @SuppressFBWarnings("LEST_LOST_EXCEPTION_STACK_TRACE")
     private void endUnitOfWork(Throwable originalException) throws Throwable {
         try {
             unitOfWork.end();
@@ -175,6 +179,7 @@ class TxnInterceptor implements MethodInterceptor {
      * @param exc
      *         the exception thrown by the original method.
      */
+    @SuppressFBWarnings("LEST_LOST_EXCEPTION_STACK_TRACE")
     private void handleException(MethodInvocation methodInvocation, TransactionFacade transactionFacade, Throwable exc) throws Throwable {
         try {
             if (isRollbackNecessaryFor(methodInvocation, exc)) {
