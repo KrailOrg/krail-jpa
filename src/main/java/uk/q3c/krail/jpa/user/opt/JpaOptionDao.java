@@ -11,17 +11,21 @@
  *
  */
 
-package uk.q3c.krail.jpa.i18n;
+package uk.q3c.krail.jpa.user.opt;
 
-import uk.q3c.krail.i18n.PatternCacheKey;
-import uk.q3c.krail.i18n.PatternDao;
+import org.apache.onami.persist.Transactional;
+import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * JPA specific interface for {@link PatternDao} to enable binding alternatives
- * <p>
- * Created by David Sowerby on 15/04/15.
+ * Created by David Sowerby on 13/04/15.
  */
-public interface JpaPatternDao extends PatternDao {
+public interface JpaOptionDao extends OptionDao {
 
-    JpaPatternEntity find(PatternCacheKey cacheKey);
+    @Transactional
+    @Nullable
+    JpaOptionEntity find(@Nonnull OptionCacheKey cacheKey);
 }

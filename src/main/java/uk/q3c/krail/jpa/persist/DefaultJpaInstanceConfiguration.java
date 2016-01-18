@@ -19,8 +19,8 @@ import org.eclipse.persistence.jpa.PersistenceProvider;
 import uk.q3c.krail.core.user.opt.OptionDao;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.PatternDao;
-import uk.q3c.krail.jpa.i18n.DefaultJpaPatternDao_LongInt;
-import uk.q3c.krail.jpa.user.opt.DefaultOptionJpaDao_LongInt;
+import uk.q3c.krail.jpa.i18n.DefaultJpaPatternDao;
+import uk.q3c.krail.jpa.user.opt.DefaultJpaOptionDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,7 +198,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      */
     @Override
     public DefaultJpaInstanceConfiguration provideOptionDao() {
-        bind(OptionDao.class, DefaultOptionJpaDao_LongInt.class);
+        bind(OptionDao.class, DefaultJpaOptionDao.class);
         provideOptionDao = true;
         return this;
     }
@@ -209,7 +209,7 @@ public class DefaultJpaInstanceConfiguration extends HashMap<String, Object> imp
      */
     @Override
     public DefaultJpaInstanceConfiguration providePatternDao() {
-        bind(PatternDao.class, DefaultJpaPatternDao_LongInt.class);
+        bind(PatternDao.class, DefaultJpaPatternDao.class);
         providePatternDao = true;
         return this;
     }

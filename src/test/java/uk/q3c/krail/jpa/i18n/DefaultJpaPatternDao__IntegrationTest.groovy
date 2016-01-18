@@ -1,16 +1,17 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.jpa.i18n
-
 import com.google.inject.Inject
 import org.apache.onami.persist.PersistenceService
 import org.apache.onami.persist.UnitOfWork
@@ -23,7 +24,7 @@ import uk.q3c.krail.i18n.PatternDao
 import uk.q3c.krail.jpa.persist.Jpa1
 
 @UseModules([TestPatternJpaModule, DataModule])
-class DefaultJpaPatternDao_LongInt_IntegrationTest extends Specification {
+class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     @Inject
     @Jpa1
@@ -53,10 +54,10 @@ class DefaultJpaPatternDao_LongInt_IntegrationTest extends Specification {
     def "setting up"() {
         expect:
         persistenceService != null
-        persistenceService.isRunning() == true
+        persistenceService.isRunning()
 
         unitOfWork != null
-        unitOfWork.isActive() == true
+        unitOfWork.isActive()
 
         dao != null
 
@@ -69,11 +70,11 @@ class DefaultJpaPatternDao_LongInt_IntegrationTest extends Specification {
         PatternCacheKey cacheKey = new PatternCacheKey(LabelKey.Yes, Locale.UK);
         when:
         dao.write(cacheKey, "4");
-        Optional<PatternEntity_LongInt> actual = (Optional<PatternEntity_LongInt>) dao.find(cacheKey)
+        JpaPatternEntity actual = dao.find(cacheKey)
         then:
-        actual.isPresent()
+        actual != null
         dao.count() == 1
-        actual.get().getValue() == "4"
+        actual.getValue() == "4"
     }
 
 
@@ -84,13 +85,12 @@ class DefaultJpaPatternDao_LongInt_IntegrationTest extends Specification {
         dao.write(cacheKey, "4");
         dao.write(cacheKey, "5");
         dao.write(cacheKey, "6");
-        Optional<PatternEntity_LongInt> actual = (Optional<PatternEntity_LongInt>) dao.find(cacheKey)
+        JpaPatternEntity actual = dao.find(cacheKey)
 
         then:
-        actual.isPresent()
+        actual != null
         dao.count() == 1
-        actual.isPresent()
-        actual.get().getValue() == "6"
+        actual.getValue() == "6"
 
     }
 
@@ -112,14 +112,14 @@ class DefaultJpaPatternDao_LongInt_IntegrationTest extends Specification {
         when:
 
         dao.deleteValue(cacheKey1)
-        Optional<PatternEntity_LongInt> result2 = dao.find(cacheKey2)
-        Optional<PatternEntity_LongInt> result3 = dao.find(cacheKey3)
+        JpaPatternEntity result2 = dao.find(cacheKey2)
+        JpaPatternEntity result3 = dao.find(cacheKey3)
 
         then:
 
         dao.count() == 2
-        result2.get().getValue() == "4"
-        result3.get().getValue() == "5"
+        result2.getValue() == "4"
+        result3.getValue() == "5"
 
 
     }

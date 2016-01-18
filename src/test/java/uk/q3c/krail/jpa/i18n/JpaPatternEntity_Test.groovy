@@ -11,17 +11,32 @@
  *
  */
 
-package uk.q3c.krail.jpa.i18n;
+package uk.q3c.krail.jpa.i18n
 
-import uk.q3c.krail.i18n.PatternCacheKey;
-import uk.q3c.krail.i18n.PatternDao;
+import spock.lang.Specification
+import uk.q3c.krail.i18n.LabelKey
+import uk.q3c.krail.i18n.PatternCacheKey
 
 /**
- * JPA specific interface for {@link PatternDao} to enable binding alternatives
- * <p>
- * Created by David Sowerby on 15/04/15.
+ * Created by David Sowerby on 13/07/15.
  */
-public interface JpaPatternDao extends PatternDao {
+class JpaPatternEntity_Test extends Specification {
 
-    JpaPatternEntity find(PatternCacheKey cacheKey);
+
+    JpaPatternEntity entity;
+
+    def "create decodes the I18NKey"() {
+        given:
+
+        PatternCacheKey cacheKey1 = new PatternCacheKey(LabelKey.Yes, Locale.UK)
+
+        when:
+
+        entity = new JpaPatternEntity(cacheKey1, "x")
+
+
+        then:
+
+        entity.getI18nkey().equals("uk.q3c.krail.i18n.LabelKey.Yes")
+    }
 }

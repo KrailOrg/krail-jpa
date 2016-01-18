@@ -1,16 +1,19 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.jpa.persist;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.Transactional;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
@@ -138,6 +141,8 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings("SQL_INJECTION_JPA")
+    // The only parameter is entityName(), which is limited to either the simple class name of the entity, or its annotation
     @Nonnull
     @Override
     public <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull Class<E> entityClass) {
@@ -153,7 +158,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
      */
     @Override
     @Nonnull
-    public <E extends KrailEntity<ID, VER>> String entityName(@Nonnull Class<E> entityClass) {
+    public final <E extends KrailEntity<ID, VER>> String entityName(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
 
         // Get the @Entity annotation to check for name change
@@ -186,8 +191,11 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
 
 
     /**
-     * {@inheritDoc}
+     *
      */
+
+    @SuppressFBWarnings("SQL_INJECTION_JPA")
+    // The only parameter is entityName(), which is limited to either the simple class name of the entity, or its annotation
     @Transactional
     @Override
     public <E extends KrailEntity<ID, VER>> long count(@Nonnull Class<E> entityClass) {

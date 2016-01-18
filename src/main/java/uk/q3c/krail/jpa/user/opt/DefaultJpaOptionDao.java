@@ -13,9 +13,9 @@
 
 package uk.q3c.krail.jpa.user.opt;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
@@ -23,25 +23,22 @@ import uk.q3c.krail.core.data.OptionStringConverter;
 import uk.q3c.krail.core.data.Select;
 import uk.q3c.krail.core.user.opt.Option;
 import uk.q3c.krail.core.user.opt.OptionDao;
-import uk.q3c.krail.core.user.opt.OptionException;
 import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.user.opt.cache.OptionCache;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 import uk.q3c.krail.core.user.profile.RankOption;
-import uk.q3c.krail.jpa.persist.DefaultJpaDao_LongInt;
+import uk.q3c.krail.jpa.persist.BaseJpaKeyValueDao;
 
 import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static uk.q3c.krail.core.data.Select.Compare.EQ;
 import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
- * Converts {@link OptionCacheKey} to {@link OptionEntity_LongInt} for persistence.
+ * Converts {@link OptionCacheKey} to {@link JpaOptionEntity} for persistence.
  *
  * Injected automatically with the correct {@link EntityManagerProvider} (where correct == annotated the same as this instance).  This is done by the {@link
  * PersistenceUnitModule}
@@ -51,86 +48,26 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
  * <br>
  * Created by David Sowerby on 13/04/15.
  */
-public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implements OptionJpaDao_LongInt {
+public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCacheKey, JpaOptionEntity> implements JpaOptionDao {
 
 
     private OptionStringConverter optionStringConverter;
 
     @Inject
-    protected DefaultOptionJpaDao_LongInt(EntityManagerProvider entityManagerProvider, OptionStringConverter optionStringConverter) {
-        super(entityManagerProvider);
+    protected DefaultJpaOptionDao(EntityManagerProvider entityManagerProvider, OptionStringConverter optionStringConverter) {
+        super(entityManagerProvider, JpaOptionEntity.class);
         this.optionStringConverter = optionStringConverter;
     }
 
-    @Override
-    @Transactional
-    @Nonnull
-    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
-        checkRankOption(cacheKey, SPECIFIC_RANK);
-        Preconditions.checkArgument(value.isPresent(), "Value must be non-empty");
-        EntityManager entityManager = getEntityManager();
-        // is there an existing entity (bearing in mind that the id field is not the same as the key field
-        String stringValue = optionStringConverter.convertValueToString(value.get());
 
-
-        Optional<OptionEntity_LongInt> existingEntity = find(cacheKey);
-        if (existingEntity.isPresent()) {
-            OptionEntity_LongInt existing = existingEntity.get();
-            existing
-                          .setValue(stringValue);
-            entityManager.persist(existingEntity.get());
-            return existing;
-        } else {
-            //noinspection ConstantConditions
-            final OptionEntity_LongInt entity = new OptionEntity_LongInt(cacheKey, stringValue);
-            entityManager.persist(entity);
-            return entity;
-        }
-
-    }
-
-    @Transactional
-    @Nonnull
-    public Optional<OptionEntity_LongInt> find(@Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, SPECIFIC_RANK);
-
-        Select select = selectSingleRank(cacheKey);
-
-        TypedQuery<OptionEntity_LongInt> query = getEntityManager().createQuery(select.statement(), OptionEntity_LongInt.class);
-        List<OptionEntity_LongInt> results = query.getResultList();
-        if (results.isEmpty()) {
-            return Optional.empty();
-        } else {
-            if (results.size() > 1) {
-                throw new OptionException("Multiple values for one cache key found, cacheKey =  " + cacheKey);
-            }
-            return Optional.of(results.get(0));
-        }
-    }
 
     protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
-        return new Select().from(entityName(OptionEntity_LongInt.class))
+        return new Select().from(entityName(JpaOptionEntity.class))
                            .where("userHierarchyName", EQ, cacheKey.getHierarchy()
                                                                    .persistenceName())
                            .and("rankName", EQ, cacheKey.getRequestedRankName())
                            .and("optionKey", EQ, cacheKey.getOptionKey()
                                                          .compositeKey());
-    }
-
-    @Transactional
-    @Nonnull
-    @Override
-    public Optional<?> deleteValue(@Nonnull OptionCacheKey cacheKey) {
-        checkRankOption(cacheKey, SPECIFIC_RANK);
-        final Optional<OptionEntity_LongInt> entity = find(cacheKey);
-        if (entity.isPresent()) {
-            String entityValue = entity.get()
-                                       .getValue();
-            delete(entity.get());
-            return Optional.of(entityValue);
-        } else {
-            return Optional.empty();
-        }
     }
 
     @Nonnull
@@ -142,6 +79,7 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
 
         return findFirstRankedValue(cacheKey, ranks);
     }
+
 
     /**
      * Returns the first value found from the ordered {@code ranks}
@@ -165,20 +103,20 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
         return value;
     }
 
+    @Override
+    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
+        checkRankOption(cacheKey, SPECIFIC_RANK);
+        checkArgument(value.isPresent(), "Value must be present");
+        String stringValue = optionStringConverter.convertValueToString(value.get());
+        return write(cacheKey, stringValue);
+    }
+
     @Nonnull
     @Override
     public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
-        final Optional<OptionEntity_LongInt> optionalEntity = find(cacheKey);
-        if (optionalEntity.isPresent()) {
-
-            String value = optionalEntity.get()
-                                         .getValue();
-
-            return Optional.of(optionStringConverter.convertStringToValue(cacheKey, value));
-        } else {
-            return Optional.empty();
-        }
+        Optional<String> v = getValueAsString(cacheKey);
+        return (v.isPresent()) ? Optional.of(optionStringConverter.convertStringToValue(cacheKey, v.get())) : Optional.empty();
     }
 
 
@@ -196,11 +134,23 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings("SQL_INJECTION_JPA")//entityName() is final and can only return SimpleClassName of annotation
+    @SuppressWarnings("JpaQlInspection")
     @Transactional
     @Override
     public int clear() {
-        final Query query = getEntityManager().createQuery("DELETE FROM " + entityName(OptionEntity_LongInt.class));
-        return query.executeUpdate();
+        return getEntityManager().createQuery("DELETE FROM " + entityName(JpaOptionEntity.class))
+                                 .executeUpdate();
+    }
+
+    @Override
+    protected JpaOptionEntity newEntity(OptionCacheKey cacheKey, String value) {
+        return new JpaOptionEntity(cacheKey, value);
+    }
+
+    @Override
+    protected OptionId newId(OptionCacheKey cacheKey) {
+        return new OptionId(cacheKey);
     }
 
     /**
@@ -208,7 +158,7 @@ public class DefaultOptionJpaDao_LongInt extends DefaultJpaDao_LongInt implement
      */
     @Override
     public long count() {
-        return super.count(OptionEntity_LongInt.class);
+        return super.count(JpaOptionEntity.class);
     }
 
 

@@ -13,15 +13,14 @@
 
 package uk.q3c.krail.jpa.i18n;
 
-import uk.q3c.krail.i18n.PatternCacheKey;
-import uk.q3c.krail.i18n.PatternDao;
+import uk.q3c.krail.core.data.KrailEntity;
 
 /**
- * JPA specific interface for {@link PatternDao} to enable binding alternatives
- * <p>
- * Created by David Sowerby on 15/04/15.
+ * Created by David Sowerby on 18 Jan 2016
  */
-public interface JpaPatternDao extends PatternDao {
+public interface KeyValueEntity<ID, VER> extends KrailEntity<ID, VER> {
 
-    JpaPatternEntity find(PatternCacheKey cacheKey);
+    String getValue();
+
+    void setValue(String value);
 }

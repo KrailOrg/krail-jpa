@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.jpa.user.opt
@@ -26,7 +28,7 @@ import uk.q3c.krail.i18n.LabelKey
 import uk.q3c.krail.jpa.persist.Jpa1
 
 @UseModules([TestOptionJpaModule, DataModule])
-class DefaultOptionJpaDao_LongInt_IntegrationTest extends Specification {
+class DefaultJpaOptionDao__IntegrationTest extends Specification {
 
     @Inject
     @Jpa1
@@ -80,7 +82,7 @@ class DefaultOptionJpaDao_LongInt_IntegrationTest extends Specification {
         given:
         OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey);
         when:
-        OptionEntity_LongInt actual = (OptionEntity_LongInt) dao.write(cacheKey, Optional.of("4"));
+        JpaOptionEntity actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("4"));
         then:
         actual != null
         dao.count() == 1
@@ -92,16 +94,16 @@ class DefaultOptionJpaDao_LongInt_IntegrationTest extends Specification {
         OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey);
 
         when:
-        OptionEntity_LongInt actual = (OptionEntity_LongInt) dao.write(cacheKey, Optional.of("4"));
-        actual = (OptionEntity_LongInt) dao.write(cacheKey, Optional.of("5"));
-        actual = (OptionEntity_LongInt) dao.write(cacheKey, Optional.of("6"));
-        Optional<OptionEntity_LongInt> result = dao.find(cacheKey)
+        JpaOptionEntity actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("4"));
+        actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("5"));
+        actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("6"));
+        JpaOptionEntity result = dao.find(cacheKey)
 
         then:
         actual != null
         dao.count() == 1
-        result.isPresent()
-        result.get().getValue() == "6"
+        result != null
+        result.getValue() == "6"
 
     }
 
@@ -123,14 +125,14 @@ class DefaultOptionJpaDao_LongInt_IntegrationTest extends Specification {
         when:
 
         dao.deleteValue(cacheKey)
-        Optional<OptionEntity_LongInt> result1 = dao.find(cacheKey1)
-        Optional<OptionEntity_LongInt> result2 = dao.find(cacheKey2)
+        JpaOptionEntity result1 = dao.find(cacheKey1)
+        JpaOptionEntity result2 = dao.find(cacheKey2)
 
         then:
 
         dao.count() == 2
-        result1.get().getValue() == "4"
-        result2.get().getValue() == "5"
+        result1.getValue() == "4"
+        result2.getValue() == "5"
 
     }
 

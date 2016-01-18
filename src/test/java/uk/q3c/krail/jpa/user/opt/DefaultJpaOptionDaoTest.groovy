@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.jpa.user.opt
@@ -29,11 +31,11 @@ import javax.persistence.TypedQuery
 
 /**
  *
- * Test for {@link uk.q3c.krail.jpa.user.opt.DefaultOptionJpaDao_LongInt}
+ * Test for {@link DefaultJpaOptionDao}
  *
  * Created by David Sowerby on 10/07/15.
  */
-class DefaultOptionJpaDao_LongIntTest extends Specification {
+class DefaultJpaOptionDaoTest extends Specification {
 
 
     ConverterFactory converterFactory = new DefaultConverterFactory()
@@ -46,13 +48,13 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
 
     UserHierarchy userHierarchy = Mock()
 
-    TypedQuery<OptionEntity_LongInt> query = Mock()
+    TypedQuery<JpaOptionEntity> query = Mock()
 
-    List<OptionEntity_LongInt> emptyResultList;
+    List<JpaOptionEntity> emptyResultList;
 
     OptionKey optionKey1 = Mock()
 
-    DefaultOptionJpaDao_LongInt dao
+    DefaultJpaOptionDao dao
 
 
     def setup() {
@@ -62,7 +64,7 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
         emptyResultList = new ArrayList<>()
         userHierarchy.persistenceName() >> "simple"
         userHierarchy.rankName(_) >> "ds"
-        dao = new DefaultOptionJpaDao_LongInt(entityManagerProvider, stringPersistenceConverter)
+        dao = new DefaultJpaOptionDao(entityManagerProvider, stringPersistenceConverter)
     }
 
     def "Write should throw an OptionKeyException if OptionKey rank is not specific"() {
@@ -95,15 +97,15 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
         then:
         1 * entityManager.persist(_)
         entity != null
-        entity instanceof OptionEntity_LongInt
-        OptionEntity_LongInt rEntity = (OptionEntity_LongInt) entity
+        entity instanceof JpaOptionEntity
+        JpaOptionEntity rEntity = (JpaOptionEntity) entity
         rEntity.getValue() == "3"
 
     }
 
     def "Write the second time should change the value of the existing OptionEntity and persist it"() {
         given:
-        List<OptionEntity_LongInt> resultList = new ArrayList<>();
+        List<JpaOptionEntity> resultList = new ArrayList<>();
         OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey1)
         emptyResultList = new ArrayList<>()
         query.getResultList() >> emptyResultList
@@ -113,14 +115,14 @@ class DefaultOptionJpaDao_LongIntTest extends Specification {
 
         when:
         Object entity = dao.write(cacheKey, Optional.of(3))
-        resultList.add((OptionEntity_LongInt) entity)
+        resultList.add((JpaOptionEntity) entity)
         entity = dao.write(cacheKey, Optional.of(5))
 
         then:
         2 * entityManager.persist(_)
         entity != null
-        entity instanceof OptionEntity_LongInt
-        OptionEntity_LongInt rEntity = (OptionEntity_LongInt) entity
+        entity instanceof JpaOptionEntity
+        JpaOptionEntity rEntity = (JpaOptionEntity) entity
         rEntity.getValue() == "5"
 
     }

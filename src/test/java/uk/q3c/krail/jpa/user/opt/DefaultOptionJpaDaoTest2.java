@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package uk.q3c.krail.jpa.user.opt;
@@ -35,10 +37,10 @@ import static uk.q3c.krail.core.user.profile.RankOption.*;
 
 @RunWith(MycilaJunitRunner.class)
 @GuiceContext({})
-public class DefaultOptionJpaDaoLongIntTest extends JpaDaoTestBase {
+public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
 
 
-    OptionJpaDao_LongInt dao;
+    JpaOptionDao dao;
 
     @Mock
     UserHierarchy hierarchy1;
@@ -52,7 +54,7 @@ public class DefaultOptionJpaDaoLongIntTest extends JpaDaoTestBase {
     @Before
     public void setup() {
         super.setUp();
-        final Key<OptionJpaDao_LongInt> daoKey = Key.get(OptionJpaDao_LongInt.class, Jpa1.class);
+        final Key<JpaOptionDao> daoKey = Key.get(JpaOptionDao.class, Jpa1.class);
         dao = injector.getInstance(daoKey);
         when(hierarchy1.persistenceName()).thenReturn("p1");
         when(hierarchy1.ranksForCurrentUser()).thenReturn(rankNames1);
