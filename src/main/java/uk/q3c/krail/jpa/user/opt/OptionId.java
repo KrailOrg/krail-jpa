@@ -13,8 +13,10 @@
 
 package uk.q3c.krail.jpa.user.opt;
 
+import uk.q3c.krail.core.user.opt.OptionKey;
 import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
 
+import javax.annotation.Nonnull;
 import javax.persistence.Embeddable;
 
 /**
@@ -33,14 +35,13 @@ public class OptionId {
 
     }
 
-    public OptionId(OptionCacheKey optionCacheKey) {
+    public OptionId(@Nonnull OptionCacheKey optionCacheKey) {
         userHierarchyName = optionCacheKey.getHierarchy()
                                           .persistenceName();
         rankName = optionCacheKey.getRequestedRankName();
-        optionKey = optionCacheKey.getOptionKey()
-                                  .compositeKey();
-        context = optionCacheKey.getOptionKey()
-                                .getContext()
+        OptionKey<?> optKey = optionCacheKey.getOptionKey();
+        optionKey = optKey.compositeKey();
+        context = optKey.getContext()
                                 .getName();
     }
 

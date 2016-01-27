@@ -60,8 +60,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
     }
 
 
-
-    protected Select selectSingleRank(@Nonnull OptionCacheKey cacheKey) {
+    protected <V> Select selectSingleRank(@Nonnull OptionCacheKey<V> cacheKey) {
         return new Select().from(entityName(JpaOptionEntity.class))
                            .where("userHierarchyName", EQ, cacheKey.getHierarchy()
                                                                    .persistenceName())
@@ -72,7 +71,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
 
     @Nonnull
     @Override
-    public Optional<?> getHighestRankedValue(@Nonnull final OptionCacheKey cacheKey) {
+    public <V> Optional<?> getHighestRankedValue(@Nonnull final OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
         final ImmutableList<String> ranks = cacheKey.getHierarchy()
                                                     .ranksForCurrentUser();
@@ -91,10 +90,10 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
      *
      * @return the first value found, or Optional.empty() if none found
      */
-    protected Optional<?> findFirstRankedValue(@Nonnull final OptionCacheKey cacheKey, @Nonnull List<String> ranks) {
+    protected <V> Optional<?> findFirstRankedValue(@Nonnull final OptionCacheKey<V> cacheKey, @Nonnull List<String> ranks) {
         Optional<?> value = Optional.empty();
         for (String rank : ranks) {
-            OptionCacheKey searchKey = new OptionCacheKey(cacheKey, rank, SPECIFIC_RANK);
+            OptionCacheKey<V> searchKey = new OptionCacheKey<>(cacheKey, rank, SPECIFIC_RANK);
             value = getValue(searchKey);
             if (value.isPresent()) {
                 return value;
@@ -104,7 +103,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
     }
 
     @Override
-    public <V> Object write(@Nonnull OptionCacheKey cacheKey, @Nonnull Optional<V> value) {
+    public <V> Object write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         checkArgument(value.isPresent(), "Value must be present");
         String stringValue = optionStringConverter.convertValueToString(value.get());
@@ -113,7 +112,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
 
     @Nonnull
     @Override
-    public Optional<?> getValue(@Nonnull OptionCacheKey cacheKey) {
+    public <V> Optional<?> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         Optional<String> v = getValueAsString(cacheKey);
         return (v.isPresent()) ? Optional.of(optionStringConverter.convertStringToValue(cacheKey, v.get())) : Optional.empty();
@@ -122,7 +121,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
 
     @Nonnull
     @Override
-    public Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey cacheKey) {
+    public <V> Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.LOWEST_RANK);
         final ImmutableList<String> ranks = cacheKey.getHierarchy()
                                                     .ranksForCurrentUser()

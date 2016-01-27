@@ -27,5 +27,5 @@ public interface JpaOptionDao extends OptionDao {
 
     @Transactional
     @Nullable
-    JpaOptionEntity find(@Nonnull OptionCacheKey cacheKey);
+    <V> JpaOptionEntity find(@Nonnull OptionCacheKey<V> cacheKey);
 }

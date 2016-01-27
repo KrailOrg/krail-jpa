@@ -46,9 +46,9 @@ public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
     UserHierarchy hierarchy1;
 
     ImmutableList<String> rankNames1 = ImmutableList.of("fred", "accounts", "finance");
-    private OptionCacheKey cacheKey0;
-    private OptionCacheKey cacheKey1;
-    private OptionCacheKey cacheKey2;
+    private OptionCacheKey<Integer> cacheKey0;
+    private OptionCacheKey<Integer> cacheKey1;
+    private OptionCacheKey<Integer> cacheKey2;
     private OptionKey<Integer> optionKey1;
 
     @Before
@@ -62,9 +62,9 @@ public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
         when(hierarchy1.rankName(1)).thenReturn(rankNames1.get(1));
         when(hierarchy1.rankName(2)).thenReturn(rankNames1.get(2));
         optionKey1 = new OptionKey<>(288, LocaleContainer.class, LabelKey.Yes);
-        cacheKey0 = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, 0, optionKey1);
-        cacheKey1 = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, 1, optionKey1);
-        cacheKey2 = new OptionCacheKey(hierarchy1, SPECIFIC_RANK, 2, optionKey1);
+        cacheKey0 = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 0, optionKey1);
+        cacheKey1 = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 1, optionKey1);
+        cacheKey2 = new OptionCacheKey<>(hierarchy1, SPECIFIC_RANK, 2, optionKey1);
 
 
     }
@@ -93,11 +93,11 @@ public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
         dao.write(cacheKey1, Optional.of(44));
         dao.write(cacheKey2, Optional.of(195));
         //when
-        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey(cacheKey0, HIGHEST_RANK));
-        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey(cacheKey0, LOWEST_RANK));
-        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
-        Optional<?> specificRankedValue1 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(1), SPECIFIC_RANK));
-        Optional<?> specificRankedValue2 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(2), SPECIFIC_RANK));
+        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey<>(cacheKey0, HIGHEST_RANK));
+        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey<>(cacheKey0, LOWEST_RANK));
+        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
+        Optional<?> specificRankedValue1 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(1), SPECIFIC_RANK));
+        Optional<?> specificRankedValue2 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(2), SPECIFIC_RANK));
         //then
         assertThat(highestRankedValue.get()
                                      .toString()).isEqualTo("73");
@@ -118,12 +118,12 @@ public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
         dao.write(cacheKey1, Optional.of(44));
         dao.write(cacheKey2, Optional.of(195));
         //when
-        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey(cacheKey0, HIGHEST_RANK));
-        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey(cacheKey0, LOWEST_RANK));
-        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
-        Optional<?> specificRankedValue1 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(1), SPECIFIC_RANK));
-        Optional<?> specificRankedValue2 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(2), SPECIFIC_RANK));
-        Optional<?> highestRankedValue1 = dao.getHighestRankedValue(new OptionCacheKey(cacheKey0, "rubbish", HIGHEST_RANK));
+        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey<>(cacheKey0, HIGHEST_RANK));
+        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey<>(cacheKey0, LOWEST_RANK));
+        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
+        Optional<?> specificRankedValue1 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(1), SPECIFIC_RANK));
+        Optional<?> specificRankedValue2 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(2), SPECIFIC_RANK));
+        Optional<?> highestRankedValue1 = dao.getHighestRankedValue(new OptionCacheKey<>(cacheKey0, "rubbish", HIGHEST_RANK));
         //then
         assertThat(highestRankedValue.get()).isEqualTo(73);
         assertThat(lowestRankedValue.get()).isEqualTo(195);
@@ -165,9 +165,9 @@ public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
         //given
 
         //when
-        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey(cacheKey0, HIGHEST_RANK));
-        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey(cacheKey0, LOWEST_RANK));
-        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
+        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey<>(cacheKey0, HIGHEST_RANK));
+        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey<>(cacheKey0, LOWEST_RANK));
+        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
         //then
         assertThat(highestRankedValue.isPresent()).isFalse();
         assertThat(lowestRankedValue.isPresent()).isFalse();
@@ -180,9 +180,9 @@ public class DefaultOptionJpaDaoTest2 extends JpaDaoTestBase {
         //given
 
         //when
-        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey(cacheKey0, HIGHEST_RANK));
-        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey(cacheKey0, LOWEST_RANK));
-        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
+        Optional<?> highestRankedValue = dao.getHighestRankedValue(new OptionCacheKey<>(cacheKey0, HIGHEST_RANK));
+        Optional<?> lowestRankedValue = dao.getLowestRankedValue(new OptionCacheKey<>(cacheKey0, LOWEST_RANK));
+        Optional<?> specificRankedValue0 = dao.getValue(new OptionCacheKey<>(cacheKey0, rankNames1.get(0), SPECIFIC_RANK));
         //then
         assertThat(highestRankedValue.isPresent()).isFalse();
         assertThat(lowestRankedValue.isPresent()).isFalse();
