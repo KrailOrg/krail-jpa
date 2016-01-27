@@ -1,12 +1,14 @@
 /*
- * Copyright (c) 2015. David Sowerby
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  * Copyright (c) 2016. David Sowerby
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *  * the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  * specific language governing permissions and limitations under the License.
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
  */
 
 package org.apache.onami.persist;
@@ -34,15 +36,15 @@ public final class TransactionalAnnotationMatcher extends BaseMatcher<Transactio
         this.expectedIgnore = asSet(expectedIgnore);
     }
 
+    public static TransactionalAnnotationMatcher transactionalAnnotation(Class[] expectedUnits, Class[] expectedRollback, Class[] expectedIgnore) {
+        return new TransactionalAnnotationMatcher(expectedUnits, expectedRollback, expectedIgnore);
+    }
+
     private <T> Set<T> asSet(T... elements) {
         if (elements == null) {
             return new HashSet<T>();
         }
         return new HashSet<T>(Arrays.asList(elements));
-    }
-
-    public static TransactionalAnnotationMatcher transactionalAnnotation(Class[] expectedUnits, Class[] expectedRollback, Class[] expectedIgnore) {
-        return new TransactionalAnnotationMatcher(expectedUnits, expectedRollback, expectedIgnore);
     }
 
     public boolean matches(Object item) {
@@ -58,7 +60,7 @@ public final class TransactionalAnnotationMatcher extends BaseMatcher<Transactio
     }
 
     public void describeTo(Description description) {
-        description.appendText("<@org.apache.onami.persist.Transactional(")
+        description.appendText("<@org.apache.onami.common.Transactional(")
                    .appendText("onUnits=")
                    .appendValueList("[", ", ", "]", expectedUnits)
                    .appendText(", rollbackOn=")
