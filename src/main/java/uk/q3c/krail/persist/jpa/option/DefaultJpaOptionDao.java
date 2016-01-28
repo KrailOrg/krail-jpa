@@ -20,21 +20,21 @@ import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
 import uk.q3c.krail.core.data.OptionStringConverter;
-import uk.q3c.krail.core.data.Select;
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.OptionDao;
-import uk.q3c.krail.core.user.opt.cache.DefaultOptionCacheLoader;
-import uk.q3c.krail.core.user.opt.cache.OptionCache;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.option.OptionException;
+import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
+import uk.q3c.krail.core.persist.cache.option.OptionCache;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 import uk.q3c.krail.core.user.profile.RankOption;
 import uk.q3c.krail.persist.jpa.common.BaseJpaKeyValueDao;
 
 import javax.annotation.Nonnull;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static uk.q3c.krail.core.data.Select.Compare.EQ;
 import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 
 /**
@@ -48,7 +48,7 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
  * <br>
  * Created by David Sowerby on 13/04/15.
  */
-public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCacheKey, JpaOptionEntity> implements JpaOptionDao {
+public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<JpaOptionId, OptionCacheKey, JpaOptionEntity> implements JpaOptionDao {
 
 
     private OptionStringConverter optionStringConverter;
@@ -60,24 +60,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
     }
 
 
-    protected <V> Select selectSingleRank(@Nonnull OptionCacheKey<V> cacheKey) {
-        return new Select().from(entityName(JpaOptionEntity.class))
-                           .where("userHierarchyName", EQ, cacheKey.getHierarchy()
-                                                                   .persistenceName())
-                           .and("rankName", EQ, cacheKey.getRequestedRankName())
-                           .and("optionKey", EQ, cacheKey.getOptionKey()
-                                                         .compositeKey());
-    }
 
-    @Nonnull
-    @Override
-    public <V> Optional<?> getHighestRankedValue(@Nonnull final OptionCacheKey<V> cacheKey) {
-        checkRankOption(cacheKey, RankOption.HIGHEST_RANK);
-        final ImmutableList<String> ranks = cacheKey.getHierarchy()
-                                                    .ranksForCurrentUser();
-
-        return findFirstRankedValue(cacheKey, ranks);
-    }
 
 
     /**
@@ -103,24 +86,70 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
     }
 
     @Override
-    public <V> Object write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
+    public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         checkArgument(value.isPresent(), "Value must be present");
         String stringValue = optionStringConverter.convertValueToString(value.get());
-        return write(cacheKey, stringValue);
+        write(cacheKey, stringValue);
     }
 
     @Nonnull
     @Override
-    public <V> Optional<?> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
-        checkRankOption(cacheKey, SPECIFIC_RANK);
-        Optional<String> v = getValueAsString(cacheKey);
-        return (v.isPresent()) ? Optional.of(optionStringConverter.convertStringToValue(cacheKey, v.get())) : Optional.empty();
+    public <V> Optional<V> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
+        Optional<String> optionalStringValue;
+
+        switch (cacheKey.getRankOption()) {
+            case HIGHEST_RANK:
+                optionalStringValue = getRankedValue(cacheKey, false);
+                break;
+            case LOWEST_RANK:
+                optionalStringValue = getRankedValue(cacheKey, true);
+                break;
+            case SPECIFIC_RANK:
+                optionalStringValue = getStringValue(cacheKey);
+                break;
+            default:
+                throw new OptionException("Unrecognised rankOption");
+        }
+        return optionalStringValue.isPresent() ? Optional.of(optionStringConverter.convertStringToValue(cacheKey, optionalStringValue.get())) : Optional
+                .empty();
+    }
+
+    @Nonnull
+    @Override
+    public Optional<String> deleteValue(@Nonnull OptionCacheKey cacheKey) {
+        checkRankOption(cacheKey, RankOption.SPECIFIC_RANK);
+        return super.deleteValue(cacheKey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Nonnull
+    protected <V> Optional<String> getRankedValue(@Nonnull OptionCacheKey<V> cacheKey, boolean lowest) {
+        ImmutableList<String> ranks = cacheKey.getHierarchy()
+                                              .ranksForCurrentUser();
+        ImmutableList<String> ranksToUse = (lowest) ? ranks.reverse() : ranks;
+        for (String rank : ranksToUse) {
+            OptionCacheKey<V> specificKey = new OptionCacheKey<>(cacheKey, rank, RankOption.SPECIFIC_RANK);
+            Optional<String> stringValue = getStringValue(specificKey);
+            if (stringValue.isPresent()) return stringValue;
+        }
+        return Optional.empty();
+    }
+
+    protected Optional<String> getStringValue(@Nonnull OptionCacheKey<?> cacheKey) {
+        EntityManager entityManager = getEntityManager();
+        JpaOptionEntity jpaOptionEntity = entityManager.find(JpaOptionEntity.class, new JpaOptionId(cacheKey));
+        if (jpaOptionEntity == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(jpaOptionEntity.getValue());
+        }
     }
 
 
     @Nonnull
-    @Override
     public <V> Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey<V> cacheKey) {
         checkRankOption(cacheKey, RankOption.LOWEST_RANK);
         final ImmutableList<String> ranks = cacheKey.getHierarchy()
@@ -148,8 +177,8 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<OptionId, OptionCach
     }
 
     @Override
-    protected OptionId newId(OptionCacheKey cacheKey) {
-        return new OptionId(cacheKey);
+    protected JpaOptionId newId(OptionCacheKey cacheKey) {
+        return new JpaOptionId(cacheKey);
     }
 
     /**

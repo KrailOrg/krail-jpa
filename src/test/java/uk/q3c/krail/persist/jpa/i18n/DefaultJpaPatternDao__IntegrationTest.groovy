@@ -19,8 +19,8 @@ import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.PatternCacheKey
-import uk.q3c.krail.core.i18n.PatternDao
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
+import uk.q3c.krail.core.persist.common.i18n.PatternDao
 import uk.q3c.krail.persist.jpa.common.Jpa1
 
 @UseModules([TestPatternJpaModule, DataModule])

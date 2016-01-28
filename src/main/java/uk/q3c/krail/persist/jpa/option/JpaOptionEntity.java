@@ -13,8 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.option;
 
-import uk.q3c.krail.core.user.opt.Option;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.option.Option;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.persist.jpa.i18n.KeyValueEntity;
 
 import javax.annotation.Nonnull;
@@ -32,10 +32,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by David Sowerby on 13/04/15.
  */
 @Entity
-public class JpaOptionEntity implements KeyValueEntity<OptionId, Integer> {
+public class JpaOptionEntity implements KeyValueEntity<JpaOptionId, Integer> {
 
     @EmbeddedId
-    private OptionId id;
+    private JpaOptionId id;
     private String value;
     @Version
     private Integer version;
@@ -44,13 +44,13 @@ public class JpaOptionEntity implements KeyValueEntity<OptionId, Integer> {
     }
 
     public JpaOptionEntity(@Nonnull OptionCacheKey optionCacheKey, @Nonnull String value) {
-        this.id = new OptionId(optionCacheKey);
+        this.id = new JpaOptionId(optionCacheKey);
         this.value = value;
 
     }
 
     @Override
-    public OptionId getId() {
+    public JpaOptionId getId() {
         return id;
     }
 

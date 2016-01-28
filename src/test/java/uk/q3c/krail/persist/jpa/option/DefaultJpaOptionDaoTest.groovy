@@ -19,10 +19,10 @@ import org.apache.onami.persist.EntityManagerProvider
 import spock.lang.Specification
 import uk.q3c.krail.core.data.DefaultOptionStringConverter
 import uk.q3c.krail.core.data.OptionStringConverter
-import uk.q3c.krail.core.user.opt.OptionContext
-import uk.q3c.krail.core.user.opt.OptionKey
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey
-import uk.q3c.krail.core.user.opt.cache.OptionKeyException
+import uk.q3c.krail.core.option.OptionContext
+import uk.q3c.krail.core.option.OptionKey
+import uk.q3c.krail.core.option.OptionKeyException
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
 import uk.q3c.krail.core.user.profile.RankOption
 import uk.q3c.krail.core.user.profile.UserHierarchy
 

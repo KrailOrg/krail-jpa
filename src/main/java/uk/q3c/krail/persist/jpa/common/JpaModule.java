@@ -18,11 +18,11 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import org.apache.onami.persist.PersistenceModule;
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
+import uk.q3c.krail.core.option.CoreDao;
 import uk.q3c.krail.core.persist.common.common.DefaultPersistenceInfo;
 import uk.q3c.krail.core.persist.common.common.OptionDaoProviders;
 import uk.q3c.krail.core.persist.common.common.PersistenceInfo;
 import uk.q3c.krail.core.persist.common.i18n.PatternDaoProviders;
-import uk.q3c.krail.core.user.opt.CoreDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

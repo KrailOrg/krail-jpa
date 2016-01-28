@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.jpa.i18n;
 
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
-import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 import uk.q3c.krail.persist.jpa.common.DefaultJpaInstanceConfiguration;
 import uk.q3c.krail.persist.jpa.common.Jpa1;
 import uk.q3c.krail.persist.jpa.common.JpaDb;

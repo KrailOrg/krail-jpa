@@ -17,8 +17,8 @@ import org.apache.onami.persist.BindingPair;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.jpa.PersistenceProvider;
 import uk.q3c.krail.core.i18n.I18NKey;
-import uk.q3c.krail.core.i18n.PatternDao;
-import uk.q3c.krail.core.user.opt.OptionDao;
+import uk.q3c.krail.core.persist.common.i18n.PatternDao;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 import uk.q3c.krail.persist.jpa.i18n.DefaultJpaPatternDao;
 import uk.q3c.krail.persist.jpa.option.DefaultJpaOptionDao;
 

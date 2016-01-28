@@ -13,8 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.option;
 
-import uk.q3c.krail.core.user.opt.OptionKey;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.option.OptionKey;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Embeddable;
@@ -23,7 +23,7 @@ import javax.persistence.Embeddable;
  * Created by David Sowerby on 17 Jan 2016
  */
 @Embeddable
-public class OptionId {
+public class JpaOptionId {
 
 
     private String context;
@@ -31,11 +31,11 @@ public class OptionId {
     private String rankName;
     private String userHierarchyName;
 
-    protected OptionId() {
+    protected JpaOptionId() {
 
     }
 
-    public OptionId(@Nonnull OptionCacheKey optionCacheKey) {
+    public JpaOptionId(@Nonnull OptionCacheKey optionCacheKey) {
         userHierarchyName = optionCacheKey.getHierarchy()
                                           .persistenceName();
         rankName = optionCacheKey.getRequestedRankName();
@@ -66,7 +66,7 @@ public class OptionId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OptionId optionId = (OptionId) o;
+        JpaOptionId optionId = (JpaOptionId) o;
 
         if (context != null ? !context.equals(optionId.context) : optionId.context != null) return false;
         if (optionKey != null ? !optionKey.equals(optionId.optionKey) : optionId.optionKey != null) return false;

@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.jpa.i18n
 
 import spock.lang.Specification
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.i18n.PatternCacheKey
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
 
 /**
  * Created by David Sowerby on 13/07/15.

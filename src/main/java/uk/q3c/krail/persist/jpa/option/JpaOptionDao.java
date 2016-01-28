@@ -14,8 +14,8 @@
 package uk.q3c.krail.persist.jpa.option;
 
 import org.apache.onami.persist.Transactional;
-import uk.q3c.krail.core.user.opt.OptionDao;
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey;
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.core.persist.common.option.OptionDao;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

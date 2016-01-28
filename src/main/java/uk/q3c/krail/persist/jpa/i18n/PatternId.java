@@ -14,7 +14,7 @@
 package uk.q3c.krail.persist.jpa.i18n;
 
 import uk.q3c.krail.core.data.EnumConverter;
-import uk.q3c.krail.core.i18n.PatternCacheKey;
+import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Embeddable;

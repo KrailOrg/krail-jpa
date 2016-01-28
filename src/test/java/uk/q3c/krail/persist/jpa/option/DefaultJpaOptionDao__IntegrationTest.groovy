@@ -20,9 +20,9 @@ import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.i18n.LabelKey
-import uk.q3c.krail.core.user.opt.OptionDao
-import uk.q3c.krail.core.user.opt.OptionKey
-import uk.q3c.krail.core.user.opt.cache.OptionCacheKey
+import uk.q3c.krail.core.option.OptionKey
+import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
+import uk.q3c.krail.core.persist.common.option.OptionDao
 import uk.q3c.krail.core.user.profile.RankOption
 import uk.q3c.krail.core.user.profile.UserHierarchy
 import uk.q3c.krail.core.view.component.LocaleContainer
