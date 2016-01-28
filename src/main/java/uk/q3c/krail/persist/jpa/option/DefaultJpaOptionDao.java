@@ -95,6 +95,7 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<JpaOptionId, OptionC
 
     @Nonnull
     @Override
+    @Transactional
     public <V> Optional<V> getValue(@Nonnull OptionCacheKey<V> cacheKey) {
         Optional<String> optionalStringValue;
 
@@ -146,16 +147,6 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<JpaOptionId, OptionC
         } else {
             return Optional.of(jpaOptionEntity.getValue());
         }
-    }
-
-
-    @Nonnull
-    public <V> Optional<?> getLowestRankedValue(@Nonnull OptionCacheKey<V> cacheKey) {
-        checkRankOption(cacheKey, RankOption.LOWEST_RANK);
-        final ImmutableList<String> ranks = cacheKey.getHierarchy()
-                                                    .ranksForCurrentUser()
-                                                    .reverse();
-        return findFirstRankedValue(cacheKey, ranks);
     }
 
 

@@ -80,6 +80,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
      * {@inheritDoc}
      */
     @Override
+    @Transactional
     @Nonnull
     public <E extends KrailEntity<ID, VER>> Optional<E> findById(@Nonnull Class<E> entityClass, @Nonnull ID entityId) {
         checkNotNull(entityClass);
@@ -145,6 +146,7 @@ public abstract class BaseJpaDao<ID, VER> implements JpaDao<ID, VER> {
     // The only parameter is entityName(), which is limited to either the simple class name of the entity, or its annotation
     @Nonnull
     @Override
+    @Transactional
     public <E extends KrailEntity<ID, VER>> List<E> findAll(@Nonnull Class<E> entityClass) {
         checkNotNull(entityClass);
         EntityManager entityManager = entityManagerProvider.get();

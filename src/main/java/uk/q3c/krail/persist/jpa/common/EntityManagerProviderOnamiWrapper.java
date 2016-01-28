@@ -51,8 +51,8 @@ public class EntityManagerProviderOnamiWrapper implements com.vaadin.addon.jpaco
             log.debug("Unit of Work started by EntityManagerProvider wrapper, thread id = {}", Thread.currentThread()
                                                                                                      .getId());
         } else {
-            log.debug("Unit of Work aready running, thread id = {}", Thread.currentThread()
-                                                                           .getId());
+            log.debug("Unit of Work already running, thread id = {}", Thread.currentThread()
+                                                                            .getId());
         }
         return entityManagerProvider.get();
     }
