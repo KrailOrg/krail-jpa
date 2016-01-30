@@ -79,15 +79,6 @@ class DefaultJpaOptionDao__IntegrationTest extends Specification {
     }
 
 
-    def "write a single value"() {
-        given:
-        OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey);
-        when:
-        JpaOptionEntity actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("4"));
-        then:
-        actual != null
-        dao.count() == 1
-    }
 
 
     def "write with the same cache key multiple times and ensure there is only the latest value present in persistence"() {
@@ -95,13 +86,12 @@ class DefaultJpaOptionDao__IntegrationTest extends Specification {
         OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey);
 
         when:
-        JpaOptionEntity actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("4"));
-        actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("5"));
-        actual = (JpaOptionEntity) dao.write(cacheKey, Optional.of("6"));
+        dao.write(cacheKey, Optional.of("4"));
+        dao.write(cacheKey, Optional.of("5"));
+        dao.write(cacheKey, Optional.of("6"));
         JpaOptionEntity result = dao.find(cacheKey)
 
         then:
-        actual != null
         dao.count() == 1
         result != null
         result.getValue() == "6"

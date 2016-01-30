@@ -13,117 +13,49 @@
 
 package uk.q3c.krail.persist.jpa.option
 
-import com.vaadin.data.util.converter.ConverterFactory
-import com.vaadin.data.util.converter.DefaultConverterFactory
+import com.google.inject.Inject
 import org.apache.onami.persist.EntityManagerProvider
-import spock.lang.Specification
-import uk.q3c.krail.core.data.DefaultOptionStringConverter
-import uk.q3c.krail.core.data.OptionStringConverter
-import uk.q3c.krail.core.option.OptionContext
-import uk.q3c.krail.core.option.OptionKey
-import uk.q3c.krail.core.option.OptionKeyException
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey
-import uk.q3c.krail.core.user.profile.RankOption
-import uk.q3c.krail.core.user.profile.UserHierarchy
-
-import javax.persistence.EntityManager
-import javax.persistence.TypedQuery
+import org.apache.onami.persist.PersistenceService
+import org.apache.onami.persist.UnitOfWork
+import org.eclipse.persistence.config.PersistenceUnitProperties
+import spock.guice.UseModules
+import uk.q3c.krail.core.data.DataModule
+import uk.q3c.krail.core.persist.common.option.OptionDao
+import uk.q3c.krail.core.persist.common.option.OptionDaoTestBase
+import uk.q3c.krail.persist.jpa.common.Jpa1
 
 /**
- *
- * Test for {@link uk.q3c.krail.persist.jpa.option.DefaultJpaOptionDao}
- *
- * Created by David Sowerby on 10/07/15.
+ * Created by David Sowerby on 21 Jan 2016
  */
-class DefaultJpaOptionDaoTest extends Specification {
+@UseModules([TestOptionJpaModule, DataModule])
+class DefaultJpaOptionDaoTest extends OptionDaoTestBase {
+    @Inject
+    @Jpa1
+    PersistenceService persistenceService;
 
+    @Inject
+    @Jpa1
+    OptionDao injectedDao;
 
-    ConverterFactory converterFactory = new DefaultConverterFactory()
+    @Inject
+    @Jpa1
+    EntityManagerProvider entityManagerProvider
 
-    OptionStringConverter stringPersistenceConverter = new DefaultOptionStringConverter()
-
-    EntityManagerProvider entityManagerProvider = Mock()
-
-    EntityManager entityManager = Mock()
-
-    UserHierarchy userHierarchy = Mock()
-
-    TypedQuery<JpaOptionEntity> query = Mock()
-
-    List<JpaOptionEntity> emptyResultList;
-
-    OptionKey optionKey1 = Mock()
-
-    DefaultJpaOptionDao dao
-
+    @Inject
+    @Jpa1
+    UnitOfWork unitOfWork;
 
     def setup() {
-        optionKey1.compositeKey() >> "a_composite_key"
-        optionKey1.getContext() >> OptionContext.class
-        entityManagerProvider.get() >> entityManager
-        emptyResultList = new ArrayList<>()
-        userHierarchy.persistenceName() >> "simple"
-        userHierarchy.rankName(_) >> "ds"
-        dao = new DefaultJpaOptionDao(entityManagerProvider, stringPersistenceConverter)
+        persistenceService.start();
+        unitOfWork.begin();
+        dao = injectedDao
+        expectedConnectionUrl = (String) entityManagerProvider.get().getProperties()
+                .get(PersistenceUnitProperties.JDBC_URL)
     }
 
-    def "Write should throw an OptionKeyException if OptionKey rank is not specific"() {
-
-        given:
-
-        userHierarchy.highestRankName() >> "ds"
-        OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.HIGHEST_RANK, optionKey1)
-
-
-        when:
-        dao.write(cacheKey, Optional.of(3))
-
-        then:
-        thrown(OptionKeyException)
+    def cleanup() {
+        unitOfWork.end();
+        persistenceService.stop();
     }
 
-    def "Write the first time should create a new OptionEntity and persist it"() {
-        given:
-
-        OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey1)
-
-        query.getResultList() >> emptyResultList
-        entityManager.createQuery(_, _) >> query
-
-
-        when:
-        Object entity = dao.write(cacheKey, Optional.of(3))
-
-        then:
-        1 * entityManager.persist(_)
-        entity != null
-        entity instanceof JpaOptionEntity
-        JpaOptionEntity rEntity = (JpaOptionEntity) entity
-        rEntity.getValue() == "3"
-
-    }
-
-    def "Write the second time should change the value of the existing OptionEntity and persist it"() {
-        given:
-        List<JpaOptionEntity> resultList = new ArrayList<>();
-        OptionCacheKey cacheKey = new OptionCacheKey(userHierarchy, RankOption.SPECIFIC_RANK, optionKey1)
-        emptyResultList = new ArrayList<>()
-        query.getResultList() >> emptyResultList
-        query.getResultList() >> resultList
-        entityManager.createQuery(_, _) >> query
-
-
-        when:
-        Object entity = dao.write(cacheKey, Optional.of(3))
-        resultList.add((JpaOptionEntity) entity)
-        entity = dao.write(cacheKey, Optional.of(5))
-
-        then:
-        2 * entityManager.persist(_)
-        entity != null
-        entity instanceof JpaOptionEntity
-        JpaOptionEntity rEntity = (JpaOptionEntity) entity
-        rEntity.getValue() == "5"
-
-    }
 }

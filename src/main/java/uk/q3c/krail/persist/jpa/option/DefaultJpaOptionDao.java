@@ -19,9 +19,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
-import uk.q3c.krail.core.data.OptionStringConverter;
+import uk.q3c.krail.core.data.OptionElementConverter;
+import uk.q3c.krail.core.data.OptionListConverter;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.option.OptionException;
+import uk.q3c.krail.core.option.OptionList;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
@@ -31,7 +33,6 @@ import uk.q3c.krail.persist.jpa.common.BaseJpaKeyValueDao;
 
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
-import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -51,48 +52,24 @@ import static uk.q3c.krail.core.user.profile.RankOption.SPECIFIC_RANK;
 public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<JpaOptionId, OptionCacheKey, JpaOptionEntity> implements JpaOptionDao {
 
 
-    private OptionStringConverter optionStringConverter;
+    private OptionElementConverter optionElementConverter;
 
     @Inject
-    protected DefaultJpaOptionDao(EntityManagerProvider entityManagerProvider, OptionStringConverter optionStringConverter) {
+    protected DefaultJpaOptionDao(EntityManagerProvider entityManagerProvider, OptionElementConverter optionElementConverter) {
         super(entityManagerProvider, JpaOptionEntity.class);
-        this.optionStringConverter = optionStringConverter;
+        this.optionElementConverter = optionElementConverter;
     }
 
-
-
-
-
-    /**
-     * Returns the first value found from the ordered {@code ranks}
-     *
-     * @param cacheKey
-     *         the key to identify candidates (the rank name is replaced by a member of ranks)
-     * @param ranks
-     *         the ranks to look for
-     *
-     * @return the first value found, or Optional.empty() if none found
-     */
-    protected <V> Optional<?> findFirstRankedValue(@Nonnull final OptionCacheKey<V> cacheKey, @Nonnull List<String> ranks) {
-        Optional<?> value = Optional.empty();
-        for (String rank : ranks) {
-            OptionCacheKey<V> searchKey = new OptionCacheKey<>(cacheKey, rank, SPECIFIC_RANK);
-            value = getValue(searchKey);
-            if (value.isPresent()) {
-                return value;
-            }
-        }
-        return value;
-    }
 
     @Override
     public <V> void write(@Nonnull OptionCacheKey<V> cacheKey, @Nonnull Optional<V> value) {
         checkRankOption(cacheKey, SPECIFIC_RANK);
         checkArgument(value.isPresent(), "Value must be present");
-        String stringValue = optionStringConverter.convertValueToString(value.get());
+        String stringValue = optionElementConverter.convertValueToString(value.get());
         write(cacheKey, stringValue);
     }
 
+    @SuppressWarnings("unchecked")
     @Nonnull
     @Override
     @Transactional
@@ -112,8 +89,20 @@ public class DefaultJpaOptionDao extends BaseJpaKeyValueDao<JpaOptionId, OptionC
             default:
                 throw new OptionException("Unrecognised rankOption");
         }
-        return optionalStringValue.isPresent() ? Optional.of(optionStringConverter.convertStringToValue(cacheKey, optionalStringValue.get())) : Optional
-                .empty();
+        if (optionalStringValue.isPresent()) {
+            V defaultValue = cacheKey.getOptionKey()
+                                     .getDefaultValue();
+            if (defaultValue instanceof OptionList) {
+                OptionList convertedValue = new OptionListConverter(optionElementConverter).convertToModel((OptionList) defaultValue,
+                        optionalStringValue.get());
+                return Optional.of((V) convertedValue);
+            } else {
+                Class<V> elementClass = (Class<V>) defaultValue.getClass();
+                return Optional.of(optionElementConverter.convertStringToValue(elementClass, optionalStringValue.get()));
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Nonnull
