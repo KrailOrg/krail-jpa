@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.jpa.option;
 
 import org.apache.onami.persist.Transactional;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 /**
  * Created by David Sowerby on 13/04/15.
  */
-public interface JpaOptionDao extends OptionDao {
+public interface JpaOptionDaoDelegate extends OptionDaoDelegate {
 
     @Transactional
     @Nullable

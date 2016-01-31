@@ -36,7 +36,7 @@ public interface JpaKeyValueDao<ID, VER, K, E extends KeyValueEntity> extends Jp
     Optional<String> deleteValue(@Nonnull K cacheKey);
 
     @Nonnull
-    Optional<String> getValueAsString(@Nonnull K cacheKey);
+    Optional<String> getValue(@Nonnull K cacheKey);
 
     @Transactional
     long count();

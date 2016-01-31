@@ -80,7 +80,7 @@ public abstract class BaseJpaKeyValueDao<ID, K, E extends KeyValueEntity<ID, Int
 
     @Nonnull
     @Override
-    public Optional<String> getValueAsString(@Nonnull K cacheKey) {
+    public Optional<String> getValue(@Nonnull K cacheKey) {
         checkNotNull(cacheKey);
         E entity = find(cacheKey);
         return (entity == null) ? Optional.empty() : Optional.of(entity.getValue());

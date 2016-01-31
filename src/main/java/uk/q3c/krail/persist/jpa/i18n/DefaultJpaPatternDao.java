@@ -52,6 +52,6 @@ public class DefaultJpaPatternDao extends BaseJpaKeyValueDao<PatternId, PatternC
     @Nonnull
     @Override
     public Optional<String> getValue(@Nonnull PatternCacheKey cacheKey) {
-        return getValueAsString(cacheKey);
+        return super.getValue(cacheKey);
     }
 }

@@ -17,8 +17,8 @@ import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
 import uk.q3c.krail.persist.jpa.i18n.DefaultJpaPatternDao;
 import uk.q3c.krail.persist.jpa.i18n.JpaPatternDao;
-import uk.q3c.krail.persist.jpa.option.DefaultJpaOptionDao;
-import uk.q3c.krail.persist.jpa.option.JpaOptionDao;
+import uk.q3c.krail.persist.jpa.option.DefaultJpaOptionDaoDelegate;
+import uk.q3c.krail.persist.jpa.option.JpaOptionDaoDelegate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -84,7 +84,7 @@ public class TestJpaModule extends JpaModule {
               .password("test")
               .ddlGeneration(DefaultJpaInstanceConfiguration.Ddl.DROP_AND_CREATE)
               .
-                      bind(JpaOptionDao.class, DefaultJpaOptionDao.class)
+                      bind(JpaOptionDaoDelegate.class, DefaultJpaOptionDaoDelegate.class)
               .bind(JpaDao_LongInt.class, DefaultJpaDao_LongInt.class)
               .bind(JpaPatternDao.class, DefaultJpaPatternDao.class);
 

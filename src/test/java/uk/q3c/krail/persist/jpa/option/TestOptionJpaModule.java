@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.jpa.option;
 
 import org.apache.onami.persist.PersistenceUnitModuleConfiguration;
 import org.junit.rules.TemporaryFolder;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.persist.jpa.common.DefaultJpaInstanceConfiguration;
 import uk.q3c.krail.persist.jpa.common.Jpa1;
 import uk.q3c.krail.persist.jpa.common.JpaDb;
@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 
 /**
- * Sets up Jpa for testing {@link OptionDao}
+ * Sets up Jpa for testing {@link OptionDaoDelegate}
  * <p>
  * Created by David Sowerby on 10/07/15.
  */

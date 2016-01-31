@@ -20,22 +20,25 @@ import org.apache.onami.persist.UnitOfWork
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import spock.guice.UseModules
 import uk.q3c.krail.core.data.DataModule
-import uk.q3c.krail.core.persist.common.option.OptionDao
+import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
+import uk.q3c.krail.core.persist.common.option.DefaultOptionDao
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate
 import uk.q3c.krail.core.persist.common.option.OptionDaoTestBase
 import uk.q3c.krail.persist.jpa.common.Jpa1
+import uk.q3c.krail.testutil.TestOptionModule
 
 /**
  * Created by David Sowerby on 21 Jan 2016
  */
-@UseModules([TestOptionJpaModule, DataModule])
-class DefaultJpaOptionDaoTest extends OptionDaoTestBase {
+@UseModules([TestOptionJpaModule, DataModule, TestOptionModule, VaadinSessionScopeModule])
+class DefaultJpaOptionDaoDelegateTest extends OptionDaoTestBase {
     @Inject
     @Jpa1
     PersistenceService persistenceService;
 
     @Inject
     @Jpa1
-    OptionDao injectedDao;
+    OptionDaoDelegate injectedDaoDelegate;
 
     @Inject
     @Jpa1
@@ -46,9 +49,10 @@ class DefaultJpaOptionDaoTest extends OptionDaoTestBase {
     UnitOfWork unitOfWork;
 
     def setup() {
+        optionSource.getActiveDao() >> injectedDaoDelegate
         persistenceService.start();
         unitOfWork.begin();
-        dao = injectedDao
+        dao = new DefaultOptionDao(optionElementConverter, optionSource)
         expectedConnectionUrl = (String) entityManagerProvider.get().getProperties()
                 .get(PersistenceUnitProperties.JDBC_URL)
     }

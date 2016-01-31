@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
 import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider;
-import uk.q3c.krail.core.persist.common.option.OptionDao;
+import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.persist.jpa.common.DefaultJpaContainerProvider;
 import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
 import uk.q3c.krail.persist.jpa.option.DefaultJpaOptionContainerProvider;
@@ -60,7 +60,7 @@ public class PersistenceUnitModule extends PrivateModule {
      * Container for adding this persistence unit.
      */
     private final AllPersistenceUnits allPersistenceUnits;
-    private MapBinder<Class<? extends Annotation>, Provider<OptionDao>> optionDaoProviders;
+    private MapBinder<Class<? extends Annotation>, Provider<OptionDaoDelegate>> optionDaoProviders;
     private MapBinder<Class<? extends Annotation>, Provider<PatternDao>> patternDaoProviders;
 
     /**
