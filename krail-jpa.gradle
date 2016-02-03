@@ -31,7 +31,6 @@ dependencies {
     compile "javax.servlet:javax.servlet-api:3.+"
 
     testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.0'
-    testCompile project(':krail-testUtil')
 
 
 }

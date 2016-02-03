@@ -19,13 +19,13 @@ import org.apache.onami.persist.PersistenceService
 import org.apache.onami.persist.UnitOfWork
 import org.eclipse.persistence.config.PersistenceUnitProperties
 import spock.guice.UseModules
+import testutil.TestOptionModule
 import uk.q3c.krail.core.data.DataModule
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.persist.common.option.DefaultOptionDao
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate
 import uk.q3c.krail.core.persist.common.option.OptionDaoTestBase
 import uk.q3c.krail.persist.jpa.common.Jpa1
-import uk.q3c.krail.testutil.TestOptionModule
 
 /**
  * Created by David Sowerby on 21 Jan 2016
