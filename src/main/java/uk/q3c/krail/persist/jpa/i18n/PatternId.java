@@ -35,7 +35,7 @@ public class PatternId {
 
     public PatternId(@Nonnull PatternCacheKey cacheKey) {
         checkNotNull(cacheKey);
-        final Enum<?> enumKey = cacheKey.getKey();
+        final Enum<?> enumKey = (Enum<?>) cacheKey.getKey();
         this.i18nkey = new EnumConverter().convertToString(enumKey);
         this.locale = cacheKey.getRequestedLocale()
                               .toLanguageTag();
