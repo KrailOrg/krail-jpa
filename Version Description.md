@@ -1,1 +1,1 @@
-Reflect changes to Service interface and model made in Krail core
+Build file renamed and a single minor fix
