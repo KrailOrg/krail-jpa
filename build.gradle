@@ -13,7 +13,10 @@
 
 
 description = 'A JPA module for use with Krail'
-version = '0.9.1'
+
+//lookup version from the file produced by the release process
+version = versionFromFile(project.projectDir)
+//version = '0.9.1'
 
 dependencies {
 
