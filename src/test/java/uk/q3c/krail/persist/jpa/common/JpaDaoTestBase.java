@@ -22,8 +22,8 @@ import org.apache.onami.persist.PersistenceService;
 import org.apache.onami.persist.UnitOfWork;
 import org.junit.After;
 import org.junit.Before;
-import testutil.TestOptionModule;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
+import uk.q3c.krail.core.persist.common.option.testutil.TestOptionModule;
 
 import java.lang.annotation.Annotation;
 
