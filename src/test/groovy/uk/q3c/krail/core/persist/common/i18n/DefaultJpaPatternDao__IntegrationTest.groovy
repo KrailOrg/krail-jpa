@@ -11,17 +11,19 @@
  *
  */
 
-package uk.q3c.krail.persist.jpa.i18n
+package uk.q3c.krail.core.persist.common.i18n
+
 import com.google.inject.Inject
 import org.apache.onami.persist.PersistenceService
 import org.apache.onami.persist.UnitOfWork
 import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.core.data.DataModule
-import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
-import uk.q3c.krail.core.persist.common.i18n.PatternDao
 import uk.q3c.krail.persist.jpa.common.Jpa1
+import uk.q3c.krail.persist.jpa.i18n.JpaPatternEntity
+import uk.q3c.krail.persist.jpa.i18n.TestPatternJpaModule
+import uk.q3c.krail.testutil.i18n.TestLabelKey
 
 @UseModules([TestPatternJpaModule, DataModule])
 class DefaultJpaPatternDao__IntegrationTest extends Specification {
@@ -67,7 +69,7 @@ class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     def "write a single value"() {
         given:
-        PatternCacheKey cacheKey = new PatternCacheKey(LabelKey.Yes, Locale.UK);
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.UK);
         when:
         dao.write(cacheKey, "4");
         JpaPatternEntity actual = dao.find(cacheKey)
@@ -80,7 +82,7 @@ class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     def "write with the same cache key multiple times and ensure there is only the latest value present in persistence"() {
         given:
-        PatternCacheKey cacheKey = new PatternCacheKey(LabelKey.Yes, Locale.UK);
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.UK);
         when:
         dao.write(cacheKey, "4");
         dao.write(cacheKey, "5");
@@ -96,9 +98,9 @@ class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     def "write multiple keys and delete one"() {
         given:
-        PatternCacheKey cacheKey1 = new PatternCacheKey(LabelKey.Yes, Locale.UK);
-        PatternCacheKey cacheKey2 = new PatternCacheKey(LabelKey.Yes, new Locale("EN"));
-        PatternCacheKey cacheKey3 = new PatternCacheKey(LabelKey.Yes, Locale.US);
+        PatternCacheKey cacheKey1 = new PatternCacheKey(TestLabelKey.Yes, Locale.UK);
+        PatternCacheKey cacheKey2 = new PatternCacheKey(TestLabelKey.Yes, new Locale("EN"));
+        PatternCacheKey cacheKey3 = new PatternCacheKey(TestLabelKey.Yes, Locale.US);
 
         when:
 
