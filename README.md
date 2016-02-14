@@ -1,5 +1,11 @@
 #krail-jpa
 
+![License](http://img.shields.io/:license-apache-blue.svg)
+[![Gitter](https://badges.gitter.im/davidsowerby/krail.svg)](https://gitter.im/davidsowerby/krail?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.org/davidsowerby/krail-jpa.svg?branch=master)](https://travis-ci.org/davidsowerby/krail-jpa)
+[![Coverage Status](https://coveralls.io/repos/github/davidsowerby/krail-jpa/badge.svg?branch=master)](https://coveralls.io/github/davidsowerby/krail-jpa?branch=master)
+
+
 This is a module for use with [Krail](https://github.com/davidsowerby/krail), a rapid development framework based around Vaadin 7.
 
 This module provides JPA capability.

@@ -11,12 +11,12 @@
  *
  */
 
-package uk.q3c.krail.persist.jpa.i18n
+package uk.q3c.krail.core.persist.common.option
 
 import spock.lang.Specification
-import uk.q3c.krail.core.i18n.LabelKey
 import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey
-
+import uk.q3c.krail.persist.jpa.i18n.JpaPatternEntity
+import uk.q3c.krail.testutil.i18n.TestLabelKey
 /**
  * Created by David Sowerby on 13/07/15.
  */
@@ -28,7 +28,7 @@ class JpaPatternEntity_Test extends Specification {
     def "create decodes the I18NKey"() {
         given:
 
-        PatternCacheKey cacheKey1 = new PatternCacheKey(LabelKey.Yes, Locale.UK)
+        PatternCacheKey cacheKey1 = new PatternCacheKey(TestLabelKey.Yes, Locale.UK)
 
         when:
 
@@ -37,6 +37,6 @@ class JpaPatternEntity_Test extends Specification {
 
         then:
 
-        entity.getI18nkey().equals("uk.q3c.krail.core.i18n.LabelKey.Yes")
+        entity.getI18nkey().equals("uk.q3c.krail.testutil.i18n.TestLabelKey.Yes")
     }
 }
