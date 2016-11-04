@@ -2,8 +2,9 @@
 .idea
 .settings
 bin
-build
+build/*
 gradle
+krail-jpa.iml
 logs
 
 .krail-jpa.iml
