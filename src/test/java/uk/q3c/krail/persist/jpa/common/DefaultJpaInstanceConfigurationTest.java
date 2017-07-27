@@ -13,8 +13,7 @@
 
 package uk.q3c.krail.persist.jpa.common;
 
-import com.mycila.testing.junit.MycilaJunitRunner;
-import com.mycila.testing.plugin.guice.GuiceContext;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.apache.onami.persist.BindingPair;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.junit.Before;
@@ -25,8 +24,7 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MycilaJunitRunner.class)
-@GuiceContext({})
+@RunWith(MockitoJUnitRunner.class)
 public class DefaultJpaInstanceConfigurationTest {
 
     DefaultJpaInstanceConfiguration config;
