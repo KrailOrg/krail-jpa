@@ -13,13 +13,13 @@
 
 package uk.q3c.krail.persist.jpa.i18n;
 
-import uk.q3c.krail.core.data.EnumConverter;
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
+import uk.q3c.util.data.EnumConverter;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Embeddable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * Created by David Sowerby on 17 Jan 2016

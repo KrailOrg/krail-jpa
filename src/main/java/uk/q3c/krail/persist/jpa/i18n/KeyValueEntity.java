@@ -13,7 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.i18n;
 
-import uk.q3c.krail.core.data.KrailEntity;
+
+import uk.q3c.krail.persist.KrailEntity;
 
 /**
  * Created by David Sowerby on 18 Jan 2016

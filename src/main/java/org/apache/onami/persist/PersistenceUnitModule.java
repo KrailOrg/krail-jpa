@@ -21,10 +21,10 @@ import com.google.inject.util.Providers;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
-import uk.q3c.krail.core.persist.common.i18n.PatternDao;
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider;
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
+import uk.q3c.krail.i18n.persist.PatternDao;
+import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.jpa.common.DefaultJpaContainerProvider;
 import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
 import uk.q3c.krail.persist.jpa.option.DefaultJpaOptionContainerProvider;
@@ -35,7 +35,7 @@ import javax.transaction.UserTransaction;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
-import static org.apache.onami.persist.Preconditions.checkNotNull;
+import static org.apache.onami.persist.Preconditions.*;
 
 /**
  * Module for configuring a single persistence unit.

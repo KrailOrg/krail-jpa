@@ -13,7 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.i18n;
 
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

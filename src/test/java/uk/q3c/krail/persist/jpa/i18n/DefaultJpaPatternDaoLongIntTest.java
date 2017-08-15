@@ -16,14 +16,14 @@ package uk.q3c.krail.persist.jpa.i18n;
 import com.google.inject.Key;
 import org.junit.Test;
 import uk.q3c.krail.core.i18n.LabelKey;
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.persist.jpa.common.Jpa1;
 import uk.q3c.krail.persist.jpa.common.JpaDaoTestBase;
 
 import java.util.Locale;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 
 public class DefaultJpaPatternDaoLongIntTest extends JpaDaoTestBase {

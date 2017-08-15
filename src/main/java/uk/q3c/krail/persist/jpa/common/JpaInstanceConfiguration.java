@@ -15,8 +15,9 @@ package uk.q3c.krail.persist.jpa.common;
 
 import org.apache.onami.persist.BindingPair;
 import org.apache.onami.persist.EntityManagerProvider;
-import uk.q3c.krail.core.data.DataSourceInstanceConfiguration;
-import uk.q3c.krail.core.persist.common.common.KrailPersistenceUnit;
+import uk.q3c.krail.i18n.persist.I18NPersistenceEnabler;
+import uk.q3c.krail.option.persist.OptionPersistenceEnabler;
+import uk.q3c.krail.persist.DataSourceInstanceConfiguration;
 
 import java.util.List;
 import java.util.Properties;
@@ -24,7 +25,7 @@ import java.util.Properties;
 /**
  * Created by David Sowerby on 04/04/15.
  */
-public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfiguration<C>, KrailPersistenceUnit {
+public interface JpaInstanceConfiguration<C> extends DataSourceInstanceConfiguration<C>, I18NPersistenceEnabler<JpaInstanceConfiguration>, OptionPersistenceEnabler<JpaInstanceConfiguration> {
     enum TransactionType {JTA, RESOURCE_LOCAL}
 
 

@@ -14,8 +14,8 @@
 package uk.q3c.krail.persist.jpa.option;
 
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.persist.common.common.ContainerType;
 import uk.q3c.krail.core.persist.common.option.OptionContainerProvider;
+import uk.q3c.krail.persist.ContainerType;
 
 /**
  * Used solely to enable a Krail developer to replace the default implementation if desired

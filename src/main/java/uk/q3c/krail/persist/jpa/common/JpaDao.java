@@ -13,7 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.common;
 
-import uk.q3c.krail.core.data.Dao;
+
+import uk.q3c.krail.persist.Dao;
 
 /**
  * Type safety interface for JPA implementation of {@link Dao}

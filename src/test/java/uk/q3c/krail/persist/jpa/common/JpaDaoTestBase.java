@@ -23,7 +23,8 @@ import org.apache.onami.persist.UnitOfWork;
 import org.junit.After;
 import org.junit.Before;
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule;
-import uk.q3c.krail.testutil.option.TestOptionModule;
+import uk.q3c.krail.option.test.TestOptionModule;
+import uk.q3c.util.UtilModule;
 
 import java.lang.annotation.Annotation;
 
@@ -38,7 +39,7 @@ public abstract class JpaDaoTestBase {
     @Before
     public void setUp() {
         final PersistenceModule pm = createPersistenceModuleForTest();
-        injector = Guice.createInjector(pm, new TestOptionModule(), new VaadinSessionScopeModule());
+        injector = Guice.createInjector(pm, new TestOptionModule(), new VaadinSessionScopeModule(),new UtilModule());
 
         //startup persistence
         injector.getInstance(Key.get(PersistenceService.class, Jpa1.class))

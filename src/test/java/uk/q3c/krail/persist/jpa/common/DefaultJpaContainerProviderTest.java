@@ -16,12 +16,12 @@ package uk.q3c.krail.persist.jpa.common;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container;
 import org.junit.Test;
-import uk.q3c.krail.core.persist.common.common.ContainerType;
-import uk.q3c.krail.core.persist.common.common.VaadinContainerProvider;
+import uk.q3c.krail.persist.ContainerType;
+import uk.q3c.krail.persist.VaadinContainerProvider;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 
 public class DefaultJpaContainerProviderTest extends JpaDaoTestBase {

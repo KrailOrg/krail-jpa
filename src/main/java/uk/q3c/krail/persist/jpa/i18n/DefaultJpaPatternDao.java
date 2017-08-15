@@ -16,7 +16,7 @@ package uk.q3c.krail.persist.jpa.i18n;
 import com.google.inject.Inject;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
 import uk.q3c.krail.persist.jpa.common.BaseJpaKeyValueDao;
 
 import javax.annotation.Nonnull;

@@ -19,7 +19,7 @@ import org.apache.onami.persist.Transactional;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.data.KrailEntity;
+import uk.q3c.krail.persist.KrailEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +27,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * A general purpose JPA DAO Base implementation with generic methods.  Sub-class for specific ID and VER types.  Transaction control must be provided by the

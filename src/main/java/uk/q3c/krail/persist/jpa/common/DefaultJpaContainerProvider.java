@@ -19,8 +19,8 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.provider.CachingBatchableLocalEntityProvider;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.UnitOfWork;
-import uk.q3c.krail.core.config.ConfigurationException;
-import uk.q3c.krail.core.persist.common.common.ContainerType;
+import uk.q3c.krail.persist.ContainerType;
+import uk.q3c.krail.persist.PersistenceConfigurationException;
 
 /**
  * Sets up and returns a JPAContainer instance for use with Onami persistence.  An instance of this should be injected, annotated for the appropriate
@@ -53,7 +53,7 @@ public class DefaultJpaContainerProvider implements JpaContainerProvider {
                 containerProvider = new CachingBatchableLocalEntityProvider<>(entityClass);
                 break;
             default:
-                throw new ConfigurationException("Unrecognised Container Type");
+                throw new PersistenceConfigurationException("Unrecognised Container Type");
         }
         containerProvider.setEntityManagerProvider(new EntityManagerProviderOnamiWrapper(entityManagerProvider, unitOfWork));
         JPAContainer<E> container = new JPAContainer<>(entityClass);

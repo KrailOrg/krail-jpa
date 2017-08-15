@@ -18,13 +18,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
-import uk.q3c.krail.core.data.OptionElementConverter;
 import uk.q3c.krail.core.option.Option;
 import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
 import uk.q3c.krail.core.persist.cache.option.OptionCache;
 import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
 import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.persist.jpa.common.BaseJpaKeyValueDao;
+import uk.q3c.util.data.DataConverter;
 
 import javax.annotation.Nonnull;
 
@@ -42,13 +42,13 @@ import javax.annotation.Nonnull;
 public class DefaultJpaOptionDaoDelegate extends BaseJpaKeyValueDao<JpaOptionId, OptionCacheKey, JpaOptionEntity> implements JpaOptionDaoDelegate {
 
 
-    private OptionElementConverter optionElementConverter;
+    private DataConverter dataConverter;
 
     @SuppressFBWarnings("FCBL_FIELD_COULD_BE_LOCAL") //injected
     @Inject
-    protected DefaultJpaOptionDaoDelegate(EntityManagerProvider entityManagerProvider, OptionElementConverter optionElementConverter) {
+    protected DefaultJpaOptionDaoDelegate(EntityManagerProvider entityManagerProvider, DataConverter dataConverter) {
         super(entityManagerProvider, JpaOptionEntity.class);
-        this.optionElementConverter = optionElementConverter;
+        this.dataConverter = dataConverter;
     }
 
 

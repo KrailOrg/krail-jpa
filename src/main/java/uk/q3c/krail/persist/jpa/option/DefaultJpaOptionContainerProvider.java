@@ -14,7 +14,7 @@ package uk.q3c.krail.persist.jpa.option;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.persist.common.common.ContainerType;
+import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
 
 /**

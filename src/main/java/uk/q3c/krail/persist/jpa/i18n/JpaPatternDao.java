@@ -13,8 +13,9 @@
 
 package uk.q3c.krail.persist.jpa.i18n;
 
-import uk.q3c.krail.core.persist.cache.i18n.PatternCacheKey;
-import uk.q3c.krail.core.persist.common.i18n.PatternDao;
+
+import uk.q3c.krail.i18n.persist.PatternCacheKey;
+import uk.q3c.krail.i18n.persist.PatternDao;
 
 /**
  * JPA specific interface for {@link PatternDao} to enable binding alternatives
