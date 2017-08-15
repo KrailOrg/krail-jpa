@@ -68,7 +68,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:' + groovyVersion
 
     //krail
-    compile 'uk.q3c.krail:krail:0.9.10.1'
+    compile 'uk.q3c.krail:krail:0.9.10.2'
 
     //Data stores
     compile 'org.hsqldb:hsqldb:2.3.2'

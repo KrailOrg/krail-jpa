@@ -13,8 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.option;
 
-import uk.q3c.krail.core.option.OptionKey;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.option.OptionKey;
+import uk.q3c.krail.option.persist.OptionCacheKey;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Embeddable;

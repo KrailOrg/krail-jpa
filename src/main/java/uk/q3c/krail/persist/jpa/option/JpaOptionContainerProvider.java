@@ -14,7 +14,7 @@
 package uk.q3c.krail.persist.jpa.option;
 
 import com.vaadin.data.Container;
-import uk.q3c.krail.core.persist.common.option.OptionContainerProvider;
+import uk.q3c.krail.option.persist.OptionContainerProvider;
 import uk.q3c.krail.persist.ContainerType;
 
 /**

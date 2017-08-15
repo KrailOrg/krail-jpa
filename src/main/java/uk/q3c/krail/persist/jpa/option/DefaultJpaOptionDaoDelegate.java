@@ -18,11 +18,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.PersistenceUnitModule;
 import org.apache.onami.persist.Transactional;
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.persist.cache.option.DefaultOptionCacheLoader;
-import uk.q3c.krail.core.persist.cache.option.OptionCache;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
-import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.persist.OptionCache;
+import uk.q3c.krail.option.persist.OptionCacheKey;
+import uk.q3c.krail.option.persist.OptionDaoDelegate;
+import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.persist.jpa.common.BaseJpaKeyValueDao;
 import uk.q3c.util.data.DataConverter;
 

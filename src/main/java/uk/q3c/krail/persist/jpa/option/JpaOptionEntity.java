@@ -13,8 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.option;
 
-import uk.q3c.krail.core.option.Option;
-import uk.q3c.krail.core.persist.cache.option.OptionCacheKey;
+import uk.q3c.krail.option.Option;
+import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.persist.jpa.i18n.KeyValueEntity;
 
 import javax.annotation.Nonnull;
@@ -22,7 +22,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Version;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * An entity to hold data for an {@link Option}.  The value is held as a String to enable the use of a single column for it.  Context is part of the overall

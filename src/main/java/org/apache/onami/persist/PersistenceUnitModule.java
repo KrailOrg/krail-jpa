@@ -21,9 +21,9 @@ import com.google.inject.util.Providers;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.persist.common.option.OptionContainerProvider;
-import uk.q3c.krail.core.persist.common.option.OptionDaoDelegate;
 import uk.q3c.krail.i18n.persist.PatternDao;
+import uk.q3c.krail.option.persist.OptionContainerProvider;
+import uk.q3c.krail.option.persist.OptionDaoDelegate;
 import uk.q3c.krail.persist.VaadinContainerProvider;
 import uk.q3c.krail.persist.jpa.common.DefaultJpaContainerProvider;
 import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
@@ -203,7 +203,7 @@ public class PersistenceUnitModule extends PrivateModule {
         bind(PersistenceService.class).to(ApplicationManagedEntityManagerFactoryProvider.class);
         bind(EntityManagerFactoryProvider.class).to(ApplicationManagedEntityManagerFactoryProvider.class);
         bind(Properties.class).annotatedWith(ForContainerManaged.class)
-                              .toProvider(Providers.<Properties>of(null));
+                .toProvider(Providers.of(null));
         bind(Properties.class).annotatedWith(ForApplicationManaged.class)
                               .toProvider(Providers.of(config.getProperties()));
 
@@ -220,7 +220,7 @@ public class PersistenceUnitModule extends PrivateModule {
         bind(Properties.class).annotatedWith(ForContainerManaged.class)
                               .toProvider(Providers.of(config.getProperties()));
         bind(Properties.class).annotatedWith(ForApplicationManaged.class)
-                              .toProvider(Providers.<Properties>of(null));
+                .toProvider(Providers.of(null));
 
         // required in ContainerManagedEntityManagerFactoryProvider
         bindEntityManagerFactorySource();

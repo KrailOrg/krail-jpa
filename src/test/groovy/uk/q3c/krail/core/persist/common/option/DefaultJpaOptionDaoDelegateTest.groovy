@@ -21,6 +21,8 @@ import org.eclipse.persistence.config.PersistenceUnitProperties
 import spock.guice.UseModules
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.vaadin.DataModule
+import uk.q3c.krail.option.persist.OptionDaoDelegate
+import uk.q3c.krail.option.persist.dao.DefaultOptionDao
 import uk.q3c.krail.option.test.TestOptionModule
 import uk.q3c.krail.persist.jpa.common.Jpa1
 import uk.q3c.krail.persist.jpa.option.TestOptionJpaModule
@@ -34,11 +36,11 @@ import uk.q3c.util.UtilModule
 class DefaultJpaOptionDaoDelegateTest extends OptionDaoTestBase {
     @Inject
     @Jpa1
-    PersistenceService persistenceService;
+    PersistenceService persistenceService
 
     @Inject
     @Jpa1
-    OptionDaoDelegate injectedDaoDelegate;
+    OptionDaoDelegate injectedDaoDelegate
 
     @Inject
     @Jpa1
@@ -46,20 +48,20 @@ class DefaultJpaOptionDaoDelegateTest extends OptionDaoTestBase {
 
     @Inject
     @Jpa1
-    UnitOfWork unitOfWork;
+    UnitOfWork unitOfWork
 
     def setup() {
         optionSource.getActiveDao() >> injectedDaoDelegate
-        persistenceService.start();
-        unitOfWork.begin();
+        persistenceService.start()
+        unitOfWork.begin()
         dao = new DefaultOptionDao(optionElementConverter, optionSource)
         expectedConnectionUrl = (String) entityManagerProvider.get().getProperties()
                 .get(PersistenceUnitProperties.JDBC_URL)
     }
 
     def cleanup() {
-        unitOfWork.end();
-        persistenceService.stop();
+        unitOfWork.end()
+        persistenceService.stop()
     }
 
 }
