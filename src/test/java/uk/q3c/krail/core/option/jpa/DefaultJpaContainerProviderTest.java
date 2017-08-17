@@ -34,8 +34,8 @@ public class DefaultJpaContainerProviderTest extends JpaDaoTestBase {
     @Test
     public void get() {
         //given
-        VaadinContainerProvider provider1 = getInstance(VaadinContainerProvider.class, Jpa1.class);
-        VaadinContainerProvider provider2 = getInstance(VaadinContainerProvider.class, Jpa2.class);
+        VaadinContainerProvider<JPAContainer> provider1 = getInstance(VaadinContainerProvider.class, Jpa1.class);
+        VaadinContainerProvider<JPAContainer> provider2 = getInstance(VaadinContainerProvider.class, Jpa2.class);
         //when
         Container container1 = provider1.get(StandardTestEntity.class, ContainerType.CACHED);
         Container container2 = provider2.get(StandardTestEntity.class, ContainerType.CACHED);
