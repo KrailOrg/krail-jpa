@@ -11,7 +11,7 @@
  *
  */
 
-package uk.q3c.krail.persist.jpa.common;
+package uk.q3c.krail.core.option.jpa;
 
 import com.google.inject.Inject;
 import com.vaadin.addon.jpacontainer.EntityProvider;
@@ -21,6 +21,7 @@ import org.apache.onami.persist.EntityManagerProvider;
 import org.apache.onami.persist.UnitOfWork;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.PersistenceConfigurationException;
+import uk.q3c.krail.persist.jpa.common.EntityManagerProviderOnamiWrapper;
 
 /**
  * Sets up and returns a JPAContainer instance for use with Onami persistence.  An instance of this should be injected, annotated for the appropriate

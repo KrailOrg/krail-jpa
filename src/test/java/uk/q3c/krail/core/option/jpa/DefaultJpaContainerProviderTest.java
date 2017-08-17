@@ -11,13 +11,17 @@
  *
  */
 
-package uk.q3c.krail.persist.jpa.common;
+package uk.q3c.krail.core.option.jpa;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container;
 import org.junit.Test;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
+import uk.q3c.krail.persist.jpa.common.Jpa1;
+import uk.q3c.krail.persist.jpa.common.Jpa2;
+import uk.q3c.krail.persist.jpa.common.JpaDaoTestBase;
+import uk.q3c.krail.persist.jpa.common.StandardTestEntity;
 
 import java.util.Map;
 

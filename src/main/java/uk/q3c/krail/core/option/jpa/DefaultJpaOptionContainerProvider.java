@@ -10,12 +10,12 @@
  *  * specific language governing permissions and limitations under the License.
  *
  */
-package uk.q3c.krail.persist.jpa.option;
+package uk.q3c.krail.core.option.jpa;
 
 import com.google.inject.Inject;
 import com.vaadin.data.Container;
 import uk.q3c.krail.persist.ContainerType;
-import uk.q3c.krail.persist.jpa.common.JpaContainerProvider;
+import uk.q3c.krail.persist.jpa.option.JpaOptionEntity;
 
 /**
  * Default implementation for {@link JpaOptionContainerProvider}
