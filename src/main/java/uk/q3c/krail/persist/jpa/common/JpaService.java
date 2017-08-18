@@ -13,7 +13,8 @@
 
 package uk.q3c.krail.persist.jpa.common;
 
-import uk.q3c.krail.core.services.Service;
+
+import uk.q3c.krail.service.Service;
 
 /**
  * Enables starting / stopping the JPA persistence engine - NOT CURRENTLY USED see https://github.com/davidsowerby/krail-jpa/issues/6

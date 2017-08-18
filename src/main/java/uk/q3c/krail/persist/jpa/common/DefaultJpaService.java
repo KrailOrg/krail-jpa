@@ -15,21 +15,21 @@ package uk.q3c.krail.persist.jpa.common;
 
 import com.google.inject.Inject;
 import org.apache.onami.persist.PersistenceService;
-import uk.q3c.krail.core.eventbus.GlobalBusProvider;
-import uk.q3c.krail.core.services.AbstractService;
-import uk.q3c.krail.core.services.RelatedServicesExecutor;
-import uk.q3c.krail.core.services.Service;
-import uk.q3c.krail.core.services.ServicesMonitor;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.persist.jpa.i18n.LabelKey;
+import uk.q3c.krail.service.AbstractService;
+import uk.q3c.krail.service.RelatedServiceExecutor;
+import uk.q3c.krail.service.Service;
+import uk.q3c.krail.service.ServiceMonitor;
 
 /**
  * NOT CURRENTLY USED, see https://github.com/davidsowerby/krail-jpa/issues/6
  * <p>
  * <p>
  * Default implementation for {@link JpaService}.  Wraps the Apache Onami {@link PersistenceService} in a Krail {@link Service} wrapper, so that the service is
- * monitored by {@link ServicesMonitor}, and automatically stopped when the application is closed down
+ * monitored by {@link ServiceMonitor}, and automatically stopped when the application is closed down
  * <p>
  * Created by David Sowerby on 21/06/15.
  */
@@ -38,8 +38,7 @@ public class DefaultJpaService extends AbstractService implements JpaService, Se
     private final PersistenceService persistenceService;
 
     @Inject
-    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, GlobalBusProvider globalBusProvider,
-                                RelatedServicesExecutor servicesExecutor) {
+    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
         super(translate, globalBusProvider, servicesExecutor);
         this.persistenceService = persistenceService;
     }
