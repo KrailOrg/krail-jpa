@@ -70,7 +70,7 @@ dependencies {
     compile 'com.vaadin.addon:jpacontainer:3.1.1' //JPA container
 
     //krail
-    compile 'uk.q3c.krail:krail:0.9.10.16'
+    compile 'uk.q3c.krail:krail:0.9.10.17'
 
     //Data stores
     compile 'org.hsqldb:hsqldb:2.3.2'
