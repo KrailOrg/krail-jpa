@@ -59,22 +59,22 @@ public class DefaultJpaPatternDaoLongIntTest extends JpaDaoTestBase {
         dao.write(cacheKey3, US_ENGLISH);
         //then
         assertThat(this.dao.getValue(cacheKey1)
-                           .get()).isEqualTo(UK_ENGLISH);
+                .get()).isEqualTo(UK_ENGLISH);
         assertThat(this.dao.getValue(cacheKey2)
-                           .get()).isEqualTo(ENGLISH);
+                .get()).isEqualTo(ENGLISH);
         assertThat(this.dao.getValue(cacheKey3)
-                           .get()).isEqualTo(US_ENGLISH);
+                .get()).isEqualTo(US_ENGLISH);
 
         //when
         Optional<String> returnedValue = this.dao.deleteValue(cacheKey2);
 
         //then
         assertThat(this.dao.getValue(cacheKey1)
-                           .get()).isEqualTo(UK_ENGLISH);
+                .get()).isEqualTo(UK_ENGLISH);
         assertThat(this.dao.getValue(cacheKey2)
-                           .isPresent()).isFalse();
+                .isPresent()).isFalse();
         assertThat(this.dao.getValue(cacheKey3)
-                           .get()).isEqualTo(US_ENGLISH);
+                .get()).isEqualTo(US_ENGLISH);
         assertThat(returnedValue.get()).isEqualTo(ENGLISH);
 
         //when absent

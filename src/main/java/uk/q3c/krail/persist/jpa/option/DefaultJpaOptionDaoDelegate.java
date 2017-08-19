@@ -22,7 +22,6 @@ import uk.q3c.krail.option.Option;
 import uk.q3c.krail.option.persist.OptionCache;
 import uk.q3c.krail.option.persist.OptionCacheKey;
 import uk.q3c.krail.option.persist.OptionDaoDelegate;
-import uk.q3c.krail.option.persist.cache.DefaultOptionCacheLoader;
 import uk.q3c.krail.persist.jpa.common.BaseJpaKeyValueDao;
 import uk.q3c.util.data.DataConverter;
 
@@ -34,7 +33,7 @@ import javax.annotation.Nonnull;
  * Injected automatically with the correct {@link EntityManagerProvider} (where correct == annotated the same as this instance).  This is done by the {@link
  * PersistenceUnitModule}
  * <br>
- * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache}, {@link DefaultOptionCacheLoader} and
+ * <b>NOTE:</b> All values to and from {@link Option} are natively typed.  All values to and from {@link OptionCache},  OptionCacheLoader and
  * {@link OptionDaoDelegate} are wrapped in Optional.
  * <br>
  * Created by David Sowerby on 13/04/15.
