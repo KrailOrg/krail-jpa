@@ -70,7 +70,7 @@ dependencies {
     compile 'com.vaadin.addon:jpacontainer:3.1.1' //JPA container
 
     //krail
-    compile 'uk.q3c.krail:krail-option-api:0.13.0.0.8b5407b'
+    compile 'uk.q3c.krail:krail-option-api:0.14.0.0'
     compile 'uk.q3c.krail:krail-config-api:0.9.0.1.1a175d3'
 //    compile 'uk.q3c.krail:krail:0.9.10.17'
 
@@ -97,7 +97,7 @@ dependencies {
     testCompile 'org.spockframework:spock-guice:1.0-groovy-2.4'
     testCompile 'cglib:cglib-nodep:3.2.0' // needed for Spock mocking
     testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.0'
-    testCompile 'uk.q3c.krail:krail:0.9.10.21'
+    testCompile 'uk.q3c.krail:krail:0.9.10.22'
 
 }
 
