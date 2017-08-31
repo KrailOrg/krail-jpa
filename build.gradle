@@ -11,11 +11,10 @@
  *
  */
 buildscript {
-    ext.kotlin_version = '1.1.3-2'
-    ext.kaytee_plugin_version = "0.15.3.0"
+    ext.kotlin_version = '1.1.4-2'
+    ext.kaytee_plugin_version = "0.18.2.0"
     repositories {
         jcenter()
-        mavenLocal()
     }
 
     dependencies {
@@ -42,7 +41,6 @@ apply plugin: 'uk.q3c.kaytee'
 apply plugin: "kotlin"
 
 repositories {
-    mavenLocal()
     jcenter()
     mavenCentral()
 
@@ -55,8 +53,14 @@ sourceCompatibility = '1.8'
 
 
 kaytee {
-    baseVersion = "0.10.0.0"
+    version {
+        number = "0.10.1.0"
+    }
+    changelog {
+        maxVersions = 5
+    }
 }
+
 
 bintray {
     user = 'dsowerby'
@@ -70,7 +74,7 @@ dependencies {
     compile 'com.vaadin.addon:jpacontainer:3.1.1' //JPA container
 
     //krail
-    compile 'uk.q3c.krail:krail-option-api:0.14.0.0'
+    compile 'uk.q3c.krail:krail-option-api:0.14.0.0.779c3d4'
     compile 'uk.q3c.krail:krail-config-api:0.9.0.1.1a175d3'
 //    compile 'uk.q3c.krail:krail:0.9.10.17'
 
@@ -97,7 +101,7 @@ dependencies {
     testCompile 'org.spockframework:spock-guice:1.0-groovy-2.4'
     testCompile 'cglib:cglib-nodep:3.2.0' // needed for Spock mocking
     testCompile 'de.bechte.junit:junit-hierarchicalcontextrunner:4.12.0'
-    testCompile 'uk.q3c.krail:krail:0.9.10.22'
+    testCompile 'uk.q3c.krail:krail:0.10.2.0'
 
 }
 
@@ -109,5 +113,5 @@ idea {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0.1'
+    gradleVersion = '4.1'
 }
