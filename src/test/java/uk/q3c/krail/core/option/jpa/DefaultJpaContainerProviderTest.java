@@ -14,7 +14,7 @@
 package uk.q3c.krail.core.option.jpa;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container;
+import com.vaadin.v7.data.Container;
 import org.junit.Test;
 import uk.q3c.krail.persist.ContainerType;
 import uk.q3c.krail.persist.VaadinContainerProvider;
@@ -25,7 +25,7 @@ import uk.q3c.krail.persist.jpa.common.StandardTestEntity;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class DefaultJpaContainerProviderTest extends JpaDaoTestBase {
