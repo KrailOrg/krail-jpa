@@ -22,6 +22,24 @@ In order to provide the DAOs, the onami-persist source is included and slightly 
 * Generic DAOs, for single and multiple statements within a transaction
 * Base DAOs for Krail I18N and Option
 
+---
+
+## Notice
+
+---
+
+Version 0.10.0.0 of Krail was a major refactoring.  See Release Notes.md for that release for details.  That was the last significant development that will be done under Vaadin 7.
+
+This library, and some of its associated libraries, are undergoing a transition to Vaadin 8. The upgrade to Vaadin 8 affects [krail](https://github.com/davidsowerby/krail) and [krail-jpa](https://github.com/davidsowerby/krail-jpa), and for functional testing [krail-bench](https://github.com/davidsowerby/krail-bench) and [krail-testapp](https://github.com/davidsowerby/krail-testapp)
+
+Normally the versions of these are independent, but to simplify the transition to Vaadin 8, are being brought temporarily into line:
+
+| Krail version  |   Vaadin    | 
+|---------|------------|
+|0.12.x.x | version 7  |
+|0.13.x.x-v7compat | version 8, running version 7 compatibility  |
+|0.14.x.x | pure Vaadin 8
+
 #Download
 <a href='https://bintray.com/dsowerby/maven/krail-jpa/view?source=watch' alt='Get automatic notifications about new "krail-jpa" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
 ##Gradle

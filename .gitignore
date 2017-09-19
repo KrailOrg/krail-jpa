@@ -4,10 +4,9 @@
 bin
 build/*
 gradle
-krail-jpa.iml
+*.iml
 logs
 
-.krail-jpa.iml
 
 build.gradle~
 git.ignore~
