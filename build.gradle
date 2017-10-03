@@ -56,6 +56,9 @@ kaytee {
     changelog {
         maxVersions = 5
     }
+    release{
+        mergeToMaster = false
+    }
 }
 
 
