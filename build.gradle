@@ -51,9 +51,7 @@ sourceCompatibility = '1.8'
 
 kaytee {
     version {
-        number = "0.13.0.0"
-        qualifier = "v7compat"
-        buildMetaData = "1"
+        number = "0.14.0.0"
     }
     changelog {
         maxVersions = 5
