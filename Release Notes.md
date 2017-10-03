@@ -1,33 +1,9 @@
-### Release Notes for krail-jpa 0.9.3
+### Release Notes for krail-jpa 0.13.0.0-v7compat+1 
 
-Separating build from master
+There is a jump in release number in order to synchronise the versions of krail, krail-jpa, krail-bench and krail-testapp during the transition fomr Vaadin 7 to Vaadin 8
+See README.md for details
 
-#### Change log
+This version simply runs with Vaadin 8 in compatibility mode - all components are still actually at Vaadin 7.
 
--   [23](https://github.com/davidsowerby/krail-jpa/issues/23): build.gradle has hardcoded version
--   [24](https://github.com/davidsowerby/krail-jpa/issues/24): Travis & Coveralls
-
-
-#### Dependency changes
-
-   compile dependency version changed to: krail:0.9.9
-
-#### Detail
-
-*Release notes and version.properties generated*
-
-
----
-*Version files updated*
-
-
----
-*[krail-master 23](https://github.com/davidsowerby/krail-master/issues/23) build.gradle has hardcoded version*
-
-Replaced by read from file
-
----
-*[krail-master 24](https://github.com/davidsowerby/krail-master/issues/24) Travis & Coveralls*
-
-All steps completed
+It is not expected that this version will ever be developed further, it is simply a transition point to Vaadin 8
 
