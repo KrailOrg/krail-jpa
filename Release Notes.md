@@ -1,9 +1,6 @@
-### Release Notes for krail-jpa 0.13.0.0-v7compat+1 
+### Release Notes for krail-jpa 0.14.0.0 
 
-There is a jump in release number in order to synchronise the versions of krail, krail-jpa, krail-bench and krail-testapp during the transition fomr Vaadin 7 to Vaadin 8
-See README.md for details
+The ContainerProvider simply served as a placeholder for use in Krail, when Krail was at Vaadin 7.  Since moving Krail to Vaadin 8, there is no need for any from of Container, so these have been removed.
 
-This version simply runs with Vaadin 8 in compatibility mode - all components are still actually at Vaadin 7.
 
-It is not expected that this version will ever be developed further, it is simply a transition point to Vaadin 8
 
