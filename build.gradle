@@ -82,8 +82,6 @@ dependencies {
 
     //JPA
     compile 'org.eclipse.persistence:eclipselink:2.6.3' //    Eclipse Link &  Java Persistence API
-//    compile 'org.apache.onami:org.apache.onami.common:1.0.1'
-    compile 'com.vaadin.addon:jpacontainer:4.0.0' //JPA container only needed while using vaadin 7 compatibility
     compile 'javax.transaction:jta:1.1'
 
     //servlet
