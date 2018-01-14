@@ -15,7 +15,7 @@ package uk.q3c.krail.persist.jpa.common;
 
 import com.google.inject.Inject;
 import org.apache.onami.persist.PersistenceService;
-import uk.q3c.krail.eventbus.GlobalBusProvider;
+import uk.q3c.krail.eventbus.MessageBus;
 import uk.q3c.krail.i18n.I18NKey;
 import uk.q3c.krail.i18n.Translate;
 import uk.q3c.krail.persist.jpa.i18n.LabelKey;
@@ -38,8 +38,8 @@ public class DefaultJpaService extends AbstractService implements JpaService, Se
     private final PersistenceService persistenceService;
 
     @Inject
-    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, GlobalBusProvider globalBusProvider, RelatedServiceExecutor servicesExecutor) {
-        super(translate, globalBusProvider, servicesExecutor);
+    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, MessageBus messageBus, RelatedServiceExecutor servicesExecutor) {
+        super(translate, messageBus, servicesExecutor);
         this.persistenceService = persistenceService;
     }
 

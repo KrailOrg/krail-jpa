@@ -21,21 +21,15 @@ import com.google.inject.util.Providers;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.q3c.krail.core.option.jpa.DefaultJpaContainerProvider;
-import uk.q3c.krail.core.option.jpa.DefaultJpaOptionContainerProvider;
-import uk.q3c.krail.core.option.jpa.JpaContainerProvider;
-import uk.q3c.krail.core.option.jpa.JpaOptionContainerProvider;
 import uk.q3c.krail.i18n.persist.PatternDao;
-import uk.q3c.krail.option.persist.OptionContainerProvider;
 import uk.q3c.krail.option.persist.OptionDaoDelegate;
-import uk.q3c.krail.persist.VaadinContainerProvider;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
 import java.lang.annotation.Annotation;
 import java.util.Properties;
 
-import static org.apache.onami.persist.Preconditions.*;
+import static org.apache.onami.persist.Preconditions.checkNotNull;
 
 /**
  * Module for configuring a single persistence unit.
@@ -126,10 +120,6 @@ public class PersistenceUnitModule extends PrivateModule {
                 bind(bindingPair.getInterfaceClass()).to(Key.get(bindingPair.getImplementationClass()));
             }
 
-            bind(JpaContainerProvider.class).to(DefaultJpaContainerProvider.class);
-            bind(VaadinContainerProvider.class).to(JpaContainerProvider.class);
-            bind(OptionContainerProvider.class).to(JpaOptionContainerProvider.class);
-            bind(JpaOptionContainerProvider.class).to(DefaultJpaOptionContainerProvider.class);
 
 
             //now bind the interfaces to annotation & expose
@@ -137,9 +127,6 @@ public class PersistenceUnitModule extends PrivateModule {
                 bindAndExposedAnnotated(bindingPair.getInterfaceClass());
             }
 
-            bindAndExposedAnnotated(VaadinContainerProvider.class);
-            bindAndExposedAnnotated(JpaContainerProvider.class);
-            bindAndExposedAnnotated(OptionContainerProvider.class);
 
         } else {
             expose(PersistenceService.class);
