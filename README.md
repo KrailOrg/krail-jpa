@@ -21,7 +21,7 @@ In order to provide the DAOs, the onami-persist source is included and slightly 
 ---
 
 This library is no longer supported.  The chosen direction for Krail is towards distributed systems, microservices and NoSql.  
-This version of the library works at version 0.14.0.0, although some tests have been disabled for want of some missing setup.
+This version of the library works at version 0.14.1.0, although some tests have been disabled for want of some missing setup.
 
 If anyone wants to take up maintaining this library, they would be welcome to do so.
 
