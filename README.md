@@ -6,13 +6,29 @@
 [![Coverage Status](https://coveralls.io/repos/github/davidsowerby/krail-jpa/badge.svg?branch=master)](https://coveralls.io/github/davidsowerby/krail-jpa?branch=master)
 
 
-This is a module for use with [Krail](https://github.com/davidsowerby/krail), a rapid development framework based around Vaadin 7.
+This is a module for use with [Krail](https://github.com/davidsowerby/krail), a rapid development framework based around Vaadin 8.
 
 This module provides JPA capability.
 
 Most of the functionality is provided by [Apache Onami Persist](https://onami.apache.org/persist/), but with some additional Vaadin specific capability, and Krail specific generic DAOs.
 
 In order to provide the DAOs, the onami-persist source is included and slightly modified. 
+
+---
+
+## Notice
+
+---
+
+This library is no longer supported.  The chosen direction for Krail is towards distributed systems, microservices and NoSql.  
+This version of the library works at version 0.14.0.0, although some tests have been disabled for want of some missing setup.
+
+If anyone wants to take up maintaining this library, they would be welcome to do so.
+
+---
+
+
+
 
 ## Build
 
@@ -54,7 +70,7 @@ repositories {
 ```
 
 ```
-'uk.q3c.krail:krail-jpa:0.9.2'
+'uk.q3c.krail:krail-jpa:0.14.0.0'
 ```
 ## Maven
 
@@ -70,7 +86,7 @@ repositories {
 <dependency>
 	<groupId>uk.q3c.krail</groupId>
 	<artifactId>krail-jpa</artifactId>
-	<version>0.9.2</version>
+	<version>0.14.0.0/version>
 </dependency>
 ```
 ## Direct

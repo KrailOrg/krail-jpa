@@ -14,10 +14,12 @@ package org.apache.onami.persist.test.multipersistenceunits;
 import org.apache.onami.persist.test.TestEntity;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Ignore
 public class SimpleMultiplePuTest extends BaseMultiplePuTest {
 
     @Override
@@ -35,7 +37,7 @@ public class SimpleMultiplePuTest extends BaseMultiplePuTest {
     }
 
     @Test
-    public void storeUnitsInTwoPersistenceUnits() throws Exception {
+    public void storeUnitsInTwoPersistenceUnits() {
         // given
 
         final TestEntity firstEntity = new TestEntity();
@@ -45,17 +47,17 @@ public class SimpleMultiplePuTest extends BaseMultiplePuTest {
         firstEmp.get()
                 .persist(firstEntity);
         secondEmp.get()
-                 .persist(secondEntity);
+                .persist(secondEntity);
 
         // then
         assertThat(firstEmp.get()
-                           .find(TestEntity.class, firstEntity.getId())).isNotNull();
+                .find(TestEntity.class, firstEntity.getId())).isNotNull();
         assertThat(secondEmp.get()
-                            .find(TestEntity.class, secondEntity.getId())).isNotNull();
+                .find(TestEntity.class, secondEntity.getId())).isNotNull();
         assertThat(firstEmp.get()
-                           .find(TestEntity.class, secondEntity.getId())).isNull();
+                .find(TestEntity.class, secondEntity.getId())).isNull();
         assertThat(secondEmp.get()
-                            .find(TestEntity.class, firstEntity.getId())).isNull();
+                .find(TestEntity.class, firstEntity.getId())).isNull();
     }
 
 

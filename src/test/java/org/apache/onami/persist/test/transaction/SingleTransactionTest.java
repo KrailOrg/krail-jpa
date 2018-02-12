@@ -16,15 +16,28 @@ import com.google.inject.Injector;
 import org.apache.onami.persist.PersistenceModule;
 import org.apache.onami.persist.PersistenceService;
 import org.apache.onami.persist.test.transaction.testframework.TransactionalWorker;
-import org.apache.onami.persist.test.transaction.testframework.tasks.*;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnAnyThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnAnyThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnAnyThrowingTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnNoneThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnNoneThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnNoneThrowingTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnRuntimeTestExceptionThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnRuntimeTestExceptionThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnRuntimeTestExceptionThrowingTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnTestExceptionThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnTestExceptionThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnTestExceptionThrowingTestException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests running a single non nested transaction.
  * The test make us of the testframework. For every test a new Injector is created.
  */
+@Ignore
 public class SingleTransactionTest {
 
     private Injector injector;

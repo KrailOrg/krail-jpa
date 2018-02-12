@@ -14,12 +14,14 @@
 package uk.q3c.krail.persist.jpa.common;
 
 import com.google.inject.Key;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Ignore
 public class BaseJpaDaoTest extends JpaDaoTestBase {
 
 
@@ -45,7 +47,7 @@ public class BaseJpaDaoTest extends JpaDaoTestBase {
         final Optional<Widget> byId = dao.findById(Widget.class, 1L);
         assertThat(byId.isPresent()).isTrue();
         assertThat(byId.get()
-                       .getName()).isEqualTo("a");
+                .getName()).isEqualTo("a");
     }
 
     private Widget newWidget(String a, String b) {
@@ -70,13 +72,13 @@ public class BaseJpaDaoTest extends JpaDaoTestBase {
         dao.save(newWidget("c", "count"));
         //then
         assertThat(dao.findById(Widget.class, 1L)
-                      .isPresent()).isTrue();
+                .isPresent()).isTrue();
         assertThat(dao.findById(Widget.class, 2L)
-                      .isPresent()).isTrue();
+                .isPresent()).isTrue();
         assertThat(dao.findById(Widget.class, 3L)
-                      .isPresent()).isTrue();
+                .isPresent()).isTrue();
         assertThat(dao.findById(Widget.class, 4L)
-                      .isPresent()).isFalse();
+                .isPresent()).isFalse();
         assertThat(dao.findAll(Widget.class)).hasSize(3);
         assertThat(dao.count(Widget.class)).isEqualTo(3);
     }

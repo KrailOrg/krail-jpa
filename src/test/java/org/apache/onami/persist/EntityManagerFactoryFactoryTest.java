@@ -13,6 +13,7 @@ package org.apache.onami.persist;
 
 import org.eclipse.persistence.internal.jpa.EntityManagerFactoryImpl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Test for {@link EntityManagerFactoryFactory}.
  */
+@Ignore
 public class EntityManagerFactoryFactoryTest {
 
     private static final String PU_KEY = "hibernate.ejb.persistenceUnitName";
@@ -35,7 +37,7 @@ public class EntityManagerFactoryFactoryTest {
     private EntityManagerFactoryFactory sut;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         properties = new Properties();
         sut = new EntityManagerFactoryFactory(PU_NAME, properties);
     }

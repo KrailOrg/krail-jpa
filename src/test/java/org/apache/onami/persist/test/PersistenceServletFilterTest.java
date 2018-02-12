@@ -22,6 +22,7 @@ import org.apache.onami.persist.test.multipersistenceunits.FirstPU;
 import org.apache.onami.persist.test.multipersistenceunits.SecondPU;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -32,13 +33,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 /**
  * Test which ensures that the @{link PersistenceFilter} fulfills the requirements of a guice servlet filter.
  */
+@Ignore
 public class PersistenceServletFilterTest {
     private EntityManagerProvider firstEmp;
     private Injector injector;
@@ -69,7 +73,7 @@ public class PersistenceServletFilterTest {
     }
 
     @After
-    public final void tearDown() throws Exception {
+    public final void tearDown() {
         persistenceFilter.destroy();
     }
 
@@ -98,7 +102,7 @@ public class PersistenceServletFilterTest {
 
     private class ServletMock implements Answer<Void> {
 
-        public Void answer(InvocationOnMock invocation) throws Throwable {
+        public Void answer(InvocationOnMock invocation) {
             // given
             final TestEntity firstEntity = new TestEntity();
             final TestEntity secondEntity = new TestEntity();

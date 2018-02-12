@@ -16,6 +16,7 @@ package uk.q3c.krail.core.persist.common.i18n
 import com.google.inject.Inject
 import org.apache.onami.persist.PersistenceService
 import org.apache.onami.persist.UnitOfWork
+import org.junit.Ignore
 import spock.guice.UseModules
 import spock.lang.Specification
 import uk.q3c.krail.core.vaadin.DataModule
@@ -25,33 +26,33 @@ import uk.q3c.krail.i18n.test.TestLabelKey
 import uk.q3c.krail.persist.jpa.common.Jpa1
 import uk.q3c.krail.persist.jpa.i18n.JpaPatternEntity
 import uk.q3c.krail.persist.jpa.i18n.TestPatternJpaModule
-import  uk.q3c.krail.i18n.persist.PatternCacheKey
 
+@Ignore
 @UseModules([TestPatternJpaModule, DataModule])
 class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     @Inject
     @Jpa1
-    PersistenceService persistenceService;
+    PersistenceService persistenceService
 
     @Inject
     @Jpa1
-    PatternDao dao;
+    PatternDao dao
 
 
     @Inject
     @Jpa1
-    UnitOfWork unitOfWork;
+    UnitOfWork unitOfWork
 
 
     def setup() {
-        persistenceService.start();
-        unitOfWork.begin();
+        persistenceService.start()
+        unitOfWork.begin()
     }
 
     def cleanup() {
-        unitOfWork.end();
-        persistenceService.stop();
+        unitOfWork.end()
+        persistenceService.stop()
     }
 
 
@@ -71,9 +72,9 @@ class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     def "write a single value"() {
         given:
-        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.UK);
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.UK)
         when:
-        dao.write(cacheKey, "4");
+        dao.write(cacheKey, "4")
         JpaPatternEntity actual = dao.find(cacheKey)
         then:
         actual != null
@@ -84,11 +85,11 @@ class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     def "write with the same cache key multiple times and ensure there is only the latest value present in persistence"() {
         given:
-        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.UK);
+        PatternCacheKey cacheKey = new PatternCacheKey(TestLabelKey.Yes, Locale.UK)
         when:
-        dao.write(cacheKey, "4");
-        dao.write(cacheKey, "5");
-        dao.write(cacheKey, "6");
+        dao.write(cacheKey, "4")
+        dao.write(cacheKey, "5")
+        dao.write(cacheKey, "6")
         JpaPatternEntity actual = dao.find(cacheKey)
 
         then:
@@ -100,9 +101,9 @@ class DefaultJpaPatternDao__IntegrationTest extends Specification {
 
     def "write multiple keys and delete one"() {
         given:
-        PatternCacheKey cacheKey1 = new PatternCacheKey(TestLabelKey.Yes, Locale.UK);
-        PatternCacheKey cacheKey2 = new PatternCacheKey(TestLabelKey.Yes, new Locale("EN"));
-        PatternCacheKey cacheKey3 = new PatternCacheKey(TestLabelKey.Yes, Locale.US);
+        PatternCacheKey cacheKey1 = new PatternCacheKey(TestLabelKey.Yes, Locale.UK)
+        PatternCacheKey cacheKey2 = new PatternCacheKey(TestLabelKey.Yes, new Locale("EN"))
+        PatternCacheKey cacheKey3 = new PatternCacheKey(TestLabelKey.Yes, Locale.US)
 
         when:
 

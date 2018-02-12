@@ -17,10 +17,26 @@ import org.apache.onami.persist.PersistenceModule;
 import org.apache.onami.persist.PersistenceService;
 import org.apache.onami.persist.test.transaction.testframework.TransactionalTask;
 import org.apache.onami.persist.test.transaction.testframework.TransactionalWorker;
-import org.apache.onami.persist.test.transaction.testframework.tasks.*;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnAnyThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnAnyThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnAnyThrowingTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnNoneThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnNoneThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnNoneThrowingTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnRuntimeTestExceptionThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnRuntimeTestExceptionThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnRuntimeTestExceptionThrowingTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnTestExceptionThrowingNone;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnTestExceptionThrowingRuntimeTestException;
+import org.apache.onami.persist.test.transaction.testframework.tasks.TaskRollingBackOnTestExceptionThrowingTestException;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,6 +48,7 @@ import static org.junit.Assert.fail;
  * Since the test is running a loop the injector is created directly in the test to ensure
  * that for every {@link TestVector} a new injector instance is used.
  */
+@Ignore
 public class NestedTransactionTest {
 
     /**

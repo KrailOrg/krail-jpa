@@ -18,6 +18,7 @@ import org.apache.onami.persist.EntityManagerProvider
 import org.apache.onami.persist.PersistenceService
 import org.apache.onami.persist.UnitOfWork
 import org.eclipse.persistence.config.PersistenceUnitProperties
+import org.junit.Ignore
 import spock.guice.UseModules
 import uk.q3c.krail.core.guice.vsscope.VaadinSessionScopeModule
 import uk.q3c.krail.core.vaadin.DataModule
@@ -26,12 +27,12 @@ import uk.q3c.krail.option.persist.OptionDaoDelegate
 import uk.q3c.krail.option.persist.dao.DefaultOptionDao
 import uk.q3c.krail.persist.jpa.common.Jpa1
 import uk.q3c.krail.persist.jpa.option.TestOptionJpaModule
-import uk.q3c.krail.testutil.option.OptionDaoTestBase
 import uk.q3c.util.UtilModule
 
 /**
  * Created by David Sowerby on 21 Jan 2016
  */
+@Ignore
 @UseModules([TestOptionJpaModule, DataModule, TestOptionModule, VaadinSessionScopeModule, UtilModule])
 class DefaultJpaOptionDaoDelegateTest extends OptionDaoTestBase {
     @Inject
