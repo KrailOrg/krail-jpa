@@ -69,8 +69,8 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:' + groovyVersion
 
     //krail
-    compile 'uk.q3c.krail:krail-option-api:0.18.0.0'
-    compile 'uk.q3c.krail:krail-config-api:0.10.4.0'
+    compile 'uk.q3c.krail:krail-option-api:0.18.1.0'
+    compile 'uk.q3c.krail:krail-service-api:0.14.1.0'
 //    compile 'uk.q3c.krail:krail:0.9.10.17'
 
     //Data stores

@@ -23,6 +23,10 @@ import uk.q3c.krail.service.AbstractService;
 import uk.q3c.krail.service.RelatedServiceExecutor;
 import uk.q3c.krail.service.Service;
 import uk.q3c.krail.service.ServiceMonitor;
+import uk.q3c.util.guice.SerializationSupport;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 /**
  * NOT CURRENTLY USED, see https://github.com/davidsowerby/krail-jpa/issues/6
@@ -35,26 +39,31 @@ import uk.q3c.krail.service.ServiceMonitor;
  */
 public class DefaultJpaService extends AbstractService implements JpaService, Service {
 
-    private final PersistenceService persistenceService;
+    private final transient PersistenceService persistenceService;
 
     @Inject
-    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, MessageBus messageBus, RelatedServiceExecutor servicesExecutor) {
-        super(translate, messageBus, servicesExecutor);
+    protected DefaultJpaService(Translate translate, PersistenceService persistenceService, MessageBus messageBus, RelatedServiceExecutor servicesExecutor, SerializationSupport serializationSupport) {
+        super(translate, messageBus, servicesExecutor, serializationSupport);
         this.persistenceService = persistenceService;
     }
 
     @Override
-    protected void doStop() throws Exception {
+    protected void doStop() {
         persistenceService.stop();
     }
 
     @Override
-    protected void doStart() throws Exception {
+    protected void doStart() {
         persistenceService.start();
     }
 
     @Override
     public I18NKey getNameKey() {
         return LabelKey.JPA_Service;
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
+        inputStream.defaultReadObject();
+        getSerializationSupport().deserialize(this);
     }
 }
