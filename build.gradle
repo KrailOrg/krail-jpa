@@ -51,7 +51,7 @@ sourceCompatibility = '1.8'
 
 kaytee {
     version {
-        number = "0.14.1.0"
+        number = "0.14.1.1"
     }
     changelog {
         maxVersions = 5
